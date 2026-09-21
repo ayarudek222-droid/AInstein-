@@ -14,6 +14,9 @@ create table if not exists public.user_data (
   state      jsonb not null default '{}'::jsonb,
   updated_at timestamptz not null default now()
 );
+-- tables created by hand earlier may lack these columns
+alter table public.user_data add column if not exists state jsonb not null default '{}'::jsonb;
+alter table public.user_data add column if not exists updated_at timestamptz not null default now();
 alter table public.user_data enable row level security;
 drop policy if exists "read own row"   on public.user_data;
 drop policy if exists "insert own row" on public.user_data;

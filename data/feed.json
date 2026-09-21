@@ -29,8 +29,18 @@
   },
   {
    "id": "biotech",
-   "label": "Biotech",
+   "label": "Biology & medicine",
    "blurb": "mRNA, gene editing and protein design — where lab results turn into treatments."
+  },
+  {
+   "id": "chemistry",
+   "label": "Chemistry",
+   "blurb": "New molecules, materials and reactions — from catalysts to batteries."
+  },
+  {
+   "id": "neuro",
+   "label": "Neuroscience",
+   "blurb": "How brains work — circuits, memory, disease and the machines that read them."
   },
   {
    "id": "opportunities",
@@ -989,7 +999,7 @@
   },
   {
    "id": "hn:49763697",
-   "track": "biotech",
+   "track": "neuro",
    "source": "med.stanford.edu",
    "policy": "headline_only",
    "media": "article",
@@ -1155,7 +1165,7 @@
   },
   {
    "id": "google-research-blog:3aacd163",
-   "track": "biotech",
+   "track": "neuro",
    "source": "Google Research Blog",
    "policy": "headline_only",
    "license": "",
@@ -1505,7 +1515,7 @@
   },
   {
    "id": "elife:ac7d52f1",
-   "track": "biotech",
+   "track": "neuro",
    "source": "eLife",
    "policy": "abstract_ok",
    "license": "",
@@ -1535,7 +1545,7 @@
   },
   {
    "id": "elife:de9a88a5",
-   "track": "biotech",
+   "track": "neuro",
    "source": "eLife",
    "policy": "abstract_ok",
    "license": "",
@@ -1565,7 +1575,7 @@
   },
   {
    "id": "elife:93045d00",
-   "track": "biotech",
+   "track": "neuro",
    "source": "eLife",
    "policy": "abstract_ok",
    "license": "",
@@ -1655,7 +1665,7 @@
   },
   {
    "id": "elife:3e1feb8d",
-   "track": "biotech",
+   "track": "neuro",
    "source": "eLife",
    "policy": "abstract_ok",
    "license": "",
@@ -1685,7 +1695,7 @@
   },
   {
    "id": "elife:f4626256",
-   "track": "biotech",
+   "track": "neuro",
    "source": "eLife",
    "policy": "abstract_ok",
    "license": "",
@@ -1917,7 +1927,7 @@
   },
   {
    "id": "plos-biology:4b87725a",
-   "track": "biotech",
+   "track": "neuro",
    "source": "PLOS Biology",
    "policy": "abstract_ok",
    "license": "",
@@ -1947,7 +1957,7 @@
   },
   {
    "id": "plos-biology:097013be",
-   "track": "biotech",
+   "track": "neuro",
    "source": "PLOS Biology",
    "policy": "abstract_ok",
    "license": "",
@@ -2091,7 +2101,7 @@
   },
   {
    "id": "plos-computational-biology:d33c8932",
-   "track": "biotech",
+   "track": "neuro",
    "source": "PLOS Computational Biology",
    "policy": "abstract_ok",
    "license": "",
@@ -2357,7 +2367,7 @@
   },
   {
    "id": "the-transmitter:4d483a0d",
-   "track": "biotech",
+   "track": "neuro",
    "source": "The Transmitter",
    "policy": "headline_only",
    "license": "",
@@ -2371,7 +2381,7 @@
   },
   {
    "id": "the-transmitter:ab0a5332",
-   "track": "biotech",
+   "track": "neuro",
    "source": "The Transmitter",
    "policy": "headline_only",
    "license": "",
@@ -2385,7 +2395,7 @@
   },
   {
    "id": "the-transmitter:8cc922c7",
-   "track": "biotech",
+   "track": "neuro",
    "source": "The Transmitter",
    "policy": "headline_only",
    "license": "",
@@ -2399,7 +2409,7 @@
   },
   {
    "id": "the-transmitter:84284b61",
-   "track": "biotech",
+   "track": "neuro",
    "source": "The Transmitter",
    "policy": "headline_only",
    "license": "",
@@ -2413,7 +2423,7 @@
   },
   {
    "id": "the-transmitter:09edc0b8",
-   "track": "biotech",
+   "track": "neuro",
    "source": "The Transmitter",
    "policy": "headline_only",
    "license": "",
@@ -2427,7 +2437,7 @@
   },
   {
    "id": "the-transmitter:6fc76d27",
-   "track": "biotech",
+   "track": "neuro",
    "source": "The Transmitter",
    "policy": "headline_only",
    "license": "",
@@ -2441,7 +2451,7 @@
   },
   {
    "id": "biorxiv-neuroscience:ac484ab0",
-   "track": "biotech",
+   "track": "neuro",
    "source": "bioRxiv Neuroscience",
    "policy": "headline_only",
    "license": "",
@@ -2455,7 +2465,7 @@
   },
   {
    "id": "biorxiv-neuroscience:625c7a8e",
-   "track": "biotech",
+   "track": "neuro",
    "source": "bioRxiv Neuroscience",
    "policy": "headline_only",
    "license": "",
@@ -2469,7 +2479,7 @@
   },
   {
    "id": "biorxiv-neuroscience:6a153364",
-   "track": "biotech",
+   "track": "neuro",
    "source": "bioRxiv Neuroscience",
    "policy": "headline_only",
    "license": "",
@@ -2483,7 +2493,7 @@
   },
   {
    "id": "biorxiv-neuroscience:dec9ef33",
-   "track": "biotech",
+   "track": "neuro",
    "source": "bioRxiv Neuroscience",
    "policy": "headline_only",
    "license": "",
@@ -2497,7 +2507,7 @@
   },
   {
    "id": "biorxiv-neuroscience:50ecc3bf",
-   "track": "biotech",
+   "track": "neuro",
    "source": "bioRxiv Neuroscience",
    "policy": "headline_only",
    "license": "",
@@ -2511,7 +2521,7 @@
   },
   {
    "id": "biorxiv-neuroscience:d8f7e79f",
-   "track": "biotech",
+   "track": "neuro",
    "source": "bioRxiv Neuroscience",
    "policy": "headline_only",
    "license": "",
@@ -2525,7 +2535,7 @@
   },
   {
    "id": "biorxiv-neuroscience:d4fd6bc1",
-   "track": "biotech",
+   "track": "neuro",
    "source": "bioRxiv Neuroscience",
    "policy": "headline_only",
    "license": "",
@@ -2539,7 +2549,7 @@
   },
   {
    "id": "biorxiv-neuroscience:9b939782",
-   "track": "biotech",
+   "track": "neuro",
    "source": "bioRxiv Neuroscience",
    "policy": "headline_only",
    "license": "",
@@ -2665,7 +2675,7 @@
   },
   {
    "id": "sciencedaily-neuroscience:6d046d44",
-   "track": "biotech",
+   "track": "neuro",
    "source": "ScienceDaily Neuroscience",
    "policy": "headline_only",
    "license": "",
@@ -2679,7 +2689,7 @@
   },
   {
    "id": "sciencedaily-neuroscience:c48c1482",
-   "track": "biotech",
+   "track": "neuro",
    "source": "ScienceDaily Neuroscience",
    "policy": "headline_only",
    "license": "",
@@ -2693,7 +2703,7 @@
   },
   {
    "id": "sciencedaily-neuroscience:112bd1e4",
-   "track": "biotech",
+   "track": "neuro",
    "source": "ScienceDaily Neuroscience",
    "policy": "headline_only",
    "license": "",
@@ -2707,7 +2717,7 @@
   },
   {
    "id": "sciencedaily-neuroscience:66c80548",
-   "track": "biotech",
+   "track": "neuro",
    "source": "ScienceDaily Neuroscience",
    "policy": "headline_only",
    "license": "",
@@ -2721,7 +2731,7 @@
   },
   {
    "id": "sciencedaily-neuroscience:5189ab1d",
-   "track": "biotech",
+   "track": "neuro",
    "source": "ScienceDaily Neuroscience",
    "policy": "headline_only",
    "license": "",
@@ -2735,7 +2745,7 @@
   },
   {
    "id": "sciencedaily-neuroscience:2a9cade4",
-   "track": "biotech",
+   "track": "neuro",
    "source": "ScienceDaily Neuroscience",
    "policy": "headline_only",
    "license": "",
@@ -2749,7 +2759,7 @@
   },
   {
    "id": "nature-neuroscience:e380e7e5",
-   "track": "biotech",
+   "track": "neuro",
    "source": "Nature Neuroscience",
    "policy": "headline_only",
    "license": "",
@@ -2763,7 +2773,7 @@
   },
   {
    "id": "nature-neuroscience:d85099a4",
-   "track": "biotech",
+   "track": "neuro",
    "source": "Nature Neuroscience",
    "policy": "headline_only",
    "license": "",
@@ -2777,7 +2787,7 @@
   },
   {
    "id": "nature-neuroscience:21c6a6bf",
-   "track": "biotech",
+   "track": "neuro",
    "source": "Nature Neuroscience",
    "policy": "headline_only",
    "license": "",
@@ -2791,7 +2801,7 @@
   },
   {
    "id": "nature-neuroscience:580b9cf8",
-   "track": "biotech",
+   "track": "neuro",
    "source": "Nature Neuroscience",
    "policy": "headline_only",
    "license": "",
@@ -2805,7 +2815,7 @@
   },
   {
    "id": "nature-neuroscience:49148fc1",
-   "track": "biotech",
+   "track": "neuro",
    "source": "Nature Neuroscience",
    "policy": "headline_only",
    "license": "",
@@ -2819,7 +2829,7 @@
   },
   {
    "id": "nature-neuroscience:eaf9b606",
-   "track": "biotech",
+   "track": "neuro",
    "source": "Nature Neuroscience",
    "policy": "headline_only",
    "license": "",
@@ -2833,7 +2843,7 @@
   },
   {
    "id": "nature-neuroscience:f3ef50fe",
-   "track": "biotech",
+   "track": "neuro",
    "source": "Nature Neuroscience",
    "policy": "headline_only",
    "license": "",
@@ -2847,7 +2857,7 @@
   },
   {
    "id": "nature-neuroscience:6d638cd7",
-   "track": "biotech",
+   "track": "neuro",
    "source": "Nature Neuroscience",
    "policy": "headline_only",
    "license": "",
@@ -5154,7 +5164,7 @@
   },
   {
    "id": "nautilus:5cef0283",
-   "track": "biotech",
+   "track": "neuro",
    "source": "Nautilus",
    "policy": "headline_only",
    "license": "",
@@ -5182,7 +5192,7 @@
   },
   {
    "id": "nautilus:33c58f93",
-   "track": "biotech",
+   "track": "neuro",
    "source": "Nautilus",
    "policy": "headline_only",
    "license": "",
@@ -5296,7 +5306,7 @@
   },
   {
    "id": "plos-one:eb471e81",
-   "track": "biotech",
+   "track": "neuro",
    "source": "PLOS ONE",
    "policy": "abstract_ok",
    "license": "CC BY 4.0",
@@ -5526,6 +5536,244 @@
    "entities": [],
    "media": "article",
    "deadline": "2026-12-15"
+  },
+  {
+   "id": "nature-chemistry:d8449964",
+   "track": "chemistry",
+   "source": "Nature Chemistry",
+   "policy": "headline_only",
+   "license": "",
+   "published": "2026-09-18T12:00:00Z",
+   "url": "https://www.nature.com/articles/s41557-026-02252-0",
+   "title": "Weaving two-dimensional peptide crystals",
+   "categories": [],
+   "experiments": [],
+   "entities": [],
+   "media": "article"
+  },
+  {
+   "id": "nature-chemistry:5f3e1745",
+   "track": "chemistry",
+   "source": "Nature Chemistry",
+   "policy": "headline_only",
+   "license": "",
+   "published": "2026-09-18T12:00:00Z",
+   "url": "https://www.nature.com/articles/s41557-026-02240-4",
+   "title": "Autonomous migration of a phosphate group along glycerol and inositol scaffolds driven by a phosphodiester reaction cycle",
+   "categories": [],
+   "experiments": [],
+   "entities": [],
+   "media": "article"
+  },
+  {
+   "id": "nature-chemistry:43f6255e",
+   "track": "chemistry",
+   "source": "Nature Chemistry",
+   "policy": "headline_only",
+   "license": "",
+   "published": "2026-09-17T12:00:00Z",
+   "url": "https://www.nature.com/articles/s41557-026-02253-z",
+   "title": "Forging ammonia with iron and light from water and nitrogen",
+   "categories": [],
+   "experiments": [],
+   "entities": [],
+   "media": "article"
+  },
+  {
+   "id": "nature-chemistry:6cd34af2",
+   "track": "chemistry",
+   "source": "Nature Chemistry",
+   "policy": "headline_only",
+   "license": "",
+   "published": "2026-09-17T12:00:00Z",
+   "url": "https://www.nature.com/articles/s41557-026-02256-w",
+   "title": "F⁻-centre charge state and dynamism govern oxide electrocatalytic selectivity",
+   "categories": [],
+   "experiments": [],
+   "entities": [],
+   "media": "article"
+  },
+  {
+   "id": "nature-communications:ab76200b",
+   "track": "chemistry",
+   "source": "Nature Communications",
+   "policy": "headline_only",
+   "license": "",
+   "published": "2026-09-21T12:00:00Z",
+   "url": "https://www.nature.com/articles/s41467-026-77409-z",
+   "title": "Design of white circularly polarized luminescence with high glum across entire visible regions by dual-loop active learning",
+   "categories": [],
+   "experiments": [],
+   "entities": [],
+   "media": "article"
+  },
+  {
+   "id": "nature-communications:e1ad45f5",
+   "track": "chemistry",
+   "source": "Nature Communications",
+   "policy": "headline_only",
+   "license": "",
+   "published": "2026-09-17T12:00:00Z",
+   "url": "https://www.nature.com/articles/s41467-026-77080-4",
+   "title": "Data-driven massive reaction networks reveal mechanistic pathways underlying catalytic CO2 hydrogenation",
+   "categories": [],
+   "experiments": [],
+   "entities": [],
+   "media": "article"
+  },
+  {
+   "id": "nature-communications:0e88b145",
+   "track": "chemistry",
+   "source": "Nature Communications",
+   "policy": "headline_only",
+   "license": "",
+   "published": "2026-09-17T12:00:00Z",
+   "url": "https://www.nature.com/articles/s41467-026-77616-8",
+   "title": "Harnessing endogenous carbon monoxide for cancer-selective drug synthesis",
+   "categories": [],
+   "experiments": [],
+   "entities": [],
+   "media": "article"
+  },
+  {
+   "id": "nature-communications:0626aa96",
+   "track": "chemistry",
+   "source": "Nature Communications",
+   "policy": "headline_only",
+   "license": "",
+   "published": "2026-09-17T12:00:00Z",
+   "url": "https://www.nature.com/articles/s41467-026-77667-x",
+   "title": "Solvent polarizability governs Li⁺ transport kinetics for high energy lithium metal batteries",
+   "categories": [],
+   "experiments": [],
+   "entities": [],
+   "media": "article"
+  },
+  {
+   "id": "nature-communications:d551ecac",
+   "track": "chemistry",
+   "source": "Nature Communications",
+   "policy": "headline_only",
+   "license": "",
+   "published": "2026-09-16T12:00:00Z",
+   "url": "https://www.nature.com/articles/s41467-026-76235-7",
+   "title": "Practical synthesis of 3-Oxa/Aza-bicyclo[3.1.1]heptanes from 3-Oxa/Aza[3.1.1]propellanes",
+   "categories": [],
+   "experiments": [],
+   "entities": [],
+   "media": "article"
+  },
+  {
+   "id": "nature-communications:613951d1",
+   "track": "chemistry",
+   "source": "Nature Communications",
+   "policy": "headline_only",
+   "license": "",
+   "published": "2026-09-15T12:00:00Z",
+   "url": "https://www.nature.com/articles/s41467-026-77774-9",
+   "title": "Visible light-induced oxygen atom transfer into C−CL bond of acyl chlorides for homolytic cleavage",
+   "categories": [],
+   "experiments": [],
+   "entities": [],
+   "media": "article"
+  },
+  {
+   "id": "nature-communications:1f41d286",
+   "track": "chemistry",
+   "source": "Nature Communications",
+   "policy": "headline_only",
+   "license": "",
+   "published": "2026-09-15T12:00:00Z",
+   "url": "https://www.nature.com/articles/s41467-026-74533-8",
+   "title": "Efficient dissociation of ultra-high-strength bamboo original fibers via deep eutectic solvent pretreatment for sustainable composite reinforcement",
+   "categories": [],
+   "experiments": [],
+   "entities": [],
+   "media": "article"
+  },
+  {
+   "id": "nature-communications:cbdcba69",
+   "track": "chemistry",
+   "source": "Nature Communications",
+   "policy": "headline_only",
+   "license": "",
+   "published": "2026-09-15T12:00:00Z",
+   "url": "https://www.nature.com/articles/s41467-026-77679-7",
+   "title": "Colossal and fully reversible barocaloric effect for sustainable cooling in a pressure-sensitive spin-crossover complex",
+   "categories": [],
+   "experiments": [],
+   "entities": [],
+   "media": "article"
+  },
+  {
+   "id": "sciencedaily:f2a5aecc",
+   "track": "chemistry",
+   "source": "ScienceDaily",
+   "policy": "headline_only",
+   "license": "",
+   "published": "2026-09-21T09:08:40-04:00",
+   "url": "https://www.sciencedaily.com/releases/2026/09/260920222405.htm",
+   "title": "A new process turns plastic waste into gasoline and diesel fuel",
+   "categories": [],
+   "experiments": [],
+   "entities": [],
+   "media": "article"
+  },
+  {
+   "id": "sciencedaily:45de46dc",
+   "track": "chemistry",
+   "source": "ScienceDaily",
+   "policy": "headline_only",
+   "license": "",
+   "published": "2026-09-20T07:35:28-04:00",
+   "url": "https://www.sciencedaily.com/releases/2026/09/260919031030.htm",
+   "title": "New nanoparticles make hidden chemical differences light up",
+   "categories": [],
+   "experiments": [],
+   "entities": [],
+   "media": "article"
+  },
+  {
+   "id": "sciencedaily:c0c8c378",
+   "track": "chemistry",
+   "source": "ScienceDaily",
+   "policy": "headline_only",
+   "license": "",
+   "published": "2026-09-19T07:49:45-04:00",
+   "url": "https://www.sciencedaily.com/releases/2026/09/260918024810.htm",
+   "title": "This deep-sea enzyme survives heat that destroys most proteins",
+   "categories": [],
+   "experiments": [],
+   "entities": [],
+   "media": "article"
+  },
+  {
+   "id": "sciencedaily:73dad0ee",
+   "track": "chemistry",
+   "source": "ScienceDaily",
+   "policy": "headline_only",
+   "license": "",
+   "published": "2026-09-18T22:08:56-04:00",
+   "url": "https://www.sciencedaily.com/releases/2026/09/260918024759.htm",
+   "title": "Billions in rare earth elements may be hiding in America's coal ash",
+   "categories": [],
+   "experiments": [],
+   "entities": [],
+   "media": "article"
+  },
+  {
+   "id": "sciencedaily:68de5c51",
+   "track": "chemistry",
+   "source": "ScienceDaily",
+   "policy": "headline_only",
+   "license": "",
+   "published": "2026-09-14T10:13:47-04:00",
+   "url": "https://www.sciencedaily.com/releases/2026/09/260913082157.htm",
+   "title": "Chemistry textbooks have been getting this wrong for nearly 100 years",
+   "categories": [],
+   "experiments": [],
+   "entities": [],
+   "media": "article"
   }
  ],
  "experiments": [
@@ -8007,12 +8255,36 @@
    "why": "The cathode inside the lithium-ion battery in your phone. A Nobel, 39 years later."
   },
   {
+   "track": "neuro",
+   "sort": 1971,
+   "title": "The hippocampus as a spatial map",
+   "who": "O'Keefe & Dostrovsky",
+   "url": "https://doi.org/10.1016/0006-8993(71)90358-1",
+   "why": "The discovery of place cells — the brain's internal map. Nobel Prize 2014."
+  },
+  {
+   "track": "chemistry",
+   "sort": 1965,
+   "title": "Self-Consistent Equations Including Exchange and Correlation Effects",
+   "who": "Kohn & Sham",
+   "url": "https://doi.org/10.1103/PhysRev.140.A1133",
+   "why": "The practical form of density functional theory — how most of computational chemistry works today."
+  },
+  {
    "track": "astro",
    "sort": 1965,
    "title": "A Measurement of Excess Antenna Temperature at 4080 Mc/s",
    "who": "Penzias and Wilson",
    "url": "https://doi.org/10.1086/148307",
    "why": "They thought it was pigeon droppings in the antenna. It was the afterglow of the Big Bang."
+  },
+  {
+   "track": "neuro",
+   "sort": 1962,
+   "title": "Receptive fields, binocular interaction and functional architecture in the cat's visual cortex",
+   "who": "Hubel & Wiesel",
+   "url": "https://doi.org/10.1113/jphysiol.1962.sp006837",
+   "why": "How the visual cortex builds edges and shapes out of spots of light — and an inspiration for convolutional networks."
   },
   {
    "track": "energy",
@@ -8055,6 +8327,14 @@
    "why": "One page, and the double helix. Built on Rosalind Franklin's X-ray data, which she was not told they had."
   },
   {
+   "track": "neuro",
+   "sort": 1952,
+   "title": "A quantitative description of membrane current and its application to conduction and excitation in nerve",
+   "who": "Hodgkin & Huxley",
+   "url": "https://doi.org/10.1113/jphysiol.1952.sp004764",
+   "why": "The equations for how a neuron fires. Still the basis of every realistic neuron model."
+  },
+  {
    "track": "energy",
    "sort": 1939,
    "title": "Über den Nachweis und das Verhalten der bei der Bestrahlung des Urans mittels Neutronen entstehenden Erdalkalimetalle",
@@ -8069,6 +8349,14 @@
    "who": "Meitner and Frisch",
    "url": "https://doi.org/10.1038/143239a0",
    "why": "The explanation Hahn could not give, worked out over a winter walk. Meitner was left off the Nobel."
+  },
+  {
+   "track": "chemistry",
+   "sort": 1931,
+   "title": "The Nature of the Chemical Bond",
+   "who": "Pauling",
+   "url": "https://doi.org/10.1021/ja01355a027",
+   "why": "Quantum mechanics turned into the chemist's everyday picture of bonds and hybrid orbitals."
   },
   {
    "track": "astro",

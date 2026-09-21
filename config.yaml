@@ -147,7 +147,7 @@ tracks:
     - solar
     - wind power
 - id: biotech
-  label: Biotech
+  label: Biology & medicine
   blurb: mRNA, gene editing and protein design — where lab results turn into treatments.
   match:
     categories:
@@ -176,6 +176,52 @@ tracks:
     - drug
     - dna
     - genetic
+- id: chemistry
+  label: Chemistry
+  blurb: New molecules, materials and reactions — from catalysts to batteries.
+  match:
+    categories:
+    - physics.chem-ph
+    keywords:
+    - chemistry
+    - chemical
+    - molecule
+    - molecular
+    - catalyst
+    - catalysis
+    - synthesis
+    - polymer
+    - crystal
+    - electrolyte
+    - reaction
+    - enzyme mechanism
+    - spectroscopy
+    - metal-organic
+    - solvent
+- id: neuro
+  label: Neuroscience
+  blurb: How brains work — circuits, memory, disease and the machines that read them.
+  match:
+    categories:
+    - q-bio.NC
+    keywords:
+    - brain
+    - neuron
+    - neurons
+    - neuroscience
+    - cortex
+    - synapse
+    - hippocampus
+    - dopamine
+    - alzheimer
+    - parkinson
+    - dementia
+    - cognition
+    - memory formation
+    - neural circuit
+    - brain-computer
+    - fmri
+    - eeg
 - id: opportunities
   label: Opportunities
   blurb: Competitions, calls and deadlines worth a calendar entry.
@@ -446,13 +492,13 @@ feeds:
 - name: The Transmitter
   url: https://www.thetransmitter.org/feed/
   policy: headline_only
-  track: biotech
+  track: neuro
   license: Editorial journalism (Simons Foundation), all rights reserved
   verified: true
 - name: bioRxiv Neuroscience
   url: http://connect.biorxiv.org/biorxiv_xml.php?subject=neuroscience
   policy: headline_only
-  track: biotech
+  track: neuro
   license: Varies per preprint (CC BY, CC BY-NC, CC BY-NC-ND, CC0 or no reuse); not stated in feed
   verified: true
 - name: Broad Institute News
@@ -470,13 +516,13 @@ feeds:
 - name: ScienceDaily Neuroscience
   url: https://www.sciencedaily.com/rss/mind_brain/neuroscience.xml
   policy: headline_only
-  track: biotech
+  track: neuro
   license: Copyright ScienceDaily / source institutions, all rights reserved
   verified: true
 - name: Nature Neuroscience
   url: https://www.nature.com/neuro.rss
   policy: headline_only
-  track: biotech
+  track: neuro
   license: Copyright Springer Nature, all rights reserved
   verified: true
 - name: ESA/Webb
@@ -672,6 +718,33 @@ feeds:
   track: opportunities
   license: All rights reserved (Opportunity Desk)
   verified: true
+# 0.6 — chemistry, verified 2026-09-21
+- name: Nature Chemistry
+  url: https://www.nature.com/nchem.rss
+  policy: headline_only
+  track: chemistry
+  license: '''© 2026 Macmillan Publishers Limited, part of Springer Nature. All rights reserved.'' (subscription
+    journal; per-article OA mixed)'
+  verified: true
+- name: ScienceDaily Chemistry
+  url: https://www.sciencedaily.com/rss/matter_energy/chemistry.xml
+  policy: headline_only
+  track: chemistry
+  license: All rights reserved (ScienceDaily; content from institutional press releases)
+  verified: true
+- name: Nature Communications - Chemistry subject
+  url: https://www.nature.com/subjects/chemistry/ncomms.rss
+  policy: headline_only
+  track: chemistry
+  license: 'Open access but mixed per article: CC BY 4.0 and CC BY-NC-ND 4.0 (e.g. s41467-026-77679-7, -77080-4,
+    -77409-z, -77667-x, -74533-8 are CC BY-NC-ND 4.0)'
+  verified: true
+- name: Chemical Science
+  url: https://feeds.rsc.org/rss/sc
+  policy: headline_only
+  track: chemistry
+  license: Per article CC BY 3.0 or CC BY-NC 3.0 — headline only
+  verified: false
 # Pictures for cards (ainstein/pictures.py). The article's own picture comes
 # only from feeds marked og_image or images; `previews: true` would also take
 # link-preview pictures from every other source — their copyright, so it is
@@ -2232,6 +2305,36 @@ entities:
   - Research here led to several of Israel's best-known drugs
   url: https://www.weizmann.ac.il/pages/
 canon:
+- track: chemistry
+  sort: 1965
+  title: Self-Consistent Equations Including Exchange and Correlation Effects
+  who: Kohn & Sham
+  url: https://doi.org/10.1103/PhysRev.140.A1133
+  why: The practical form of density functional theory — how most of computational chemistry works today.
+- track: chemistry
+  sort: 1931
+  title: The Nature of the Chemical Bond
+  who: Pauling
+  url: https://doi.org/10.1021/ja01355a027
+  why: Quantum mechanics turned into the chemist's everyday picture of bonds and hybrid orbitals.
+- track: neuro
+  sort: 1952
+  title: A quantitative description of membrane current and its application to conduction and excitation in nerve
+  who: Hodgkin & Huxley
+  url: https://doi.org/10.1113/jphysiol.1952.sp004764
+  why: The equations for how a neuron fires. Still the basis of every realistic neuron model.
+- track: neuro
+  sort: 1962
+  title: Receptive fields, binocular interaction and functional architecture in the cat's visual cortex
+  who: Hubel & Wiesel
+  url: https://doi.org/10.1113/jphysiol.1962.sp006837
+  why: How the visual cortex builds edges and shapes out of spots of light — and an inspiration for convolutional networks.
+- track: neuro
+  sort: 1971
+  title: The hippocampus as a spatial map
+  who: O'Keefe & Dostrovsky
+  url: https://doi.org/10.1016/0006-8993(71)90358-1
+  why: The discovery of place cells — the brain's internal map. Nobel Prize 2014.
 - track: energy
   sort: 2024
   title: Achievement of Target Gain Larger than Unity in an Inertial Fusion Experiment

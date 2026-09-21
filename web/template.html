@@ -444,6 +444,8 @@
   .fcard.hl .plate:not(.photo){height:90px;}
   .fcard.hl .fbody{flex:none;}
   .fcard.hl .fhook{font-size:clamp(21px,5vw,26px);}
+  .cday.planned{box-shadow:inset 0 -3px 0 var(--accent);}
+  .dirall{margin:10px 0 0;font-size:13px;}
   .fwhy{margin:0;font-size:13.5px;line-height:1.5;color:var(--ink-3);font-style:italic;}
   .factions.row{display:flex;align-items:center;gap:16px;flex-wrap:nowrap;border-top:1px solid var(--rule);padding-top:10px;margin-top:4px;}
   .factions.row .gap{flex:1;}
@@ -777,7 +779,7 @@
   .cday[aria-pressed="true"]{outline:2px solid var(--accent);outline-offset:1px;}
   .cday.done::after{content:"";position:absolute;right:5px;bottom:5px;width:5px;height:5px;border-radius:50%;background:currentColor;}
   .cday.blank{visibility:hidden;}
-  .cday.future{opacity:.45;cursor:default;}
+  .cday.future{opacity:.62;}
   .cday:focus-visible{outline:2px solid var(--accent);outline-offset:1px;}
   .dayview{display:flex;flex-direction:column;gap:10px;padding-top:4px;border-top:1px solid var(--rule);}
   .dayview h3.dtitle{margin:10px 0 0;font-size:20px;font-weight:400;letter-spacing:0;text-transform:none;color:var(--ink);}
@@ -893,6 +895,14 @@
       <div class="diaryscroll">
         <div class="cal" id="cal"></div>
         <div class="dayview" id="dayView"></div>
+        <div class="ideas" id="ideas">
+          <h3 class="dtitle">Want to learn</h3>
+          <div class="ideaadd">
+            <input type="text" id="ideaInput" maxlength="240" placeholder="Something that popped into your head" aria-label="Something you want to learn">
+            <button type="button" class="fbtn" id="ideaAdd">Add</button>
+          </div>
+          <ul class="idealist" id="ideaList"></ul>
+        </div>
       </div>
     </section>
 
@@ -989,14 +999,6 @@
     </div>
     <div id="pBody"></div>
     <div class="pmine" id="pMine" hidden>
-        <div class="ideas" id="ideas">
-          <h3 class="dtitle">Want to learn</h3>
-          <div class="ideaadd">
-            <input type="text" id="ideaInput" maxlength="240" placeholder="Something that popped into your head" aria-label="Something you want to learn">
-            <button type="button" class="fbtn" id="ideaAdd">Add</button>
-          </div>
-          <ul class="idealist" id="ideaList"></ul>
-        </div>
         <div class="settings" id="diarySettings">
           <h3 class="dtitle">Your feed</h3>
           <div>
@@ -1129,6 +1131,7 @@
     '</article>';
   }
 
+  var dirAll = {};
   function dirHTML(track){
     var all = (data.entities || []).filter(function(e){
       return track ? e.track === track : true;
@@ -1139,6 +1142,15 @@
               e.org+" "+e.kind+" "+(e.keywords||[]).join(" ")).toLowerCase().indexOf(q) >= 0;
     }) : all;
     if(!shown.length) return "";
+    // Most active first — what has news this week, then the ones with a
+    // track record — and only the top six until someone asks for all.
+    var weight = function(e){ return (e.item_ids || []).length * 4 + (e.trending_views ? 3 : 0) +
+      Math.min(3, (e.notable || []).length) + (/taking data|operating|flying|annual|rolling/.test(e.status || "") ? 1 : 0); };
+    if(!q){
+      shown = shown.slice().sort(function(a, b){ return weight(b) - weight(a); });
+      var full = shown.length;
+      if(!dirAll[track] && full > 6) shown = shown.slice(0, 6);
+    }
 
     var cells = shown.map(function(e){
       var settled = /taking data|operating|flying/.test(e.status);
@@ -1147,8 +1159,6 @@
       var card = '<button type="button" class="exp'+(n?" active":"")+'" data-exp="'+esc(e.id)+'">'+
         '<span class="nm">'+esc(e.name)+'</span>'+
         '<span class="loc">'+esc(e.kind)+' · '+esc(e.country)+'</span>'+
-        '<span class="st '+cls+'">'+esc(e.status)+'</span>'+
-        ((e.notable||[]).length ? '<span class="depth">'+e.notable.length+' highlights</span>' : '')+
         (n ? '<span class="pulse">'+n+' new</span>' : '')+
       '</button>';
       if(openExp !== e.id) return card;
@@ -1188,12 +1198,15 @@
                 : track === "particles" ? "The experiments"
                 : track === "energy" ? "Machines and companies"
                 : track === "biotech" ? "Labs and companies"
+                : track === "chemistry" ? "Labs and companies"
                 : track === "neuro" ? "Projects, labs and companies"
                 : track === "ai" ? "Labs and companies"
                 : "Who is building this";
-    return '<div class="dirhead"><h2>'+heading+'</h2><span>'+shown.length+
-           (shown.length !== all.length ? ' of '+all.length : '')+'</span></div>'+
-           '<div class="dir">'+cells+'</div>';
+    var more = !q && all.length > shown.length;
+    return '<div class="dirhead"><h2>'+heading+'</h2></div>'+
+           '<div class="dir">'+cells+'</div>'+
+           (more ? '<button type="button" class="linkbtn dirall" data-dirall="'+esc(track || "")+'">Show all '+all.length+'</button>'
+                 : (!q && dirAll[track] && all.length > 6 ? '<button type="button" class="linkbtn dirall" data-dirall="'+esc(track || "")+'">Show fewer</button>' : ''));
   }
 
   function canonHTML(track){
@@ -1344,6 +1357,8 @@
       if(defs) defs.hidden = !defs.hidden;
       return;
     }
+    var da = e.target.closest("[data-dirall]");
+    if(da){ var tk = da.getAttribute("data-dirall"); dirAll[tk] = !dirAll[tk]; render(); return; }
     var ex = e.target.closest(".exp");
     if(ex){
       openExp = (openExp === ex.dataset.exp) ? null : ex.dataset.exp;
@@ -1605,7 +1620,8 @@
   var Today = (function(){
     var KEY = "ainstein.desk.v1";
     var HUE = { ai:"--rose", astro:"--violet", industry:"--accent",
-                particles:"--ink-2", energy:"--slate", biotech:"--teal" };
+                particles:"--ink-2", energy:"--slate", biotech:"--teal",
+                chemistry:"--accent", neuro:"--rose" };
     var state = null, dbRef = null, dbBusy = false, dbDirty = false, dbTimer = null;
     var where = "this browser";
     var mode = "today", secLive = 0, lastActive = Date.now();
@@ -1793,7 +1809,7 @@
     // Inside Claude the page can't reach other sites, and the drawn plate stays.
     var PICK = "ainstein.pics.v1", pics = null, picUsed = {}, picBusy = 0, picQueue = [];
     var PIC_FALLBACK = {astro:"galaxy Hubble", industry:"rocket launch", particles:"particle detector CERN",
-      energy:"solar power plant", biotech:"cell microscopy", ai:"supercomputer data center", opportunities:"students laboratory"};
+      energy:"solar power plant", biotech:"cell microscopy", chemistry:"chemistry laboratory", neuro:"neurons microscopy", ai:"supercomputer data center", opportunities:"students laboratory"};
     var OPEN = /^(cc0|cc[- ]by(-sa)?( [\d.]+)?|public domain|pd\b|attribution)/i;
     function picsLoad(){
       if(pics) return pics;
@@ -1911,7 +1927,7 @@
     var TIER = {
       3: ["Nature","Nature Physics","Nature Neuroscience","Nature Biotechnology","Nature Climate Change","Nature Communications",
           "Nature Communications — physics","Nature Communications — energy","Physical Review X","eLife","PLOS Biology",
-          "Quanta Magazine","NASA","ESA","ESO","ESA/Webb","ESA/Hubble","NASA JPL","CERN Courier","Google DeepMind","OpenAI","Crossref"],
+          "Quanta Magazine","Nature Chemistry","NASA","ESA","ESO","ESA/Webb","ESA/Hubble","NASA JPL","CERN Courier","Google DeepMind","OpenAI","Crossref"],
       2: ["arXiv","Physical Review Research","Quantum (journal)","APS Physics","Science News","Scientific American","Knowable Magazine",
           "The Transmitter","STAT","Carbon Brief","Spaceflight Now","NASASpaceflight","Payload","European Spaceflight","SpacePolicyOnline",
           "Google Research Blog","Microsoft Research","BAIR Blog","MIT News AI","AAS Nova","Universe Today","Physics World",
@@ -1941,9 +1957,11 @@
       var w = function(track){ return state.focus.length ? (state.focus.indexOf(track) >= 0 ? 5 : 1) : 1; };
       var now = Date.now(), age = function(i){ return (now - Date.parse(i.published || 0)) / 864e5; };
       var skip = {}; breaking().forEach(function(i){ skip[i.id] = 1; });
-      var pool = (data.items || []).filter(function(i){
-        return !skip[i.id] && i.title && (i.hook || age(i) < 30) && importance(i) > 0;
-      });
+      // The feed is for what's new: the last ten days (three weeks if the
+      // week was thin). Anything older lives on in the Library.
+      var usable = function(i){ return !skip[i.id] && i.title && importance(i) > 0; };
+      var pool = (data.items || []).filter(function(i){ return usable(i) && age(i) <= 10; });
+      if(pool.length < 40) pool = (data.items || []).filter(function(i){ return usable(i) && age(i) <= 21; });
       // Each field's stories, most important first; a little daily jitter so
       // two equally strong stories take turns leading.
       var byTrack = {};
@@ -2049,6 +2067,28 @@
             if(r() < .55) g.push('<line x1="'+a[0]+'" y1="'+a[1].toFixed(1)+'" x2="'+b[0]+'" y2="'+b[1].toFixed(1)+'"'+st(.12 + r()*.35, .9)+'/>');
           }); });
         nodes.forEach(function(l){ l.forEach(function(n){ g.push(dot(n[0], n[1], 3.4, .9)); }); });
+      } else if(track === "chemistry"){
+        // a little lattice of hexagonal rings
+        var R = 16 + r()*4, hx = R*Math.sqrt(3);
+        for(y = 10; y < H + R; y += R*1.5) for(x = (Math.round(y/(R*1.5)) % 2 ? hx/2 : 0) - 10; x < W + hx; x += hx){
+          if(r() < .45) continue;
+          var hp = [];
+          for(i = 0; i < 6; i++){ var a = Math.PI/6 + i*Math.PI/3; hp.push((x + R*Math.cos(a)).toFixed(1) + "," + (y + R*Math.sin(a)).toFixed(1)); }
+          g.push('<polygon points="'+hp.join(" ")+'"'+st(.2 + r()*.45, 1.1)+'/>');
+          if(r() < .25) g.push(dot(x, y, 2.4, .8));
+        }
+      } else if(track === "neuro"){
+        // a neuron: a body, branching dendrites, one long axon
+        var cx2 = W*(.25 + r()*.15), cy2 = H*.5;
+        var branch = function(x0, y0, ang, len, depth){
+          if(depth > 4 || len < 6) return;
+          var x1 = x0 + Math.cos(ang)*len, y1 = y0 + Math.sin(ang)*len;
+          g.push('<line x1="'+x0.toFixed(1)+'" y1="'+y0.toFixed(1)+'" x2="'+x1.toFixed(1)+'" y2="'+y1.toFixed(1)+'"'+st(.7 - depth*.12, 1.6 - depth*.25)+'/>');
+          branch(x1, y1, ang - .45 - r()*.3, len*.7, depth + 1); branch(x1, y1, ang + .45 + r()*.3, len*.7, depth + 1);
+        };
+        for(i = 0; i < 5; i++) branch(cx2, cy2, Math.PI*.6 + i*Math.PI*.28 + r()*.2, 26 + r()*10, 0);
+        g.push('<path d="M'+cx2+' '+cy2+' C '+(W*.55)+' '+(cy2 - 30)+', '+(W*.7)+' '+(cy2 + 30)+', '+(W - 20)+' '+(cy2 - 6)+'"'+st(.75, 1.6)+'/>');
+        g.push(dot(cx2, cy2, 7, .9));
       } else {
         for(x = 0; x < W; x += 22) g.push('<line x1="'+x+'" y1="0" x2="'+x+'" y2="'+H+'"'+st(.15)+'/>');
       }
@@ -2369,11 +2409,11 @@
       var todayK = dayKey();
       for(var dnum = 1; dnum <= dim; dnum++){
         var k = dayKey(new Date(view.getFullYear(), view.getMonth(), dnum)), d = state.days[k];
-        var cls = "cday l" + level(d) + (k === todayK ? " today" : "") + (d && d.done ? " done" : "") + (k > todayK ? " future" : "");
+        var cls = "cday l" + (k > todayK ? 0 : level(d)) + (k === todayK ? " today" : "") + (d && d.done ? " done" : "") + (k > todayK ? " future" : "") + (k > todayK && d && d.note ? " planned" : "");
         var label = new Date(k + "T12:00:00").toLocaleDateString(undefined, {weekday:"long", day:"numeric", month:"long"}) +
           (d ? ", " + d.learned.length + " learned" : "");
         cells.push('<button type="button" class="' + cls + '" data-day="' + k + '" aria-pressed="' + (k === picked) + '" aria-label="' + esc(label) + '"' +
-          (k > todayK ? " disabled" : "") + '>' + dnum + '</button>');
+          '>' + dnum + '</button>');
       }
       $("cal").innerHTML = cells.join("");
       renderDay();
@@ -2403,15 +2443,15 @@
     function renderDay(){
       var k = picked, d = state.days[k] || {read:[], learned:[], note:"", sec:0, done:false}, lookup = titleLookup();
       var title = new Date(k + "T12:00:00").toLocaleDateString(undefined, {weekday:"long", day:"numeric", month:"long"});
-      var isToday = k === dayKey();
+      var isToday = k === dayKey(), future = k > dayKey();
       var mins = Math.round((d.sec + (isToday ? secLive : 0)) / 60);
       $("dayView").innerHTML =
         '<h3 class="dtitle">' + esc(title) + '</h3>' +
-        '<div class="m">' + (d.read.length || mins ? mins + " min · " + d.read.length + " read" + (d.done ? " · finished the set" : "") : (isToday ? "Nothing yet today." : "A quiet day.")) + '</div>' +
+        '<div class="m">' + (d.read.length || mins ? mins + " min · " + d.read.length + " read" + (d.done ? " · finished the set" : "") : (future ? (d.note ? "Planned." : "Still ahead.") : isToday ? "Nothing yet today." : "A quiet day.")) + '</div>' +
         ((d.learned.length || (d.ideas || []).length) ? '<div><h3>What I learned</h3><ul>' + d.learned.map(function(id){ return '<li>' + esc(lookup[id] || "a card that has since left the feed") + '</li>'; }).join("") +
           (d.ideas || []).map(function(id){ var x = findIdea(id); return x && x.text ? '<li>' + esc(x.text) + ' <span class="m">(from my list)</span></li>' : ""; }).join("") + '</ul></div>' : "") +
-        '<div><label class="ftrack" for="dayNote">' + (isToday ? "In my own words, today" : "In my own words") + '</label>' +
-        '<textarea class="note-in" id="dayNote" placeholder="' + (isToday ? "One thing you understand now that you didn't this morning." : "What stayed with you from this day?") + '">' + esc(d.note || "") + '</textarea>' +
+        '<div><label class="ftrack" for="dayNote">' + (future ? "A plan for this day" : isToday ? "In my own words, today" : "In my own words") + '</label>' +
+        '<textarea class="note-in" id="dayNote" placeholder="' + (future ? "Something to read, watch or look up that day." : isToday ? "One thing you understand now that you didn't this morning." : "What stayed with you from this day?") + '">' + esc(d.note || "") + '</textarea>' +
         '<div class="factions" style="border:none;padding-top:6px"><button type="button" class="fbtn" data-dsave="' + k + '">Save</button></div></div>';
     }
     function renderSettings(){
@@ -2898,7 +2938,7 @@
     var MAX = 800, KEEP = 40;
 
     var FIELDS = [["ai","AI"],["astro","Astrophysics"],["industry","Space industry"],["particles","Physics"],
-                  ["energy","Energy & climate"],["biotech","Biotech & the brain"],["method","Methods & research life"]];
+                  ["energy","Energy & climate"],["chemistry","Chemistry"],["biotech","Biology & medicine"],["neuro","Neuroscience"],["method","Methods & research life"]];
     var ROOMS = [
       ["ai","ai","AI — anything"],["llm","ai","Large language models"],["align","ai","AI safety & alignment"],
       ["ai4sci","ai","AI for science"],["robots","ai","Robotics"],["mltheory","ai","Learning theory"],
@@ -2914,13 +2954,15 @@
       ["energy","energy","Energy — anything"],["fusion","energy","Fusion"],["storage","energy","Batteries & storage"],
       ["solar","energy","Solar & the grid"],["fission","energy","Nuclear fission"],["climate","energy","Climate science"],
       ["bio","biotech","Biotech — anything"],["crispr","biotech","Gene editing"],["protein","biotech","Protein design & structure"],
-      ["neuro","biotech","Neuroscience"],["aging","biotech","Longevity & aging"],["synbio","biotech","Synthetic biology"],
+      ["aging","biotech","Longevity & aging"],["synbio","biotech","Synthetic biology"],
+      ["chem","chemistry","Chemistry — anything"],["materials","chemistry","Materials & catalysis"],["drugs","chemistry","Drug discovery"],
+      ["brain","neuro","Neuroscience — anything"],["neuro","neuro","Memory & learning"],["bci","neuro","Brain–computer interfaces"],["neurodis","neuro","Brain disease"],
       ["stats","method","Statistics & data analysis"],["numerics","method","Numerical methods & simulation"],
       ["code","method","Scientific Python & code"],["papers","method","Journal club"],["grad","method","Grad school & research life"],
       ["opps","method","Hackathons & opportunities"],["scicomm","method","Science writing & communication"]
     ].map(function(r){ return {id:r[0], f:r[1], t:r[2]}; });
     var BY_ID = {}; ROOMS.forEach(function(r){ BY_ID[r.id] = r; });
-    var TRACK_ROOM = {ai:"ai", astro:"astro", industry:"space", particles:"particles", energy:"energy", biotech:"bio"};
+    var TRACK_ROOM = {ai:"ai", astro:"astro", industry:"space", particles:"particles", energy:"energy", biotech:"bio", chemistry:"chem", neuro:"brain"};
 
     // Only what is unmistakable goes here; everything subtler is Claude's call.
     var BLOCK = /\b(porn\w*|nudes?|naked|horny|blowjobs?|onlyfans|sexting|dick ?pics?|send (me )?(pics|photos|nudes))\b|פורנו|עירום|עירומה|חרמן|חרמנית|ציצים|סקסי|תשלחי תמונ|תשלח תמונ/i;
@@ -3276,7 +3318,7 @@
         else if(a("data-person")) Social.openProfile(a("data-person"));
         else if(a("data-keep")){
           var key = a("data-keep"), txt = t.closest(".msg").querySelector(".text").textContent;
-          if(Today.remember(txt, view === "dm" ? "a message" : BY_ID[current].t)){ t.textContent = "In your list ✓"; t.disabled = true; Today.toast("Added to Want to learn on your page."); }
+          if(Today.remember(txt, view === "dm" ? "a message" : BY_ID[current].t)){ t.textContent = "In your list ✓"; t.disabled = true; Today.toast("Added to Want to learn in your diary."); }
         }
         else if(a("data-report")) report(a("data-report"));
         else if(a("data-del")) delMine(a("data-del"));
@@ -3858,7 +3900,7 @@
         }
         else if(e.target.closest("#pePhotoBtn") || e.target.id === "pePhotoPick") $("pePhotoFile").click();
         else if(e.target.id === "pePhotoRemove") setPhoto(null);
-        else if(e.target.closest("[data-preview]")) renderProfile(uid);
+        else if(e.target.closest("[data-preview]")){ $("pName").textContent = nameOf(uid) === "you" ? ((profiles[uid] || {}).name || "Your page") : nameOf(uid); renderProfile(uid); }
         else if((t = e.target.closest("[data-dm]"))){ closeSheet("profileSheet"); Talk.openDM(t.getAttribute("data-dm")); }
         else if(e.target.closest("[data-pickrooms]")){ closeSheet("profileSheet"); Talk.openPicker(); }
       });
