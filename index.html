@@ -9496,6 +9496,16 @@
       signOut: function(){
         return this.ready().then(function(c){ return c && c.client.auth.signOut(); }).then(function(){ location.reload(); });
       },
+      verify: function(email, code){
+        return this.ready().then(function(c){
+          return c.client.auth.verifyOtp({email:email, token:code, type:"email"}).then(function(r){ if(r.error) throw r.error; location.reload(); });
+        });
+      },
+      linkError: function(){
+        var q = new URLSearchParams((location.hash || "").replace(/^#/, "") + "&" + (location.search || "").replace(/^\?/, ""));
+        var d = q.get("error_description");
+        return d ? d.replace(/\+/g, " ") : "";
+      },
       account: function(){ return this.ready().then(function(c){ return c ? {anonymous:c.anonymous, email:c.email || ""} : null; }); },
       ready: function(){
         if(p) return p;
@@ -11084,7 +11094,7 @@
       likes[uid] = next; refresh();
       writing = writing.then(function(){
         return db.doc("likes/" + uid).set(next);
-      }).catch(function(){});
+      }).catch(cloudFail("save the like"));
     }
 
     // ---------------------------------------------------------- counts
@@ -11238,6 +11248,7 @@
       }).then(function(){
         $("cInput").value = ""; replyTo = null; $("cReplying").hidden = true;
       }).catch(function(e){
+        cloudFail("post the comment")(e);
         $("cInput").placeholder = (e && e.code === "quota_exceeded") ? "The comment store is full." : "Couldn't post — try again.";
       }).then(function(){ $("cPost").disabled = false; });
     }
@@ -11310,7 +11321,11 @@
             'Your diary is already saved without an account.</p>' +
             '<div class="pfield"><label for="siEmail">Email</label><input id="siEmail" type="email" autocomplete="email" placeholder="you@example.com"></div>' +
             '<button type="button" class="sendbtn" id="siSend" style="align-self:flex-start">Email me a sign-in link</button>' +
-            '<p class="hint" id="siNote"></p></div>';
+            '<p class="hint" id="siNote">' + (Cloud.linkError() ? "The last link didn't work: " + esc(Cloud.linkError()) + ". Send a new one." : "") + '</p>' +
+            '<div class="pfield" id="siCodeBox" hidden><label for="siCode">Or type the code from the email</label>' +
+              '<input id="siCode" inputmode="numeric" autocomplete="one-time-code" maxlength="10" placeholder="123456"></div>' +
+            '<button type="button" class="fbtn" id="siVerify" style="align-self:flex-start" hidden>Sign in with the code</button>' +
+            '<p class="hint">Open the link in this same browser, on this same address.</p></div>';
           return;
         }
         $("pBody").innerHTML = '<p class="hint">' + (on ? "Sign in to make a page." : "Pages work inside Claude.") + "</p>";
@@ -11361,6 +11376,13 @@
         (pub ? '<div class="pblock"><button type="button" class="linkbtn" id="siOut" style="align-self:flex-start">Sign out</button></div>' : '');
     }
 
+    function cloudFail(what){
+      return function(e){
+        var msg = (e && e.message) || "unknown error";
+        console.warn("AInstein: couldn't " + what + " —", msg);
+        if(window.claude && window.claude.public) Today.toast("Couldn't " + what + ": " + msg);
+      };
+    }
     function saveProfile(){
       var fields = [].map.call(document.querySelectorAll('#peFields [aria-pressed="true"]'), function(b){ return b.getAttribute("data-pf"); });
       var doc = {
@@ -11381,7 +11403,7 @@
       db.doc("profiles/" + uid).set(doc).then(function(){
         $("peSave").textContent = "Saved";
         setTimeout(function(){ var b = $("peSave"); if(b){ b.textContent = "Save my page"; b.disabled = false; } }, 1400);
-      }).catch(function(){ $("peSave").textContent = "Couldn't save — try again"; $("peSave").disabled = false; });
+      }).catch(function(er){ cloudFail("save your page")(er); $("peSave").textContent = "Couldn't save — try again"; $("peSave").disabled = false; });
     }
 
     // Crop to the centre square and shrink to 256px, so a phone photo of
@@ -11500,11 +11522,20 @@
         if((t = e.target.closest("[data-pf]"))) t.setAttribute("aria-pressed", String(t.getAttribute("aria-pressed") !== "true"));
         else if(e.target.id === "peSave") saveProfile();
         else if(e.target.id === "siOut") Cloud.signOut();
+        else if(e.target.id === "siVerify"){
+          var code = ($("siCode").value || "").replace(/\s/g, ""), em2 = ($("siEmail").value || "").trim();
+          if(!code) return;
+          e.target.disabled = true; $("siNote").textContent = "Checking…";
+          Cloud.verify(em2, code).catch(function(er){ e.target.disabled = false; $("siNote").textContent = "That code didn't work: " + ((er && er.message) || "try again") + "."; });
+        }
         else if(e.target.id === "siSend"){
           var em = ($("siEmail").value || "").trim();
           if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)){ $("siNote").textContent = "That doesn't look like an email address."; return; }
           e.target.disabled = true; $("siNote").textContent = "Sending…";
-          Cloud.signIn(em).then(function(){ $("siNote").textContent = "Check your inbox: the link signs you in on this device."; },
+          Cloud.signIn(em).then(function(){
+              $("siNote").textContent = "Sent. Open the email and click the link — or type the code below.";
+              $("siCodeBox").hidden = false; $("siVerify").hidden = false; e.target.disabled = false;
+            },
             function(er){ e.target.disabled = false; $("siNote").textContent = "Couldn't send: " + ((er && er.message) || "try again") + "."; });
         }
         else if(e.target.closest("#pePhotoBtn") || e.target.id === "pePhotoPick") $("pePhotoFile").click();
