@@ -26,7 +26,10 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           CROSSREF_MAILTO: ${{ secrets.CROSSREF_MAILTO }}
         run: |
-          python -m ainstein.build --days 3
+          # Without an API key the feed still builds: headlines, links and
+          # pictures, just no rewritten summaries.
+          if [ -n "$ANTHROPIC_API_KEY" ]; then python -m ainstein.build --days 7
+          else python -m ainstein.build --days 7 --no-ai; fi
           python tools/embed.py
 
       - name: Commit if the feed changed

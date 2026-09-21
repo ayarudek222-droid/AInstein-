@@ -255,7 +255,28 @@
     padding:32px 16px;position:relative;z-index:1;
   }
   .doorinner{max-width:360px;width:100%;display:flex;flex-direction:column;align-items:stretch;gap:14px;text-align:center;}
-  .doortitle{font-size:clamp(52px,14vw,76px);line-height:1;margin:0 0 18px;font-weight:400;}
+  .doortitle{font-size:clamp(52px,14vw,76px);line-height:1;margin:0;font-weight:400;position:relative;}
+  .doorlogo{position:relative;margin:0 0 26px;display:flex;justify-content:center;}
+  .orbit{position:absolute;left:50%;top:50%;width:150%;transform:translate(-50%,-50%);overflow:visible;pointer-events:none;}
+  .orbit .ring{fill:none;stroke:var(--accent);stroke-width:1.3;opacity:.55;stroke-dasharray:1300;stroke-dashoffset:1300;
+    animation:ringDraw 1.4s .35s cubic-bezier(.6,.1,.2,1) forwards;}
+  .orbit .electron{fill:var(--rose);opacity:0;animation:fadeIn .4s 1.2s forwards;}
+  .doortitle .ch{display:inline-block;opacity:0;transform:translateY(.45em) scale(.92);filter:blur(8px);
+    animation:chIn .75s cubic-bezier(.2,.8,.2,1) forwards;}
+  .doortitle .ch:nth-child(1){animation-delay:.05s} .doortitle .ch:nth-child(2){animation-delay:.14s}
+  .doortitle em .ch:nth-child(1){animation-delay:.3s} .doortitle em .ch:nth-child(2){animation-delay:.37s}
+  .doortitle em .ch:nth-child(3){animation-delay:.44s} .doortitle em .ch:nth-child(4){animation-delay:.51s}
+  .doortitle em .ch:nth-child(5){animation-delay:.58s} .doortitle em .ch:nth-child(6){animation-delay:.65s}
+  .door .doorbtns,.door .doorform,.door #enter{opacity:0;transform:translateY(12px);animation:riseIn .6s 1.25s cubic-bezier(.2,.8,.2,1) forwards;}
+  .door.leaving{animation:doorOut .45s ease forwards;}
+  @keyframes chIn{to{opacity:1;transform:none;filter:none;}}
+  @keyframes ringDraw{to{stroke-dashoffset:0;}}
+  @keyframes fadeIn{to{opacity:.9;}}
+  @keyframes riseIn{to{opacity:1;transform:none;}}
+  @keyframes doorOut{to{opacity:0;transform:scale(1.04);}}
+  @media (prefers-reduced-motion: reduce){
+    .doortitle .ch,.orbit .ring,.orbit .electron,.door .doorbtns,.door .doorform,.door #enter{animation:none;opacity:1;transform:none;filter:none;stroke-dashoffset:0;}
+  }
   .doortitle em{font-style:italic;color:var(--accent);}
   .doorbtns{display:flex;flex-direction:column;gap:10px;}
   .doorform{display:flex;flex-direction:column;gap:12px;text-align:left;}
@@ -805,7 +826,16 @@
      choice is remembered for the rest of the browser session. -->
 <section class="door" id="door">
   <div class="doorinner">
-    <h1 class="doortitle">AI<em>nstein</em></h1>
+    <div class="doorlogo" aria-label="AInstein">
+      <svg class="orbit" viewBox="0 0 400 160" aria-hidden="true">
+        <ellipse class="ring" cx="200" cy="80" rx="190" ry="52" transform="rotate(-8 200 80)"/>
+        <circle class="electron" r="5">
+          <animateMotion dur="7s" begin="1s" repeatCount="indefinite" rotate="auto"
+            path="M10,80 a190,52 0 1,0 380,0 a190,52 0 1,0 -380,0"/>
+        </circle>
+      </svg>
+      <h1 class="doortitle" aria-hidden="true"><span class="ch">A</span><span class="ch">I</span><em><span class="ch">n</span><span class="ch">s</span><span class="ch">t</span><span class="ch">e</span><span class="ch">i</span><span class="ch">n</span></em></h1>
+    </div>
 
     <div class="doorbtns" id="doorAuth" hidden>
       <button type="button" class="enter" data-door="signup">Sign up</button>
@@ -10242,6 +10272,106 @@
         }).join("");
     }
 
+    // Pictures, found in the reader's browser on the public site: NASA's
+    // library for space, Wikimedia Commons (open licences only) for the rest.
+    // Cached for a week, so each picture is looked up once per reader.
+    // Inside Claude the page can't reach other sites, and the drawn plate stays.
+    var PICK = "ainstein.pics.v1", pics = null, picUsed = {}, picBusy = 0, picQueue = [];
+    var PIC_FALLBACK = {astro:"galaxy Hubble", industry:"rocket launch", particles:"particle detector CERN",
+      energy:"solar power plant", biotech:"cell microscopy", ai:"supercomputer data center", opportunities:"students laboratory"};
+    var OPEN = /^(cc0|cc[- ]by(-sa)?( [\d.]+)?|public domain|pd\b|attribution)/i;
+    function picsLoad(){
+      if(pics) return pics;
+      try{ pics = JSON.parse(localStorage.getItem(PICK) || "{}"); }catch(e){ pics = {}; }
+      var now = Date.now(); Object.keys(pics).forEach(function(k){ if(now - pics[k].at > 7 * 864e5) delete pics[k]; });
+      Object.keys(pics).forEach(function(k){ if(pics[k].url) picUsed[pics[k].url] = 1; });
+      return pics;
+    }
+    function picsSave(){ try{ localStorage.setItem(PICK, JSON.stringify(pics)); }catch(e){} }
+    function canFetchPics(){ return !(window.claude && window.claude.use && !window.claude.public); }
+    function picWords(it){
+      var stop = /^(the|a|an|of|in|on|for|to|and|or|with|from|by|at|as|is|are|was|new|how|why|what|its|it|this|that|into|over|after|about|than|more|can|may|will|yet|again|first|study|shows|finds|makes|gets|their|our|your)$/i;
+      var words = [];
+      (it.tags || []).slice(0, 2).forEach(function(t){ words = words.concat(t.split(/\s+/)); });
+      if(words.length < 2){
+        (it.hook || it.title || "").replace(/[^\w\s-]/g, " ").split(/\s+/).forEach(function(w){
+          if(w.length > 2 && !stop.test(w) && !/^\d+$/.test(w)) words.push(w);
+        });
+      }
+      return words.filter(function(w, i){ return words.indexOf(w) === i; }).slice(0, 3).join(" ");
+    }
+    function getJSON(url){ return fetch(url).then(function(r){ return r.ok ? r.json() : null; }).catch(function(){ return null; }); }
+    function nasaPic(q){
+      return getJSON("https://images-api.nasa.gov/search?media_type=image&page_size=12&q=" + encodeURIComponent(q)).then(function(j){
+        var items = (j && j.collection && j.collection.items) || [];
+        for(var i = 0; i < items.length; i++){
+          var m = (items[i].data || [{}])[0], who = ((m.photographer || "") + " " + (m.secondary_creator || "")).toLowerCase();
+          if(who.trim() && who.indexOf("nasa") < 0 && who.indexOf("jpl") < 0) continue;
+          var l = (items[i].links || [])[0];
+          if(l && l.href && !picUsed[l.href.replace("~thumb", "~medium")]) return {url:l.href.replace("~thumb", "~medium"), credit:"NASA"};
+        }
+        return null;
+      });
+    }
+    function commonsPic(q){
+      var u = "https://commons.wikimedia.org/w/api.php?origin=*&action=query&format=json&generator=search&gsrnamespace=6&gsrlimit=12" +
+        "&prop=imageinfo&iiprop=url|size|extmetadata&iiurlwidth=1280&gsrsearch=" + encodeURIComponent(q + " filetype:bitmap");
+      return getJSON(u).then(function(j){
+        var pages = j && j.query && j.query.pages ? Object.keys(j.query.pages).map(function(k){ return j.query.pages[k]; }) : [];
+        pages.sort(function(a, b){ return (a.index || 0) - (b.index || 0); });
+        for(var i = 0; i < pages.length; i++){
+          var p = pages[i], info = (p.imageinfo || [])[0] || {}, meta = info.extmetadata || {};
+          var lic = ((meta.LicenseShortName || {}).value || "").trim();
+          if(!OPEN.test(lic) || /\b(nc|nd)\b/i.test(lic) || (info.width || 0) < 900) continue;
+          if(/logo|icon|map|diagram|chart|graph|flag|seal|coat of arms|signature|svg|plot|screenshot/i.test(p.title || "")) continue;
+          var url = info.thumburl || info.url; if(!url || picUsed[url]) continue;
+          var artist = String((meta.Artist || {}).value || "").replace(/<[^>]+>/g, "").trim().slice(0, 50);
+          return {url:url, credit:(artist ? artist + " / " : "") + "Wikimedia Commons (" + lic + ")"};
+        }
+        return null;
+      });
+    }
+    function findPic(it){
+      var q = picWords(it), space = it.track === "astro" || it.track === "industry";
+      var tries = [];
+      if(q){ if(space) tries.push(function(){ return nasaPic(q); }); tries.push(function(){ return commonsPic(q); }); }
+      if(q && q.split(" ").length > 1){ var q1 = q.split(" ").slice(0, 2).join(" "); tries.push(function(){ return commonsPic(q1); }); }
+      var fb = PIC_FALLBACK[it.track];
+      if(fb){ if(space) tries.push(function(){ return nasaPic(fb); }); tries.push(function(){ return commonsPic(fb); }); }
+      var i = 0;
+      function next(){ if(i >= tries.length) return Promise.resolve(null); return tries[i++]().then(function(r){ return r || next(); }); }
+      return next();
+    }
+    function applyPic(el, it){
+      var plate = el.querySelector(".plate"); if(!plate || plate.classList.contains("photo")) return;
+      plate.classList.add("photo");
+      plate.insertAdjacentHTML("afterbegin", '<img src="' + esc(it.image) + '" alt="" loading="lazy" decoding="async" ' +
+        'onerror="this.parentNode.classList.remove(\'photo\');this.remove()"><span class="credit">' + esc(it.image_credit || "") + '</span>');
+    }
+    function picPump(){
+      while(picBusy < 2 && picQueue.length){
+        (function(el){
+          var id = el.getAttribute("data-id"), card = findCard(id); if(!card || !card.item || card.item.image) return;
+          var it = card.item, c = picsLoad()[id];
+          if(c){ if(c.url){ it.image = c.url; it.image_credit = c.credit; applyPic(el, it); } return; }
+          picBusy++;
+          findPic(it).then(function(r){
+            pics[id] = r ? {url:r.url, credit:r.credit, at:Date.now()} : {url:"", at:Date.now()}; picsSave();
+            if(r){ picUsed[r.url] = 1; it.image = r.url; it.image_credit = r.credit;
+              var live = document.querySelector('#feed .fcard[data-id="' + CSS.escape(id) + '"]'); if(live) applyPic(live, it); }
+          }).then(function(){ picBusy--; picPump(); });
+        })(picQueue.shift());
+      }
+    }
+    function morePictures(){
+      if(!canFetchPics() || !window.fetch) return;
+      picsLoad();
+      picQueue = [].slice.call(document.querySelectorAll("#feed .fcard[data-id]")).filter(function(el){
+        var c = findCard(el.getAttribute("data-id")); return c && c.item && !c.item.image && (c.kind === "news" || c.kind === "headline");
+      });
+      picPump();
+    }
+
     function renderBreaking(){
       var list = breaking(), el = $("breakingList");
       if(!el) return;
@@ -10588,7 +10718,7 @@
       feed.classList.toggle("listview", state.view === "list");
       document.querySelectorAll("[data-view]").forEach(function(b){ b.setAttribute("aria-pressed", String(b.getAttribute("data-view") === (state.view || "cards"))); });
       renderProgress(); renderStats();
-      observe();
+      observe(); morePictures();
     }
     function moreCard(){
       var n = bonus.length - extra;
@@ -10606,7 +10736,7 @@
       var first = tmp.firstElementChild;
       while(tmp.firstChild) old.parentNode.insertBefore(tmp.firstChild, old);
       old.remove();
-      observe();
+      observe(); morePictures();
       if(first && first.scrollIntoView) first.scrollIntoView({behavior:"smooth", block:"start"});
     }
     function refreshCard(id){
@@ -10949,7 +11079,7 @@
         var id = row.getAttribute("data-row"), card = findCard(id); if(!card) return;
         var tmp = document.createElement("div"); tmp.innerHTML = cardFor(card, +row.getAttribute("data-n"));
         var el = tmp.firstElementChild; el.classList.add("opened");
-        row.replaceWith(el); markRead(id);
+        row.replaceWith(el); markRead(id); morePictures();
       });
       $("breakingList").addEventListener("click", function(e){
         var t;
@@ -12389,7 +12519,13 @@
   var entered = false;
   try{ entered = sessionStorage.getItem("ainstein.entered") === "1"; }catch(e){}
 
+  var splashDone = Date.now() + 1500;
   function openDesk(){
+    if(!door.hidden && !door.classList.contains("leaving") && window.matchMedia && !window.matchMedia("(prefers-reduced-motion: reduce)").matches){
+      door.classList.add("leaving");
+      setTimeout(function(){ door.classList.remove("leaving"); openDesk(); }, 430);
+      return;
+    }
     door.hidden = true;
     app.hidden = false;
     try{ sessionStorage.setItem("ainstein.entered", "1"); }catch(e){}
@@ -12451,9 +12587,10 @@
     // already a member: straight in. Just signed up: finish the page.
     Cloud.ready().then(function(c){
       if(!c || c.anonymous) return;
-      openDesk();
+      return new Promise(function(r){ setTimeout(r, Math.max(0, splashDone - Date.now())); }).then(function(){ openDesk();
       var pending = null; try{ pending = JSON.parse(localStorage.getItem("ainstein.signup") || "null"); localStorage.removeItem("ainstein.signup"); }catch(er){}
       Social.welcome(pending && pending.name);
+      });
     });
   }
 
