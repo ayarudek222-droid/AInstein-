@@ -721,6 +721,7 @@
   }
   .me img{width:100%;height:100%;object-fit:cover;}
   .me #meInitial{font-size:15px;color:var(--ink-2);}
+  .me .mins.su{color:var(--accent);letter-spacing:.02em;}
   .me .mins{font-size:10.5px;letter-spacing:.04em;font-variant-numeric:tabular-nums;}
   .me:focus-visible .ring{outline:2px solid var(--accent);outline-offset:2px;}
   .mode.ico{padding:4px 7px;display:inline-flex;align-items:center;}
@@ -810,6 +811,7 @@
       <div class="pfield" id="doorCodeBox" hidden><label for="doorCode">Or type the code from the email</label>
         <input id="doorCode" inputmode="numeric" autocomplete="one-time-code" maxlength="10" placeholder="123456"></div>
       <button type="button" class="enter ghost" id="doorVerify" hidden>Sign in with the code</button>
+      <button type="button" class="linkbtn" id="doorSwitch"></button>
       <button type="button" class="linkbtn" data-door="back">Back</button>
     </form>
 
@@ -2043,7 +2045,9 @@
     }
     function renderStats(){
       var mins = Math.floor((day().sec + secLive)/60);
-      $("meMins").textContent = mins + "m";
+      var visitor = window.claude && window.claude.public && !Cloud.isMember();
+      $("meMins").textContent = visitor ? "Sign up" : mins + "m";
+      $("meMins").classList.toggle("su", !!visitor);
       $("openMe").setAttribute("aria-label", "Your page · " + mins + " minutes today");
       if(mode === "diary") renderDiaryHead();
     }
@@ -3395,6 +3399,7 @@
     }
 
     function openProfile(id){
+      if((id === uid || id === "me") && window.claude && window.claude.public && !Cloud.isMember()){ openSignup(); return; }
       viewing = id;
       resolve([id]).then(function(){
         $("pName").textContent = (id === uid || id === "me") ? "Your page" : nameOf(id);
@@ -3864,7 +3869,12 @@
 
   // On the public site the door is where you sign up or log in; inside
   // Claude your Claude account is the account, so there is just a way in.
-  var doorMode = "signup";
+  var doorMode = "signup", doorFromApp = false;
+  function openSignup(mode){
+    doorFromApp = !app.hidden;
+    app.hidden = true; door.hidden = false;
+    doorShow(mode || "signup");
+  }
   function doorShow(m){
     var $d = function(id){ return document.getElementById(id); };
     doorMode = m;
@@ -3874,6 +3884,8 @@
     $d("doorNote").textContent = Cloud.linkError() ? "The last link didn't work: " + Cloud.linkError() + ". Send a new one." : "";
     $d("doorCodeBox").hidden = true; $d("doorVerify").hidden = true;
     $d("doorSend").textContent = m === "signup" ? "Sign up" : "Email me a link";
+    $d("doorSwitch").textContent = m === "signup" ? "Already have an account? Log in" : "New here? Sign up";
+    $d("doorSwitch").setAttribute("data-door", m === "signup" ? "login" : "signup");
     if(m !== "choose") $d(m === "signup" ? "doorName" : "doorEmail").focus();
   }
   function setupDoor(){
@@ -3883,7 +3895,9 @@
     doorShow("choose");
     document.getElementById("door").addEventListener("click", function(e){
       var t = e.target.closest("[data-door]"); if(!t) return;
-      var m = t.getAttribute("data-door"); doorShow(m === "back" ? "choose" : m);
+      var m = t.getAttribute("data-door");
+      if(m === "back" && doorFromApp){ doorFromApp = false; door.hidden = true; app.hidden = false; return; }
+      doorShow(m === "back" ? "choose" : m);
     });
     $d("doorForm").addEventListener("submit", function(e){
       e.preventDefault();
