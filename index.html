@@ -9015,7 +9015,7 @@
   const supabaseKey = 'sb_publishable_wpEYYzzlt3ev8816TBZuig_860O4h40';
   const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-  var seed = JSON.parse(document.getElementById("feed-data").textContent);
+  var seed = window.seedData || { items: [] };
   var data = seed;
   var tab = null;
   var query = "";
