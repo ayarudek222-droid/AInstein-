@@ -1,0 +1,38 @@
+name: Refresh feed
+
+on:
+  schedule:
+    - cron: "0 5 * * *"     # 05:00 UTC daily
+  workflow_dispatch:         # and a manual "Run workflow" button
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      - name: Build feed
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          CROSSREF_MAILTO: ${{ secrets.CROSSREF_MAILTO }}
+        run: |
+          python -m ainstein.build --days 3
+          python tools/embed.py
+
+      - name: Commit if the feed changed
+        run: |
+          git config user.name  "ainstein-bot"
+          git config user.email "actions@github.com"
+          git add data/feed.json data/img index.html
+          git diff --staged --quiet || git commit -m "feed: $(date -u +%Y-%m-%d)"
+          git push

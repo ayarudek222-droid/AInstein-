@@ -1,0 +1,2663 @@
+# AInstein configuration
+# Tracks are domains. Every source declares what may be done with it
+# (see SOURCES.md). The directory lists what is CURRENTLY active —
+# retired, paused and not-yet-built entries are deliberately absent.
+
+tracks:
+- id: ai
+  label: AI
+  blurb: The labs, the models, and the papers underneath the announcements.
+  match:
+    categories:
+    - cs.AI
+    - cs.LG
+    - cs.CL
+    - cs.CV
+    - cs.NE
+    - stat.ML
+    keywords:
+    - language model
+    - neural network
+    - transformer
+    - benchmark
+    - fine-tun
+    - reinforcement learning
+    - alignment
+    - inference
+    - training run
+    - agent
+    - llm
+    - llms
+    - gpt
+    - gemini
+    - claude
+    - mistral
+    - agents
+    - chatbot
+    - openai
+    - deepmind
+    - anthropic
+    - machine learning
+- id: astro
+  label: Astrophysics
+  blurb: The observatories and deep-space missions, and what they are actually finding.
+  match:
+    categories:
+    - astro-ph
+    - physics.space-ph
+    - gr-qc
+    keywords:
+    - telescope
+    - exoplanet
+    - galaxy
+    - cosmic
+    - planetary
+    - black hole
+    - nebula
+    - solar wind
+    - heliosphere
+    - astronomer
+    - observatory
+    - rover
+    - flyby
+    - lunar surface
+    - martian
+    - comet
+    - supernova
+    - betelgeuse
+    - milky way
+    - star
+    - planet
+    - moon
+- id: industry
+  label: Space industry
+  blurb: Launchers, satellites and the companies flying them — who raised, who launched, who won the contract.
+  match:
+    categories: []
+    keywords:
+    - launch vehicle
+    - launcher
+    - rocket
+    - spaceport
+    - constellation
+    - smallsat
+    - satellite operator
+    - ground station
+    - earth observation
+    - propulsion
+    - in-orbit
+    - debris removal
+    - contract
+    - funding round
+    - commercial crew
+    - payload capacity
+    - first flight
+    - starship
+    - spacex
+    - launch
+    - satellite
+- id: particles
+  label: Particle physics
+  blurb: The detectors, where they sit underground, and what they measured.
+  match:
+    categories:
+    - hep-ex
+    - hep-ph
+    - hep-lat
+    keywords:
+    - collider
+    - quark
+    - neutrino
+    - boson
+    - muon
+    - kaon
+    - antimatter
+    - dark matter
+    - lhc
+    - standard model
+    - decay channel
+    - higgs
+    - cern
+- id: energy
+  label: Energy
+  blurb: The physics and engineering of making power — fusion, fission, storage, sun and heat.
+  match:
+    categories:
+    - physics.plasm-ph
+    - physics.app-ph
+    keywords:
+    - fusion
+    - fission
+    - tokamak
+    - stellarator
+    - reactor
+    - battery
+    - lithium
+    - solar cell
+    - photovoltaic
+    - perovskite
+    - energy storage
+    - grid
+    - geothermal
+    - hydrogen
+    - electrolyzer
+    - ignition
+    - power plant
+    - nuclear power
+    - solar
+    - wind power
+- id: biotech
+  label: Biotech
+  blurb: mRNA, gene editing and protein design — where lab results turn into treatments.
+  match:
+    categories:
+    - q-bio.BM
+    - q-bio.GN
+    - q-bio.MN
+    - q-bio.QM
+    keywords:
+    - mrna
+    - crispr
+    - gene editing
+    - gene therapy
+    - vaccine
+    - antibody
+    - clinical trial
+    - protein design
+    - protein structure
+    - cell therapy
+    - genome
+    - sequencing
+    - base editing
+    - stem cell
+    - embryo
+    - progenitor
+    - cancer
+    - drug
+    - dna
+    - genetic
+- id: opportunities
+  label: Opportunities
+  blurb: Competitions, calls and deadlines worth a calendar entry.
+  match: {}
+limits:
+  per_track: 40
+  per_source: 8
+interests:
+  first detection: 4
+  first measurement: 4
+  launch: 3
+  neutrino: 3
+  dark matter: 3
+  gravitational wave: 3
+  exoplanet: 3
+  interstellar: 3
+  jwst: 3
+  black hole: 3
+  connectome: 3
+  brain-computer: 3
+  antimatter: 3
+  collider: 2
+  cosmic ray: 2
+  telescope: 2
+  mission: 2
+  asteroid: 2
+  mars: 2
+  qubit: 2
+  cortex: 2
+  anomaly: 2
+  upper limit: 1
+arxiv:
+  categories:
+  - astro-ph.EP
+  - astro-ph.HE
+  - physics.space-ph
+  - hep-ex
+  - cs.AI
+  - cs.LG
+  - physics.plasm-ph
+  - q-bio.BM
+  - q-bio.GN
+crossref:
+  journals:
+    Nature: 0028-0836
+    Science: 1095-9203
+    Nature Astronomy: 2397-3366
+    Nature Physics: 1745-2481
+    Physical Review Letters: 1079-7114
+    Nature Medicine: 1078-8956
+    Nature Biotechnology: 1087-0156
+    Nature Energy: 2058-7546
+feeds:
+- name: NASA
+  url: https://www.nasa.gov/news-release/feed/
+  policy: abstract_ok
+  track: auto
+  fallback_track: astro
+  license: NASA material is generally not copyrighted (see NASA media guidelines)
+  verified: true
+  images: true
+  image_credit: NASA
+  image_skip:
+  - /apod/
+  - 'apod:'
+  - 'apod '
+- name: ESA
+  url: https://www.esa.int/rssfeed/Our_Activities/Space_News
+  policy: abstract_ok
+  track: auto
+  fallback_track: astro
+  license: CC BY-SA 3.0 IGO
+  verified: true
+  images: true
+  image_credit: ESA (CC BY-SA 3.0 IGO)
+  image_skip:
+  - pikachu
+  - pokemon
+  - pokémon
+  - lego
+  - disney
+- name: CERN
+  url: https://home.cern/api/news/news/feed.rss
+  policy: abstract_ok
+  track: particles
+  license: CC BY 4.0 (home.cern terms of use)
+  verified: false
+- name: CERN Courier
+  url: https://cerncourier.com/feed/
+  policy: headline_only
+  track: particles
+  license: Editorial content, all rights reserved — headline and link only
+  verified: true
+- name: Fermilab
+  url: https://news.fnal.gov/feed/
+  policy: headline_only
+  track: particles
+  license: US national laboratory newsroom — treat as all rights reserved until confirmed
+  verified: false
+- name: Quanta Magazine
+  url: https://www.quantamagazine.org/feed/
+  policy: headline_only
+  track: auto
+  license: Editorial content, all rights reserved — headline and link only
+  verified: true
+- name: Science News
+  url: https://www.sciencenews.org/feed
+  policy: headline_only
+  track: auto
+  license: Editorial content, all rights reserved — headline and link only
+  verified: true
+- name: Phys.org
+  url: https://phys.org/rss-feed/
+  policy: headline_only
+  track: auto
+  license: Editorial content, all rights reserved — headline and link only
+  verified: true
+- name: MIT Technology Review
+  url: https://www.technologyreview.com/feed/
+  policy: headline_only
+  track: auto
+  license: Editorial content, all rights reserved — headline and link only
+  verified: true
+- name: SpaceNews
+  url: https://spacenews.com/feed/
+  policy: headline_only
+  track: auto
+  fallback_track: industry
+  license: Editorial content, all rights reserved — headline and link only
+  verified: false
+- name: Ars Technica Science
+  url: https://feeds.arstechnica.com/arstechnica/science
+  policy: headline_only
+  track: auto
+  license: Editorial content, all rights reserved — headline and link only
+  verified: false
+- name: OpenAI
+  url: https://openai.com/news/rss.xml
+  policy: headline_only
+  track: ai
+  license: Company newsroom, all rights reserved — headline and link only
+  verified: true
+- name: ESA Careers
+  url: https://www.esa.int/rssfeed/careers
+  policy: headline_only
+  track: opportunities
+  license: ESA terms
+  verified: false
+- name: ESO
+  url: https://www.eso.org/public/news/feed/
+  policy: abstract_ok
+  track: astro
+  license: CC BY 4.0 — credit "ESO" (press releases, captions, images)
+  verified: true
+  images: true
+  image_credit: ESO (CC BY 4.0)
+  image_skip: []
+- name: NASA JPL
+  url: https://www.jpl.nasa.gov/feeds/news/
+  policy: headline_only
+  track: auto
+  fallback_track: astro
+  license: JPL's policy frees images and video, not article text — headline and link only
+  verified: true
+  images: true
+  image_credit: NASA/JPL-Caltech
+  image_skip: []
+- name: Nature
+  url: https://www.nature.com/nature.rss
+  policy: headline_only
+  track: auto
+  license: Nature news and papers — headline and link only
+  verified: true
+- name: Google DeepMind
+  url: https://deepmind.google/blog/rss.xml
+  policy: headline_only
+  track: ai
+  license: Company blog — headline and link only
+  verified: true
+- name: Hugging Face
+  url: https://huggingface.co/blog/feed.xml
+  policy: headline_only
+  track: ai
+  license: Company blog — headline and link only
+  verified: true
+# 0.5 — verified 2026-09-21 by fetching each feed
+- name: Google Research Blog
+  url: https://research.google/blog/rss/
+  policy: headline_only
+  track: ai
+  license: Copyright Google, all rights reserved
+  verified: true
+- name: Microsoft Research
+  url: https://www.microsoft.com/en-us/research/feed/
+  policy: headline_only
+  track: ai
+  license: Copyright Microsoft, all rights reserved
+  verified: true
+- name: BAIR Blog
+  url: https://bair.berkeley.edu/blog/feed.xml
+  policy: headline_only
+  track: ai
+  license: Author/UC Berkeley copyright; no open licence stated
+  verified: true
+- name: MIT News AI
+  url: https://news.mit.edu/rss/topic/artificial-intelligence2
+  policy: headline_only
+  track: ai
+  license: Text copyright MIT, all rights reserved (images CC BY-NC-ND 3.0 per MIT News policy)
+  verified: true
+- name: Import AI
+  url: https://importai.substack.com/feed
+  policy: headline_only
+  track: ai
+  license: Copyright Jack Clark, all rights reserved
+  verified: true
+- name: AI Alignment Forum
+  url: https://www.alignmentforum.org/feed.xml
+  policy: headline_only
+  track: ai
+  license: Author content; open licence not verified, treat as all rights reserved
+  verified: true
+- name: NVIDIA Technical Blog
+  url: https://developer.nvidia.com/blog/feed
+  policy: headline_only
+  track: ai
+  license: Copyright NVIDIA, all rights reserved
+  verified: true
+- name: eLife
+  url: https://elifesciences.org/rss/recent.xml
+  policy: abstract_ok
+  track: auto
+  fallback_track: biotech
+  license: CC BY 4.0
+  verified: true
+- name: PLOS Biology
+  url: https://journals.plos.org/plosbiology/feed/atom
+  policy: abstract_ok
+  track: biotech
+  license: CC BY 4.0
+  verified: true
+- name: PLOS Computational Biology
+  url: https://journals.plos.org/ploscompbiol/feed/atom
+  policy: abstract_ok
+  track: auto
+  fallback_track: biotech
+  license: CC BY 4.0
+  verified: true
+- name: STAT
+  url: https://www.statnews.com/feed/
+  policy: headline_only
+  track: biotech
+  license: Editorial journalism, all rights reserved
+  verified: true
+- name: Nature Biotechnology
+  url: https://www.nature.com/nbt.rss
+  policy: headline_only
+  track: biotech
+  license: Copyright Springer Nature, all rights reserved
+  verified: true
+- name: The Transmitter
+  url: https://www.thetransmitter.org/feed/
+  policy: headline_only
+  track: biotech
+  license: Editorial journalism (Simons Foundation), all rights reserved
+  verified: true
+- name: bioRxiv Neuroscience
+  url: http://connect.biorxiv.org/biorxiv_xml.php?subject=neuroscience
+  policy: headline_only
+  track: biotech
+  license: Varies per preprint (CC BY, CC BY-NC, CC BY-NC-ND, CC0 or no reuse); not stated in feed
+  verified: true
+- name: Broad Institute News
+  url: https://www.broadinstitute.org/rss/news-blog-feed
+  policy: headline_only
+  track: biotech
+  license: Copyright Broad Institute, all rights reserved
+  verified: true
+- name: ScienceDaily Health & Medicine
+  url: https://www.sciencedaily.com/rss/health_medicine.xml
+  policy: headline_only
+  track: biotech
+  license: Copyright ScienceDaily / source institutions, all rights reserved
+  verified: true
+- name: ScienceDaily Neuroscience
+  url: https://www.sciencedaily.com/rss/mind_brain/neuroscience.xml
+  policy: headline_only
+  track: biotech
+  license: Copyright ScienceDaily / source institutions, all rights reserved
+  verified: true
+- name: Nature Neuroscience
+  url: https://www.nature.com/neuro.rss
+  policy: headline_only
+  track: biotech
+  license: Copyright Springer Nature, all rights reserved
+  verified: true
+- name: ESA/Webb
+  url: https://esawebb.org/news/feed/
+  policy: abstract_ok
+  track: astro
+  license: CC BY 4.0 (ESA/Webb press releases and images, unless stated otherwise)
+  verified: true
+  images: true
+  image_credit: ESA/Webb (CC BY 4.0)
+- name: ESA/Hubble
+  url: https://esahubble.org/news/feed/
+  policy: abstract_ok
+  track: astro
+  license: CC BY 4.0 (ESA/Hubble press releases and images, unless stated otherwise)
+  verified: true
+  images: true
+  image_credit: ESA/Hubble (CC BY 4.0)
+- name: AAS Nova
+  url: https://aasnova.org/feed/
+  policy: headline_only
+  track: astro
+  license: 'All rights reserved (footer: ''(c) American Astronomical Society. All rights reserved.'')'
+  verified: true
+- name: Astrobites
+  url: https://astrobites.org/feed/
+  policy: headline_only
+  track: astro
+  license: CC BY-NC 4.0 (astrobites.org/copyright-permissions); site footer also says All Rights Reserved
+  verified: true
+- name: Universe Today
+  url: https://www.universetoday.com/feed/
+  policy: headline_only
+  track: astro
+  license: All rights reserved (journalism)
+  verified: true
+- name: NASASpaceflight
+  url: https://www.nasaspaceflight.com/feed/
+  policy: headline_only
+  track: industry
+  license: All rights reserved (journalism)
+  verified: true
+- name: Spaceflight Now
+  url: https://spaceflightnow.com/feed/
+  policy: headline_only
+  track: industry
+  license: All rights reserved (journalism)
+  verified: true
+- name: Payload
+  url: https://payloadspace.com/feed/
+  policy: headline_only
+  track: industry
+  license: All rights reserved (journalism)
+  verified: true
+- name: European Spaceflight
+  url: https://europeanspaceflight.com/feed/
+  policy: headline_only
+  track: industry
+  license: All rights reserved (journalism)
+  verified: true
+- name: SpacePolicyOnline
+  url: https://spacepolicyonline.com/feed/
+  policy: headline_only
+  track: industry
+  license: All rights reserved (journalism)
+  verified: true
+- name: Physical Review X
+  url: https://feeds.aps.org/rss/recent/prx.xml
+  policy: abstract_ok
+  track: particles
+  license: Articles CC BY 4.0 (fully open-access APS journal); note feed <rights> element says 'Personal use only'
+    (APS boilerplate)
+  verified: true
+- name: Physical Review Research
+  url: https://feeds.aps.org/rss/recent/prresearch.xml
+  policy: abstract_ok
+  track: particles
+  license: Articles CC BY 4.0 (open-access APS journal); feed rights boilerplate says personal use only
+  verified: true
+- name: Quantum (journal)
+  url: https://quantum-journal.org/feed/
+  policy: abstract_ok
+  track: particles
+  license: CC BY 4.0 (stated on each paper page)
+  verified: true
+- name: APS Physics
+  url: https://feeds.aps.org/rss/recent/physics.xml
+  policy: headline_only
+  track: particles
+  license: 'Copyright APS; feed rights: ''Personal use only, all commercial or other reuse prohibited''. No CC licence
+    found (article page 403 to fetcher).'
+  verified: true
+- name: Nature Communications — physics
+  url: https://www.nature.com/subjects/physics/ncomms.rss
+  policy: headline_only
+  track: particles
+  license: 'Per-article: many CC BY 4.0, some CC BY-NC-ND — headline only until checked per article'
+  verified: true
+- name: Nature Communications — energy
+  url: https://www.nature.com/subjects/energy/ncomms.rss
+  policy: headline_only
+  track: energy
+  license: 'Per-article: many CC BY 4.0, some CC BY-NC-ND — headline only until checked per article'
+  verified: true
+- name: Nature Physics
+  url: https://www.nature.com/nphys.rss
+  policy: headline_only
+  track: particles
+  license: All rights reserved (Springer Nature, subscription journal)
+  verified: true
+- name: Physics World
+  url: https://physicsworld.com/feed/
+  policy: headline_only
+  track: particles
+  license: All rights reserved (IOP Publishing journalism)
+  verified: true
+- name: Carbon Brief
+  url: https://www.carbonbrief.org/feed/
+  policy: headline_only
+  track: energy
+  license: Journalism; reuse terms not verified - treat as no-derivatives/all rights reserved
+  verified: true
+- name: Canary Media
+  url: https://www.canarymedia.com/rss.rss
+  policy: headline_only
+  track: energy
+  license: All rights reserved (journalism)
+  verified: true
+- name: Nature Climate Change
+  url: https://www.nature.com/nclimate.rss
+  policy: headline_only
+  track: energy
+  license: All rights reserved (subscription journal)
+  verified: true
+- name: Fusion Industry Association
+  url: https://www.fusionindustryassociation.org/feed/
+  policy: headline_only
+  track: energy
+  license: All rights reserved (items belong to linked publishers)
+  verified: true
+- name: Scientific American
+  url: https://www.scientificamerican.com/platform/syndication/rss/
+  policy: headline_only
+  track: auto
+  license: All rights reserved (Scientific American / Springer Nature)
+  verified: true
+- name: ScienceDaily
+  url: https://www.sciencedaily.com/rss/top/science.xml
+  policy: headline_only
+  track: auto
+  license: All rights reserved (ScienceDaily / source institutions)
+  verified: true
+- name: Knowable Magazine
+  url: https://knowablemagazine.org/rss
+  policy: headline_only
+  track: auto
+  license: CC BY-ND 4.0 (Annual Reviews) - no derivatives
+  verified: true
+- name: Nautilus
+  url: https://nautil.us/feed/
+  policy: headline_only
+  track: auto
+  license: All rights reserved (NautilusNext)
+  verified: true
+- name: Nature Communications
+  url: https://www.nature.com/ncomms.rss
+  policy: headline_only
+  track: auto
+  license: 'Per-article: many CC BY 4.0, some CC BY-NC-ND — headline only until checked per article'
+  verified: true
+- name: PLOS ONE
+  url: https://journals.plos.org/plosone/feed/atom
+  policy: abstract_ok
+  track: auto
+  fallback_track: biotech
+  license: CC BY 4.0 (verified on article pages; occasional CC0)
+  verified: true
+- name: ESA Education
+  url: https://www.esa.int/rssfeed/Education
+  policy: headline_only
+  track: opportunities
+  license: ESA copyright (text all rights reserved; some images CC BY-SA 3.0 IGO)
+  verified: true
+- name: Opportunity Desk
+  url: https://opportunitydesk.org/feed/
+  policy: headline_only
+  track: opportunities
+  license: All rights reserved (Opportunity Desk)
+  verified: true
+youtube:
+- name: PBS Space Time
+  channel_id: UC7_gcs09iThXybpVgjHZ_7g
+  track: space
+- name: Dr. Becky
+  channel_id: UCYNbYGl89UUowy8oXkipC-Q
+  track: space
+- name: Fermilab
+  channel_id: UCD5B6VoXv41fJ-IW8Wrhz9A
+  track: particles
+- name: Sabine Hossenfelder
+  channel_id: UC1yNl2E66ZzKApQdRuTQ4tw
+  track: auto
+- name: Veritasium
+  channel_id: UCHnyfMqiRRG1u-2MsSQLbXA
+  track: auto
+- name: Quanta Magazine
+  channel_id: UCTpmmkp1E4nmZqWPS-dl5bg
+  track: auto
+- name: Two Minute Papers
+  channel_id: UCbfYPyITQ-7l4upoX8nvctg
+  track: ai
+- name: Yannic Kilcher
+  channel_id: UCZHmQk67mSJgfCCTn7xBfew
+  track: ai
+- name: Cool Worlds
+  channel_id: UCGHZpIpAWJQ-Jy_CeCdXhMA
+  track: astro
+- name: Anton Petrov
+  channel_id: UCciQ8wFcVoIIMi-lfu8-cjQ
+  track: auto
+- name: Scott Manley
+  channel_id: UCxzC4EngIsMrPmbm6Nxvb-A
+  track: industry
+- name: Astrum
+  channel_id: UC-9b7aDP6ZN0coj9-xFnrtw
+  track: astro
+entities:
+- id: atlas
+  track: particles
+  kind: experiment
+  name: ATLAS
+  full_name: A Toroidal LHC Apparatus
+  org: CERN
+  location: Meyrin
+  LHC Point 1: null
+  country: Switzerland
+  status: taking data
+  since: '2009'
+  does: General-purpose proton collisions — Higgs properties and searches for new particles
+  keywords:
+  - higgs
+  - lhc
+  - collider
+  url: https://atlas.cern
+  notable:
+  - Co-discovered the Higgs boson in 2012
+  - Has published thousands of measurements and searches since
+  - Being rebuilt now for the High-Luminosity LHC
+- id: cms
+  track: particles
+  kind: experiment
+  name: CMS
+  full_name: Compact Muon Solenoid
+  org: CERN
+  location: Cessy
+  LHC Point 5: null
+  country: France
+  status: taking data
+  since: '2009'
+  does: General-purpose proton collisions — the independent cross-check on ATLAS
+  keywords:
+  - higgs
+  - lhc
+  - collider
+  url: https://cms.cern
+- id: lhcb
+  track: particles
+  kind: experiment
+  name: LHCb
+  full_name: Large Hadron Collider beauty
+  org: CERN
+  location: Ferney-Voltaire
+  LHC Point 8: null
+  country: France
+  status: taking data
+  since: '2009'
+  does: Beauty and charm quark decays — matter/antimatter asymmetry and flavour anomalies
+  keywords:
+  - cp violation
+  - flavour
+  - antimatter
+  url: https://lhcb.web.cern.ch
+- id: alice
+  track: particles
+  kind: experiment
+  name: ALICE
+  full_name: A Large Ion Collider Experiment
+  org: CERN
+  location: Saint-Genis-Pouilly
+  LHC Point 2: null
+  country: France
+  status: taking data
+  since: '2010'
+  does: Heavy-ion collisions — the quark-gluon plasma that filled the early universe
+  keywords:
+  - quark-gluon plasma
+  - heavy ion
+  url: https://alice.cern
+- id: faser
+  track: particles
+  kind: experiment
+  name: FASER
+  full_name: ForwArd Search ExpeRiment
+  org: CERN
+  location: LHC beamline
+  480 m from ATLAS: null
+  country: Switzerland
+  status: taking data
+  since: '2022'
+  does: Very forward particles — collider neutrinos and long-lived light particles
+  keywords:
+  - neutrino
+  - dark photon
+  url: https://faser.web.cern.ch
+- id: na62
+  track: particles
+  kind: experiment
+  name: NA62
+  full_name: NA62 kaon experiment
+  org: CERN
+  location: SPS North Area
+  country: Switzerland
+  status: taking data
+  since: '2016'
+  does: The ultra-rare kaon decay K+ to pi+ nu nubar — one of the sharpest tests of the Standard Model
+  keywords:
+  - kaon
+  - rare decay
+  url: https://na62.web.cern.ch
+- id: alpha
+  track: particles
+  kind: experiment
+  name: ALPHA
+  full_name: Antihydrogen Laser Physics Apparatus
+  org: CERN Antimatter Factory
+  location: Meyrin
+  country: Switzerland
+  status: taking data
+  since: '2005'
+  does: Trapped antihydrogen — whether antimatter obeys the same spectroscopy and gravity as matter
+  keywords:
+  - antimatter
+  - antihydrogen
+  url: https://alpha.web.cern.ch
+- id: icecube
+  track: particles
+  kind: experiment
+  name: IceCube
+  full_name: IceCube Neutrino Observatory
+  org: NSF and UW-Madison
+  location: Amundsen-Scott South Pole Station
+  country: Antarctica
+  status: taking data
+  since: '2011'
+  does: High-energy astrophysical neutrinos
+  using a cubic kilometre of Antarctic ice as the detector: null
+  keywords:
+  - neutrino
+  - multi-messenger
+  url: https://icecube.wisc.edu
+  notable:
+  - Found the first high-energy astrophysical neutrinos, 2013
+  - Traced one 2017 event back to a flaring blazar
+  - Mapped neutrino emission from the plane of our own galaxy, 2023
+- id: belle2
+  track: particles
+  kind: experiment
+  name: Belle II
+  full_name: Belle II at SuperKEKB
+  org: KEK
+  location: Tsukuba
+  country: Japan
+  status: taking data
+  since: '2019'
+  does: Electron-positron collisions at the Upsilon(4S) — B meson decays and flavour anomalies
+  keywords:
+  - flavour
+  - b meson
+  url: https://www.belle2.org
+- id: katrin
+  track: particles
+  kind: experiment
+  name: KATRIN
+  full_name: Karlsruhe Tritium Neutrino Experiment
+  org: KIT
+  location: Karlsruhe
+  country: Germany
+  status: taking data
+  since: '2019'
+  does: The neutrino mass directly
+  from the shape of the tritium beta decay spectrum: null
+  keywords:
+  - neutrino mass
+  - beta decay
+  url: https://www.katrin.kit.edu
+- id: xenonnt
+  track: particles
+  kind: experiment
+  name: XENONnT
+  full_name: XENONnT dark matter experiment
+  org: INFN Gran Sasso
+  location: Gran Sasso
+  under 1400 m of rock: null
+  country: Italy
+  status: taking data
+  since: '2021'
+  does: Direct dark matter detection — a WIMP recoiling off a liquid xenon nucleus
+  keywords:
+  - dark matter
+  - wimp
+  url: https://xenonexperiment.org
+- id: lz
+  track: particles
+  kind: experiment
+  name: LZ
+  full_name: LUX-ZEPLIN
+  org: SURF
+  location: Lead
+  South Dakota: null
+  1480 m underground: null
+  country: United States
+  status: taking data
+  since: '2021'
+  does: Direct dark matter detection — XENONnT's main competitor and cross-check
+  keywords:
+  - dark matter
+  - wimp
+  url: https://lz.lbl.gov
+- id: t2k
+  track: particles
+  kind: experiment
+  name: T2K
+  full_name: Tokai to Kamioka
+  org: J-PARC and Kamioka
+  location: Tokai to Super-Kamiokande (295 km)
+  country: Japan
+  status: taking data
+  since: '2010'
+  does: Neutrino oscillation and hints of CP violation in the lepton sector
+  keywords:
+  - neutrino
+  - oscillation
+  url: https://t2k-experiment.org
+- id: auger
+  track: particles
+  kind: experiment
+  name: Pierre Auger Observatory
+  full_name: Pierre Auger Cosmic Ray Observatory
+  org: Auger Collaboration
+  location: Malargue
+  Mendoza — 3000 km2 of detectors: null
+  country: Argentina
+  status: taking data
+  since: '2004'
+  does: Ultra-high-energy cosmic rays — where the most energetic particles in nature come from
+  keywords:
+  - cosmic ray
+  - air shower
+  url: https://www.auger.org
+- id: ams02
+  track: particles
+  kind: experiment
+  name: AMS-02
+  full_name: Alpha Magnetic Spectrometer
+  org: NASA and CERN
+  location: International Space Station
+  country: orbit
+  status: taking data
+  since: '2011'
+  does: Cosmic ray composition from space — searching for antimatter and dark matter signatures
+  keywords:
+  - cosmic ray
+  - antimatter
+  url: https://ams02.space
+- id: ligo
+  track: astro
+  kind: experiment
+  name: LIGO-Virgo-KAGRA
+  full_name: Gravitational-wave detector network
+  org: LIGO Lab
+  EGO and ICRR: null
+  location: Hanford and Livingston
+  Cascina: null
+  Kamioka: null
+  country: multinational
+  status: taking data
+  since: '2015'
+  does: Spacetime ripples from merging black holes and neutron stars
+  keywords:
+  - gravitational wave
+  - black hole
+  url: https://www.ligo.caltech.edu
+  notable:
+  - 'GW150914 (2015): the first direct detection, two black holes merging'
+  - 'GW170817 (2017): a neutron star merger seen in gravitational waves and in light'
+  - The O4 observing run has pushed the catalogue past 200 candidate events
+- id: jwst
+  track: astro
+  kind: mission
+  name: JWST
+  full_name: James Webb Space Telescope
+  org: NASA
+  ESA and CSA: null
+  location: Sun-Earth L2
+  1.5 million km out: null
+  country: orbit
+  status: operating
+  since: '2021'
+  does: Infrared astronomy — the earliest galaxies
+  and the atmospheres of other worlds: null
+  keywords:
+  - infrared
+  - exoplanet
+  - early universe
+  url: https://webb.nasa.gov
+  notable:
+  - First images released July 2022
+  - Galaxies seen further back than any telescope had reached
+  - CO2 detected in an exoplanet atmosphere (WASP-39b), a first
+  - The TRAPPIST-1 rocky planets, checked for air
+- id: hubble
+  track: astro
+  kind: mission
+  name: Hubble
+  full_name: Hubble Space Telescope
+  org: NASA and ESA
+  location: Low Earth orbit
+  country: orbit
+  status: operating
+  since: '1990'
+  does: Optical and ultraviolet astronomy — still the sharpest UV eye we have
+  keywords:
+  - optical
+  - ultraviolet
+  url: https://science.nasa.gov/mission/hubble/
+  notable:
+  - 'The Deep Field (1995): point at nothing, find thousands of galaxies'
+  - Pinned down the expansion rate, and started the tension over its value
+  - Still working after 35 years and five servicing missions
+- id: jwst-xrism
+  track: astro
+  kind: mission
+  name: XRISM
+  full_name: X-Ray Imaging and Spectroscopy Mission
+  org: JAXA and NASA
+  location: Low Earth orbit
+  country: orbit
+  status: operating
+  since: '2023'
+  does: High-resolution X-ray spectroscopy — the motion of hot gas around black holes and clusters
+  keywords:
+  - x-ray
+  - spectroscopy
+  - black hole
+  url: https://science.nasa.gov/mission/xrism/
+  notable:
+  - Resolve spectrometer reads gas motion around black holes to a few km/s
+  - First science results released 2024
+- id: euclid
+  track: astro
+  kind: mission
+  name: Euclid
+  full_name: Euclid
+  org: ESA
+  location: Sun-Earth L2
+  country: orbit
+  status: operating
+  since: '2023'
+  does: Surveying a third of the sky to map how dark energy stretched the universe
+  keywords:
+  - dark energy
+  - survey
+  - cosmology
+  url: https://www.esa.int/Science_Exploration/Space_Science/Euclid
+  notable:
+  - First survey images, November 2023
+  - First bulk data release, 2025 — the survey is meant to run six years
+- id: parker
+  track: astro
+  kind: mission
+  name: Parker Solar Probe
+  full_name: Parker Solar Probe
+  org: NASA
+  location: Solar corona
+  inside 10 solar radii: null
+  country: orbit
+  status: operating
+  since: '2018'
+  does: Flying through the Sun's corona to find out what heats it and accelerates the solar wind
+  keywords:
+  - solar wind
+  - corona
+  - heliophysics
+  url: https://science.nasa.gov/mission/parker-solar-probe/
+  notable:
+  - First spacecraft to fly through the Sun's corona, 2021
+  - Closest approach December 2024, about 6.1 million km from the surface
+  - Fastest object ever built by humans
+- id: perseverance
+  track: astro
+  kind: mission
+  name: Perseverance
+  full_name: Mars 2020 Perseverance rover
+  org: NASA
+  location: Jezero Crater
+  Mars: null
+  country: Mars
+  status: operating
+  since: '2021'
+  does: Roving an ancient river delta and caching samples for a future return mission
+  keywords:
+  - mars
+  - rover
+  - sample
+  url: https://science.nasa.gov/mission/mars-2020-perseverance/
+  notable:
+  - Carried Ingenuity, which flew 72 times before its rotor was damaged in 2024
+  - Sample tubes cached at Three Forks, waiting for a return mission
+  - Found organic molecules in Jezero's delta rocks
+- id: europa-clipper
+  track: astro
+  kind: mission
+  name: Europa Clipper
+  full_name: Europa Clipper
+  org: NASA
+  location: In cruise — Jupiter arrival planned 2030
+  country: deep space
+  status: in cruise
+  since: '2024'
+  does: Will fly close passes over Europa to test whether its subsurface ocean could be habitable
+  keywords:
+  - europa
+  - jupiter
+  - ocean
+  url: https://europa.nasa.gov
+  notable:
+  - Launched October 2024 on a Falcon Heavy
+  - Mars gravity assist, March 2025
+  - Will make dozens of close passes rather than orbit Europa — radiation would kill it
+- id: juice
+  track: astro
+  kind: mission
+  name: JUICE
+  full_name: Jupiter Icy Moons Explorer
+  org: ESA
+  location: In cruise — Jupiter arrival planned 2031
+  country: deep space
+  status: in cruise
+  since: '2023'
+  does: Will study Ganymede
+  Callisto and Europa: null
+  and enter orbit around Ganymede: null
+  keywords:
+  - ganymede
+  - jupiter
+  - icy moons
+  url: https://www.esa.int/Science_Exploration/Space_Science/Juice
+  notable:
+  - Launched April 2023
+  - First ever Moon-then-Earth double gravity assist, August 2024
+  - Venus flyby 2025; Jupiter arrival planned 2031
+- id: voyager
+  track: astro
+  kind: mission
+  name: Voyager 1 and 2
+  full_name: Voyager programme
+  org: NASA
+  location: Interstellar space
+  beyond the heliopause: null
+  country: interstellar
+  status: operating on reduced power
+  since: '1977'
+  does: The only working instruments humanity has outside the Sun's bubble
+  keywords:
+  - interstellar
+  - heliopause
+  url: https://science.nasa.gov/mission/voyager/
+  notable:
+  - Voyager 1 crossed into interstellar space in 2012, Voyager 2 in 2018
+  - Engineers recovered Voyager 1 from a failed memory chip in 2024, from 24 billion km away
+  - Instruments are being switched off one by one to stretch the power budget
+- id: rubin
+  track: astro
+  kind: mission
+  name: Rubin Observatory
+  full_name: Vera C. Rubin Observatory
+  org: NSF and DOE
+  location: Cerro Pachon
+  2647 m: null
+  country: Chile
+  status: starting its survey
+  since: '2025'
+  does: Will image the whole southern sky every few nights for ten years
+  catching whatever changes: null
+  keywords:
+  - survey
+  - transient
+  - lsst
+  url: https://rubinobservatory.org
+  notable:
+  - First-look images released June 2025
+  - Will repeat the whole southern sky every few nights for ten years
+  - Expected to multiply the number of known solar system objects
+- id: iss
+  track: astro
+  kind: mission
+  name: ISS
+  full_name: International Space Station
+  org: NASA
+  Roscosmos: null
+  ESA: null
+  JAXA and CSA: null
+  location: Low Earth orbit
+  about 400 km: null
+  country: orbit
+  status: operating
+  since: '2000'
+  does: Continuously crewed laboratory — microgravity science and the testbed for everything that follows
+  keywords:
+  - crew
+  - microgravity
+  - station
+  url: https://www.nasa.gov/international-space-station/
+  notable:
+  - Continuously crewed since November 2000
+  - AMS-02 has been mounted outside since 2011
+  - The testbed for every commercial crew and station programme that follows
+- id: spacex
+  track: industry
+  kind: company
+  name: SpaceX
+  full_name: Space Exploration Technologies
+  org: private
+  location: Hawthorne
+  California: null
+  country: United States
+  status: flying
+  since: '2002'
+  does: Falcon 9 and Starship launch vehicles
+  Dragon crew capsules: null
+  and the Starlink constellation: null
+  keywords:
+  - launch
+  - starship
+  - falcon
+  - starlink
+  - dragon
+  url: https://www.spacex.com
+  notable:
+  - 'Falcon 9: first orbital-class booster landing in 2015, now routine and reflown'
+  - 'Dragon: first commercial crew flight, Demo-2, in 2020'
+  - 'Starship: full flight tests since 2023, booster caught by the tower in 2024'
+  - 'Starlink: by far the largest satellite constellation ever operated'
+  - Launched Europa Clipper for NASA in October 2024
+- id: rocketlab
+  track: industry
+  kind: company
+  name: Rocket Lab
+  full_name: Rocket Lab
+  org: public
+  location: Long Beach
+  California and Mahia: null
+  country: United States and New Zealand
+  status: flying
+  since: '2006'
+  does: Electron small launcher
+  spacecraft components: null
+  and the larger Neutron in development: null
+  keywords:
+  - electron
+  - neutron
+  - small launch
+  url: https://www.rocketlabusa.com
+  notable:
+  - Electron reached orbit in 2018 and is the busiest small launcher
+  - Launched CAPSTONE to lunar orbit for NASA in 2022
+  - Recovers boosters from the sea to study reuse
+  - Neutron, a larger reusable vehicle, is in development
+- id: blueorigin
+  track: industry
+  kind: company
+  name: Blue Origin
+  full_name: Blue Origin
+  org: private
+  location: Kent
+  Washington: null
+  country: United States
+  status: flying
+  since: '2000'
+  does: New Shepard suborbital flights and New Glenn
+  which first flew in January 2025: null
+  keywords:
+  - new glenn
+  - new shepard
+  - blue moon
+  url: https://www.blueorigin.com
+  notable:
+  - New Shepard has flown crew on suborbital hops since 2021
+  - New Glenn reached orbit on its first flight, January 2025
+  - Building the Blue Moon lunar lander for NASA's Artemis programme
+- id: firefly
+  track: industry
+  kind: company
+  name: Firefly Aerospace
+  full_name: Firefly Aerospace
+  org: private
+  location: Cedar Park
+  Texas: null
+  country: United States
+  status: flying
+  since: '2014'
+  does: Alpha launch vehicle and the Blue Ghost lunar lander
+  which landed on the Moon in March 2025: null
+  keywords:
+  - alpha
+  - blue ghost
+  - lunar lander
+  url: https://fireflyspace.com
+  notable:
+  - Blue Ghost Mission 1 landed upright on Mare Crisium in March 2025
+  - Alpha is its small launch vehicle
+  - One of the few commercial landers to reach the Moon intact
+- id: intuitive
+  track: industry
+  kind: company
+  name: Intuitive Machines
+  full_name: Intuitive Machines
+  org: public
+  location: Houston
+  Texas: null
+  country: United States
+  status: flying
+  since: '2013'
+  does: Nova-C lunar landers flown under NASA's commercial lunar payload programme
+  keywords:
+  - lunar lander
+  - nova-c
+  - clps
+  url: https://www.intuitivemachines.com
+  notable:
+  - IM-1 Odysseus, February 2024 — the first US soft landing since Apollo, though it tipped over
+  - IM-2 Athena followed in March 2025
+  - Flies under NASA's commercial lunar payload programme
+- id: iceye
+  track: industry
+  kind: company
+  name: ICEYE
+  full_name: ICEYE
+  org: private
+  location: Espoo
+  country: Finland
+  status: operating a constellation
+  since: '2014'
+  does: Small radar satellites that image through cloud and darkness
+  for floods and monitoring: null
+  keywords:
+  - sar
+  - radar
+  - earth observation
+  url: https://www.iceye.com
+  notable:
+  - Put the first smallsat synthetic-aperture radar in orbit
+  - Its flood maps are used by insurers and disaster response
+  - Radar sees through cloud and at night, which optical imaging cannot
+- id: planet
+  track: industry
+  kind: company
+  name: Planet Labs
+  full_name: Planet Labs PBC
+  org: public
+  location: San Francisco
+  California: null
+  country: United States
+  status: operating a constellation
+  since: '2010'
+  does: Images the entire landmass of Earth daily with a fleet of small optical satellites
+  keywords:
+  - earth observation
+  - imagery
+  - constellation
+  url: https://www.planet.com
+  notable:
+  - The Dove flock images Earth's entire landmass daily
+  - SkySat adds high-resolution tasking on top of that baseline
+  - Archive now spans more than a decade of daily coverage
+- id: astroscale
+  track: industry
+  kind: company
+  name: Astroscale
+  full_name: Astroscale Holdings
+  org: public
+  location: Tokyo
+  country: Japan
+  status: flying demonstrations
+  since: '2013'
+  does: Rendezvous with and removal of dead satellites and debris — the orbital cleanup business
+  keywords:
+  - debris
+  - rendezvous
+  - servicing
+  url: https://astroscale.com
+  notable:
+  - ELSA-d demonstrated magnetic capture of a client satellite in 2021
+  - ADRAS-J flew right up to a discarded Japanese rocket stage in 2024 and photographed it
+  - Working toward actually removing debris, not just approaching it
+- id: openai
+  track: ai
+  kind: company
+  name: OpenAI
+  full_name: OpenAI
+  org: private
+  location: San Francisco
+  California: null
+  country: United States
+  status: shipping
+  since: '2015'
+  does: GPT models
+  ChatGPT and the API most of the industry's products are built on: null
+  keywords:
+  - gpt
+  - chatgpt
+  - api
+  - frontier model
+  url: https://openai.com
+  notable:
+  - GPT-3 (2020) then ChatGPT (2022), which moved the field into public view
+  - The API most consumer AI products are built on
+- id: anthropic
+  track: ai
+  kind: company
+  name: Anthropic
+  full_name: Anthropic
+  org: private
+  location: San Francisco
+  California: null
+  country: United States
+  status: shipping
+  since: '2021'
+  does: The Claude models
+  with published safety research and an interpretability programme: null
+  keywords:
+  - claude
+  - interpretability
+  - safety
+  url: https://www.anthropic.com
+- id: deepmind
+  track: ai
+  kind: lab
+  name: Google DeepMind
+  full_name: Google DeepMind
+  org: Google
+  location: London
+  country: United Kingdom
+  status: shipping
+  since: '2010'
+  does: Gemini
+  plus the science line — AlphaFold: null
+  weather models and materials discovery: null
+  keywords:
+  - gemini
+  - alphafold
+  - science
+  url: https://deepmind.google
+  notable:
+  - AlphaGo beat Lee Sedol in 2016
+  - AlphaFold predicted protein structures at scale; its authors shared a Nobel in 2024
+  - Gemini is the production model line
+- id: fair
+  track: ai
+  kind: lab
+  name: Meta FAIR
+  full_name: Fundamental AI Research at Meta
+  org: Meta
+  location: Menlo Park and Paris
+  country: United States and France
+  status: publishing
+  since: '2013'
+  does: Open-weight Llama models and a large share of the field's published research
+  keywords:
+  - llama
+  - open weights
+  - research
+  url: https://ai.meta.com/research/
+- id: mistral
+  track: ai
+  kind: company
+  name: Mistral AI
+  full_name: Mistral AI
+  org: private
+  location: Paris
+  country: France
+  status: shipping
+  since: '2023'
+  does: Europe's frontier lab
+  releasing much of its model line with open weights: null
+  keywords:
+  - open weights
+  - european
+  - mixtral
+  url: https://mistral.ai
+- id: huggingface
+  track: ai
+  kind: company
+  name: Hugging Face
+  full_name: Hugging Face
+  org: private
+  location: New York and Paris
+  country: United States and France
+  status: operating
+  since: '2016'
+  does: The public hub where models and datasets are shared — the field's distribution layer
+  keywords:
+  - hub
+  - datasets
+  - open source
+  url: https://huggingface.co
+- id: ai2
+  track: ai
+  kind: lab
+  name: AI2
+  full_name: Allen Institute for AI
+  org: non-profit
+  location: Seattle
+  Washington: null
+  country: United States
+  status: publishing
+  since: '2014'
+  does: Fully open models — weights
+  data and training code released together: null
+  which is rarer than it sounds: null
+  keywords:
+  - olmo
+  - open data
+  - reproducible
+  url: https://allenai.org
+- id: eleuther
+  track: ai
+  kind: project
+  name: EleutherAI
+  full_name: EleutherAI
+  org: non-profit
+  location: distributed
+  country: multinational
+  status: publishing
+  since: '2020'
+  does: Grassroots open-source research collective; released open models when almost nobody else did
+  keywords:
+  - open source
+  - pythia
+  - the pile
+  url: https://www.eleuther.ai
+- id: mila
+  track: ai
+  kind: lab
+  name: Mila
+  full_name: Quebec AI Institute
+  org: academic consortium
+  location: Montreal
+  country: Canada
+  status: publishing
+  since: '1993'
+  does: One of the largest academic deep learning groups
+  founded around Yoshua Bengio: null
+  keywords:
+  - academic
+  - deep learning
+  - bengio
+  url: https://mila.quebec
+- id: aisi
+  track: ai
+  kind: project
+  name: AI Security Institute
+  full_name: UK AI Security Institute
+  org: UK government
+  location: London
+  country: United Kingdom
+  status: evaluating
+  since: '2023'
+  does: State-run evaluations of frontier models for dangerous capabilities
+  published openly: null
+  keywords:
+  - evaluation
+  - safety
+  - policy
+  url: https://www.aisi.gov.uk
+- id: exotrail
+  track: industry
+  kind: company
+  name: Exotrail
+  full_name: Exotrail
+  org: private
+  location: Massy and Toulouse
+  country: France
+  status: flying
+  since: '2017'
+  does: Electric thrusters and an orbital transfer vehicle — the tow truck that moves satellites
+  keywords:
+  - propulsion
+  - hall thruster
+  - orbital transfer
+  url: https://www.exotrail.com/
+  notable:
+  - spacevan, an orbital transfer vehicle, has flown
+  - ExoMG Hall thrusters fly on other operators' smallsats
+  - Sells the manoeuvre, not the hardware — mobility as a service
+- id: iai-space
+  track: industry
+  kind: company
+  name: IAI Space
+  full_name: Israel Aerospace Industries — Space Division
+  org: state-owned
+  location: Lod
+  country: Israel
+  status: flying
+  since: '1953'
+  does: Observation and communications satellites
+  ground control: null
+  and the Shavit launcher — one of a handful of organisations worldwide with the full stack: null
+  keywords:
+  - ofek
+  - amos
+  - shavit
+  - satellite
+  url: https://www.iai.co.il/
+  notable:
+  - Ofek reconnaissance satellites, launched on Israel's own Shavit rocket
+  - The Amos communications satellite series
+  - Built the Beresheet lander with SpaceIL
+  - One of about eleven organisations worldwide with end-to-end space capability
+- id: ramonspace
+  track: industry
+  kind: company
+  name: Ramon.Space
+  full_name: Ramon.Space
+  org: private
+  location: Kiryat Gat
+  country: Israel
+  status: flying
+  since: '2004'
+  does: Radiation-tolerant computers for spacecraft — supercomputing that survives orbit
+  keywords:
+  - computing
+  - radiation hardened
+  - edge
+  url: https://www.ramon.space/
+  notable:
+  - Radiation-tolerant processors that keep working through orbital radiation
+  - Aimed at moving real computation off the ground and into the spacecraft
+  - Opened US engineering operations near Denver
+- id: imagesat
+  track: industry
+  kind: company
+  name: ImageSat International
+  full_name: ImageSat International (ISI)
+  org: private
+  location: Israel
+  country: Israel
+  status: operating a constellation
+  since: '1997'
+  does: High-resolution observation satellites and the analysis layer on top of them
+  keywords:
+  - earth observation
+  - imagery
+  - intelligence
+  url: https://www.imagesatintl.com/
+  notable:
+  - Operates the EROS high-resolution observation satellites
+  - GEOIMPACT layers AI analysis over the imagery
+  - Sells sovereign capability, not only pictures
+- id: stemrad
+  track: industry
+  kind: company
+  name: StemRad
+  full_name: StemRad
+  org: private
+  location: Tampa
+  Florida — founded in Israel: null
+  country: United States and Israel
+  status: flown
+  since: '2013'
+  does: The AstroRad vest
+  which shields bone marrow from space radiation; it flew on Artemis I and to the ISS: null
+  keywords:
+  - radiation
+  - astrorad
+  - artemis
+  url: https://stemrad.com/
+  notable:
+  - AstroRad flew on Artemis I around the Moon, on the MARE experiment
+  - Also tested aboard the ISS
+  - Shields bone marrow selectively rather than the whole body
+- id: spaceapps
+  track: opportunities
+  kind: competition
+  name: NASA Space Apps Challenge
+  full_name: NASA International Space Apps Challenge
+  org: NASA and 15 partner agencies
+  location: 2800+ local events worldwide
+  country: 185+ countries
+  status: annual — held each October
+  since: '2012'
+  does: A weekend hackathon on real agency data; local events run in Israel and across Europe
+  keywords:
+  - hackathon
+  - open data
+  - students
+  url: https://www.spaceappschallenge.org/
+- id: actinspace
+  track: opportunities
+  kind: competition
+  name: ActInSpace
+  full_name: ActInSpace
+  org: CNES and ESA
+  location: dozens of cities simultaneously
+  country: international
+  status: every two years — 2026 finals in Bordeaux
+  since: '2014'
+  does: A 24-hour contest to turn a real space patent into a business idea
+  keywords:
+  - hackathon
+  - patents
+  - startup
+  url: https://www.actinspace.org/
+- id: copernicus-masters
+  track: opportunities
+  kind: competition
+  name: Copernicus Masters
+  full_name: Copernicus Masters
+  org: AZO on behalf of ESA
+  location: Europe-wide
+  country: European Union
+  status: annual
+  since: '2011'
+  does: Prizes
+  coaching and prototype support for ideas built on Copernicus Earth observation data: null
+  keywords:
+  - earth observation
+  - prize
+  - business
+  url: https://copernicus-masters.com/
+- id: esa-ygt
+  track: opportunities
+  kind: programme
+  name: ESA Young Graduate Trainee
+  full_name: ESA Young Graduate Traineeship
+  org: ESA
+  location: ESA establishments across Europe
+  country: ESA member and cooperating states
+  status: opens each February
+  closes in May: null
+  since: 1980s
+  does: About 100 one-year paid traineeships a year for people finishing a master's degree
+  keywords:
+  - traineeship
+  - graduate
+  - paid
+  url: https://www.esa.int/About_Us/Careers_at_ESA/Graduates_Young_Graduate_Trainees
+- id: esa-commercialisation
+  track: opportunities
+  kind: programme
+  name: ESA Business Incubation
+  full_name: ESA Commercialisation Gateway — BICs
+  BASS and the investor network: null
+  org: ESA
+  location: incubators across ESA member states
+  country: European Union
+  status: rolling intake
+  since: '2003'
+  does: Funding
+  lab access and 500+ licensable patents for startups applying space technology: null
+  keywords:
+  - incubator
+  - funding
+  - startup
+  - patents
+  url: https://commercialisation.esa.int/
+- id: ramon-foundation
+  track: opportunities
+  kind: programme
+  name: Ramon Foundation
+  full_name: The Ramon Foundation
+  org: non-profit
+  location: 83 partner municipalities
+  country: Israel
+  status: rolling programmes
+  since: '2004'
+  does: Israel's space education pipeline — school programmes
+  mentorship and the Rakia mission's experiments: null
+  keywords:
+  - education
+  - israel
+  - students
+  - mentorship
+  url: https://www.ramonspace.com/
+- id: cern-summer
+  track: opportunities
+  kind: programme
+  name: CERN Summer Student
+  full_name: CERN Summer Student Programme
+  org: CERN
+  location: Meyrin, Geneva
+  country: Switzerland
+  status: annual — applications close in the winter
+  since: '1962'
+  does: 'Eight to thirteen weeks on a real project at CERN, with a lecture series alongside it. Paid:
+    a net allowance of 94 CHF per day, health insurance, and travel costs in some cases.'
+  keywords:
+  - internship
+  - paid
+  - physics
+  - engineering
+  notable:
+  - For bachelor's and master's students with at least six semesters done
+  - Physics, engineering, computer science and maths
+  - One of the few places an undergraduate works inside a running experiment
+  url: https://careers.cern/summer
+- id: desy-summer
+  track: opportunities
+  kind: programme
+  name: DESY Summer Students
+  full_name: DESY Summer Student Programme
+  org: DESY
+  location: Hamburg and Zeuthen
+  country: Germany
+  status: annual — applications close in February
+  since: 1970s
+  does: Seven and a half weeks inside a major accelerator laboratory, on photon science, accelerators,
+    particle or astroparticle physics.
+  keywords:
+  - internship
+  - accelerator
+  - paid
+  notable:
+  - 2026 edition ran 21 July to 10 September
+  - Free hostel accommodation plus a daily stipend, travel partly reimbursed
+  - Open to undergraduates in physics and related fields
+  url: https://summerstudents.desy.de/
+- id: caltech-surf
+  track: opportunities
+  kind: programme
+  name: Caltech SURF
+  full_name: Summer Undergraduate Research Fellowships
+  org: Caltech
+  location: Pasadena, California
+  country: United States
+  status: annual — proposals due in the winter
+  since: '1979'
+  does: A summer of research at Caltech or JPL, written up and defended like a real project — students
+    propose the work themselves.
+  keywords:
+  - research
+  - undergraduate
+  - jpl
+  notable:
+  - Running since 1979
+  - Students write their own proposal with a mentor
+  - JPL projects are part of the same programme
+  url: https://sfp.caltech.edu/programs/surf
+- id: gsoc
+  track: opportunities
+  kind: programme
+  name: Google Summer of Code
+  full_name: Google Summer of Code
+  org: Google
+  location: fully remote
+  country: worldwide
+  status: annual — organisations announced in February
+  since: '2005'
+  does: Twelve weeks contributing to an open-source project with a mentor from that project, stipend included.
+    Several scientific-software organisations take part each year.
+  keywords:
+  - open source
+  - remote
+  - stipend
+  - software
+  notable:
+  - Over 21,000 contributors since 2005, across 1,000+ organisations
+  - Astropy, the HEP software projects and similar groups participate regularly
+  - Contact the organisation before the proposal window — that is what decides selection
+  url: https://summerofcode.withgoogle.com/
+- id: ictp
+  track: opportunities
+  kind: programme
+  name: ICTP Trieste
+  full_name: Abdus Salam International Centre for Theoretical Physics
+  org: UNESCO, IAEA and Italy
+  location: Trieste
+  country: Italy
+  status: workshops and schools year round
+  since: '1964'
+  does: Schools, workshops and a diploma year in theoretical physics, aimed particularly at scientists
+    from countries without that training at home.
+  keywords:
+  - school
+  - workshop
+  - theory
+  - funded
+  notable:
+  - Founded by Abdus Salam to keep physics from concentrating in rich countries
+  - Most schools cover travel and accommodation for accepted participants
+  - Work here fed into neutrino oscillation theory and climate modelling
+  url: https://www.ictp.it/
+- id: nif
+  track: energy
+  kind: experiment
+  name: NIF
+  full_name: National Ignition Facility
+  org: Lawrence Livermore National Laboratory
+  location: Livermore, California
+  country: United States
+  status: operating
+  since: '2009'
+  does: 192 laser beams crush a fuel capsule until it fuses — the only laboratory on Earth to have reached
+    ignition.
+  keywords:
+  - fusion
+  - inertial confinement
+  - laser
+  - ignition
+  notable:
+  - 'December 2022: more fusion energy out than laser energy in, a first anywhere'
+  - 2.05 MJ of laser light produced 3.1 MJ of fusion yield
+  - Ignition has since been repeated at higher gain
+  url: https://lasers.llnl.gov/
+- id: w7x
+  track: energy
+  kind: experiment
+  name: Wendelstein 7-X
+  full_name: Wendelstein 7-X stellarator
+  org: Max Planck Institute for Plasma Physics
+  location: Greifswald
+  country: Germany
+  status: operating
+  since: '2015'
+  does: The largest stellarator ever built — a twisted magnetic bottle designed to hold plasma continuously
+    rather than in pulses.
+  keywords:
+  - fusion
+  - stellarator
+  - plasma
+  - steady state
+  notable:
+  - First plasma in December 2015; 50 superconducting coils, none of them a simple shape
+  - Built to sustain discharges up to 30 minutes
+  - Reaches confinement comparable to tokamaks without their pulsed limit
+  url: https://www.ipp.mpg.de/w7x
+- id: cfs
+  track: energy
+  kind: company
+  name: Commonwealth Fusion Systems
+  full_name: Commonwealth Fusion Systems
+  org: private, spun out of MIT
+  location: Devens, Massachusetts
+  country: United States
+  status: building SPARC
+  since: '2018'
+  does: A compact tokamak made possible by high-temperature superconducting magnets — the magnets are
+    the whole bet.
+  keywords:
+  - fusion
+  - tokamak
+  - hts magnets
+  - sparc
+  notable:
+  - SPARC is designed to be the first commercially relevant machine to produce net fusion energy
+  - ARC, the power plant meant to follow it, is already sited
+  - The largest private fusion company by funding
+  url: https://cfs.energy/
+- id: helion
+  track: energy
+  kind: company
+  name: Helion
+  full_name: Helion Energy
+  org: private
+  location: Everett, Washington
+  country: United States
+  status: building Orion
+  since: '2013'
+  does: Pulsed magneto-inertial fusion that aims to turn the plasma's energy straight into electricity,
+    skipping the steam turbine.
+  keywords:
+  - fusion
+  - pulsed
+  - direct conversion
+  notable:
+  - 'Polaris: the first privately built machine to show measurable deuterium-tritium fusion'
+  - Raised $465 million in June 2026 at a $15.5 billion valuation
+  - Building Orion, which it calls the first fusion power plant
+  url: https://www.helionenergy.com/
+- id: terrapower
+  track: energy
+  kind: company
+  name: TerraPower
+  full_name: TerraPower
+  org: private, with GE Vernova Hitachi
+  location: Kemmerer, Wyoming
+  country: United States
+  status: building Natrium
+  since: '2008'
+  does: Natrium, a sodium-cooled fission reactor with molten-salt storage bolted on — so the plant can
+    surge when the grid needs it.
+  keywords:
+  - fission
+  - sodium
+  - smr
+  - natrium
+  notable:
+  - First plant under construction in Wyoming
+  - 345 MWe, with over five hours of molten-salt energy storage
+  - Also developing medical isotopes for cancer treatment
+  url: https://www.terrapower.com/
+- id: fervo
+  track: energy
+  kind: company
+  name: Fervo Energy
+  full_name: Fervo Energy
+  org: private
+  location: Houston, Texas
+  country: United States
+  status: operating
+  since: '2017'
+  does: Geothermal power anywhere hot rock is deep enough, using the horizontal drilling and fibre sensing
+    the oil industry perfected.
+  keywords:
+  - geothermal
+  - egs
+  - drilling
+  notable:
+  - Signed a 396 MW power purchase agreement with Google, September 2026
+  - Building Cape Station in Utah
+  - Staffed deliberately with oil and gas engineers
+  url: https://fervoenergy.com/
+- id: storedot
+  track: energy
+  kind: company
+  name: StoreDot
+  full_name: StoreDot
+  org: private
+  location: Herzliya
+  country: Israel
+  status: operating
+  since: '2012'
+  does: Silicon-anode batteries built to charge an electric car in minutes rather than hours.
+  keywords:
+  - battery
+  - fast charging
+  - silicon anode
+  notable:
+  - Extreme-fast-charging cells at 300 Wh/kg
+  - Partnerships with Mercedes, Volvo and Polestar
+  - Backed by bp and TDK
+  url: https://www.store-dot.com/
+- id: solaredge
+  track: energy
+  kind: company
+  name: SolarEdge
+  full_name: SolarEdge Technologies
+  org: public
+  location: Herzliya
+  country: Israel
+  status: operating
+  since: '2006'
+  does: The electronics between a solar panel and the grid — optimisers and inverters that get more out
+    of every roof.
+  keywords:
+  - solar
+  - inverter
+  - power electronics
+  notable:
+  - Installed in more than 140 countries
+  - Leads in rooftop solar capacity
+  - Moved into home storage and grid services
+  url: https://www.solaredge.com/
+- id: oxfordpv
+  track: energy
+  kind: company
+  name: Oxford PV
+  full_name: Oxford Photovoltaics
+  org: private, spun out of Oxford University
+  location: Oxford
+  country: United Kingdom
+  status: operating
+  since: '2010'
+  does: Perovskite layered on silicon — two cells in one, each catching the part of sunlight the other
+    wastes.
+  keywords:
+  - perovskite
+  - tandem
+  - solar cell
+  notable:
+  - Built on Henry Snaith's perovskite research
+  - Among the first to put perovskite-silicon tandems into commercial modules
+  - Tandems are how solar gets past the single-junction efficiency limit
+  url: https://www.oxfordpv.com/
+- id: moderna
+  track: biotech
+  kind: company
+  name: Moderna
+  full_name: Moderna
+  org: public
+  location: Cambridge, Massachusetts
+  country: United States
+  status: shipping
+  since: '2010'
+  does: 'Medicines written as mRNA: instructions the body''s own cells follow to make the protein that
+    does the work.'
+  keywords:
+  - mrna
+  - vaccine
+  - cancer vaccine
+  notable:
+  - COVID-19 vaccine, 2020
+  - Its mRNA flu vaccine was approved by the FDA in August 2026
+  - Personalised cancer vaccines built from each patient's tumour are in late-stage trials
+  url: https://www.modernatx.com/
+- id: biontech
+  track: biotech
+  kind: company
+  name: BioNTech
+  full_name: BioNTech
+  org: public
+  location: Mainz
+  country: Germany
+  status: shipping
+  since: '2008'
+  does: Founded to make cancer immunotherapy, became famous for a vaccine, and has gone back to cancer.
+  keywords:
+  - mrna
+  - immunotherapy
+  - oncology
+  notable:
+  - Co-developed the first authorised mRNA COVID-19 vaccine, with Pfizer
+  - Founders Uğur Şahin and Özlem Türeci started it for cancer, not viruses
+  - Oncology pipeline now includes bispecific antibodies
+  url: https://www.biontech.com/
+- id: crispr-tx
+  track: biotech
+  kind: company
+  name: CRISPR Therapeutics
+  full_name: CRISPR Therapeutics
+  org: public
+  location: Zug
+  country: Switzerland
+  status: shipping
+  since: '2013'
+  does: 'Makes the first approved CRISPR medicine: patients'' own stem cells, edited and returned.'
+  keywords:
+  - crispr
+  - gene editing
+  - sickle cell
+  notable:
+  - Casgevy, developed with Vertex, is approved for sickle cell disease and beta thalassaemia
+  - Co-founded by Emmanuelle Charpentier
+  - The first time gene editing became a prescription
+  url: https://crisprtx.com/
+- id: broad
+  track: biotech
+  kind: lab
+  name: Broad Institute
+  full_name: Broad Institute of MIT and Harvard
+  org: non-profit
+  location: Cambridge, Massachusetts
+  country: United States
+  status: operating
+  since: '2004'
+  does: Genomics at industrial scale, and the lab behind base editing and prime editing.
+  keywords:
+  - genomics
+  - base editing
+  - prime editing
+  - gnomad
+  notable:
+  - Base and prime editing now in more than 25 clinical trials
+  - gnomAD has contributed to over 13 million genetic diagnoses
+  - Has sequenced nearly 900,000 whole human genomes
+  url: https://www.broadinstitute.org/
+- id: arc
+  track: biotech
+  kind: lab
+  name: Arc Institute
+  full_name: Arc Institute
+  org: non-profit, with Stanford, UCSF and Berkeley
+  location: Palo Alto, California
+  country: United States
+  status: publishing
+  since: '2021'
+  does: 'Where AI and biology meet as one lab: genome language models built next to the wet benches that
+    test them.'
+  keywords:
+  - genome language model
+  - evo
+  - virtual cell
+  notable:
+  - Its Evo models read and write DNA across all domains of life
+  - Used a genome language model to design working bacteriophages
+  - Funds scientists for years at a time, not grant cycles
+  url: https://arcinstitute.org/
+- id: isomorphic
+  track: biotech
+  kind: company
+  name: Isomorphic Labs
+  full_name: Isomorphic Labs
+  org: Alphabet, spun out of Google DeepMind
+  location: London
+  country: United Kingdom
+  status: operating
+  since: '2021'
+  does: AlphaFold's successors, pointed at drug design instead of structure prediction.
+  keywords:
+  - drug discovery
+  - alphafold
+  - ai
+  notable:
+  - Led by Demis Hassabis, who shared the 2024 Chemistry Nobel for AlphaFold
+  - Co-developed AlphaFold 3 with Google DeepMind
+  - Drug-discovery partnerships with major pharmaceutical companies
+  url: https://www.isomorphiclabs.com/
+- id: weizmann
+  track: biotech
+  kind: lab
+  name: Weizmann Institute
+  full_name: Weizmann Institute of Science
+  org: academic
+  location: Rehovot
+  country: Israel
+  status: operating
+  since: '1934'
+  does: One of the world's leading basic-science institutes, strong in immunology, cancer and the gut
+    microbiome.
+  keywords:
+  - immunology
+  - cancer
+  - microbiome
+  notable:
+  - Its ILLUMINE team won up to £20m in Cancer Grand Challenges, 2025
+  - Pioneering work linking gut microbes to immunity
+  - Research here led to several of Israel's best-known drugs
+  url: https://www.weizmann.ac.il/pages/
+canon:
+- track: energy
+  sort: 2024
+  title: Achievement of Target Gain Larger than Unity in an Inertial Fusion Experiment
+  who: Abu-Shawareb et al. (NIF)
+  url: https://doi.org/10.1103/PhysRevLett.132.065102
+  why: 2.05 MJ of laser light in, 3.1 MJ of fusion out. Seventy years of trying, finally over the line.
+- track: biotech
+  sort: 2021
+  title: Highly accurate protein structure prediction with AlphaFold
+  who: Jumper et al.
+  url: https://doi.org/10.1038/s41586-021-03819-2
+  why: A fifty-year-old problem, largely solved. The structures are free for every known protein.
+- track: ai
+  sort: 2020
+  title: Language Models are Few-Shot Learners
+  who: Brown et al.
+  url: https://arxiv.org/abs/2005.14165
+  why: GPT-3. The paper where scaling alone started producing abilities nobody trained for.
+- track: ai
+  sort: 2017
+  title: Attention Is All You Need
+  who: Vaswani et al.
+  url: https://arxiv.org/abs/1706.03762
+  why: The transformer. Every large language model in use today is a descendant of this one paper.
+- track: astro
+  sort: 2016
+  title: Observation of Gravitational Waves from a Binary Black Hole Merger
+  who: LIGO and Virgo Collaborations
+  url: https://doi.org/10.1103/PhysRevLett.116.061102
+  why: Spacetime itself was measured ringing, a century after Einstein said it would.
+- track: ai
+  sort: 2015
+  title: Deep Residual Learning for Image Recognition
+  who: He et al.
+  url: https://arxiv.org/abs/1512.03385
+  why: Skip connections made very deep networks trainable. Almost everything since is built on them.
+- track: ai
+  sort: 2014
+  title: Generative Adversarial Networks
+  who: Goodfellow et al.
+  url: https://arxiv.org/abs/1406.2661
+  why: Two networks trained against each other — the idea that made generated images convincing.
+- track: particles
+  sort: 2012
+  title: Observation of a new particle in the search for the Standard Model Higgs boson
+  who: ATLAS Collaboration
+  url: https://arxiv.org/abs/1207.7214
+  why: The last missing piece of the Standard Model, found 48 years after it was predicted.
+- track: biotech
+  sort: 2012
+  title: A Programmable Dual-RNA–Guided DNA Endonuclease in Adaptive Bacterial Immunity
+  who: Jinek, Chylinski, Fonfara, Hauer, Doudna and Charpentier
+  url: https://doi.org/10.1126/science.1225829
+  why: CRISPR-Cas9 turned from a bacterial immune system into a tool for editing any genome.
+- track: biotech
+  sort: 2005
+  title: Suppression of RNA Recognition by Toll-like Receptors
+  who: Karikó, Buckstein, Ni and Weissman
+  url: https://doi.org/10.1016/j.immuni.2005.06.008
+  why: The modified-nucleoside trick that stops the body attacking mRNA. Ignored for years, then it made
+    the COVID vaccines work.
+- track: astro
+  sort: 1998
+  title: Observational Evidence from Supernovae for an Accelerating Universe
+  who: Riess et al.
+  url: https://arxiv.org/abs/astro-ph/9805201
+  why: The expansion is speeding up, and nobody knows why. Dark energy is the name for not knowing.
+- track: particles
+  sort: 1998
+  title: Evidence for Oscillation of Atmospheric Neutrinos
+  who: Super-Kamiokande Collaboration
+  url: https://arxiv.org/abs/hep-ex/9807003
+  why: Neutrinos change type as they travel, which means they have mass — the Standard Model said they
+    did not.
+- track: energy
+  sort: 1980
+  title: 'LixCoO2: A new cathode material for batteries of high energy density'
+  who: Mizushima, Goodenough et al.
+  url: https://doi.org/10.1016/0025-5408(80)90012-4
+  why: The cathode inside the lithium-ion battery in your phone. A Nobel, 39 years later.
+- track: astro
+  sort: 1965
+  title: A Measurement of Excess Antenna Temperature at 4080 Mc/s
+  who: Penzias and Wilson
+  url: https://doi.org/10.1086/148307
+  why: They thought it was pigeon droppings in the antenna. It was the afterglow of the Big Bang.
+- track: energy
+  sort: 1961
+  title: Detailed Balance Limit of Efficiency of p-n Junction Solar Cells
+  who: Shockley and Queisser
+  url: https://doi.org/10.1063/1.1736034
+  why: Why a single solar cell tops out near a third of the sunlight it catches — and why tandems exist.
+- track: particles
+  sort: 1957
+  title: Experimental Test of Parity Conservation in Beta Decay
+  who: Chien-Shiung Wu et al.
+  url: https://doi.org/10.1103/PhysRev.105.1413
+  why: Nature tells left from right. Physicists had assumed for decades that it could not.
+- track: astro
+  sort: 1957
+  title: Synthesis of the Elements in Stars
+  who: Burbidge, Burbidge, Fowler and Hoyle
+  url: https://doi.org/10.1103/RevModPhys.29.547
+  why: How every element heavier than helium got made. The paper that ties nuclear physics to the sky.
+- track: energy
+  sort: 1957
+  title: Some Criteria for a Power Producing Thermonuclear Reactor
+  who: John Lawson
+  url: https://doi.org/10.1088/0370-1301/70/1/303
+  why: How hot, how dense and for how long — the bar every fusion machine is still measured against.
+- track: biotech
+  sort: 1953
+  title: 'Molecular Structure of Nucleic Acids: A Structure for Deoxyribose Nucleic Acid'
+  who: Watson and Crick
+  url: https://doi.org/10.1038/171737a0
+  why: One page, and the double helix. Built on Rosalind Franklin's X-ray data, which she was not told
+    they had.
+- track: energy
+  sort: 1939
+  title: Über den Nachweis und das Verhalten der bei der Bestrahlung des Urans mittels Neutronen entstehenden
+    Erdalkalimetalle
+  who: Hahn and Strassmann
+  url: https://doi.org/10.1007/BF01488241
+  why: The chemistry showing uranium had split into barium. They could not explain it, and published anyway.
+- track: energy
+  sort: 1939
+  title: 'Disintegration of Uranium by Neutrons: a New Type of Nuclear Reaction'
+  who: Meitner and Frisch
+  url: https://doi.org/10.1038/143239a0
+  why: The explanation Hahn could not give, worked out over a winter walk. Meitner was left off the Nobel.
+- track: astro
+  sort: 1929
+  title: A relation between distance and radial velocity among extra-galactic nebulae
+  who: Edwin Hubble
+  url: https://doi.org/10.1073/pnas.15.3.168
+  why: Two and a half pages showing the universe is expanding. Cosmology starts here.
+watch:
+- track: ai
+  name: 'Neural Networks: Zero to Hero'
+  who: Andrej Karpathy
+  free: true
+  url: https://karpathy.ai/zero-to-hero.html
+  why: Nine lectures building a working GPT from nothing, in code, with every line explained.
+- track: ai
+  name: Neural networks
+  who: 3Blue1Brown
+  free: true
+  url: https://www.3blue1brown.com/topics/neural-networks
+  why: The visual explanation of what a network is actually doing. Start here if the maths looks opaque.
+- track: ai
+  name: Practical Deep Learning for Coders
+  who: fast.ai
+  free: true
+  url: https://course.fast.ai/
+  why: 'Top-down: you train a working model in lesson one and learn why it worked afterwards.'
+- track: ai
+  name: Short courses (agents, RAG, evaluation)
+  who: DeepLearning.AI
+  free: false
+  url: https://www.deeplearning.ai/short-courses/
+  why: Short, current, built with the labs themselves — though the catalogue has moved to a membership.
+- track: ai
+  name: Paper walkthroughs
+  who: Yannic Kilcher
+  free: true
+  url: https://www.youtube.com/channel/UCZHmQk67mSJgfCCTn7xBfew
+  why: Reads the week's papers out loud and argues with them, which is how you learn to read them yourself.
+- track: astro
+  name: PBS Space Time
+  who: PBS
+  free: true
+  url: https://www.youtube.com/channel/UC7_gcs09iThXybpVgjHZ_7g
+  why: The rare channel that keeps the real equations in and still stays followable.
+- track: astro
+  name: Dr. Becky
+  who: Becky Smethurst, Oxford
+  free: true
+  url: https://www.youtube.com/channel/UCYNbYGl89UUowy8oXkipC-Q
+  why: A working astrophysicist walking through the month's results, including the ones that did not hold
+    up.
+- track: particles
+  name: Fermilab
+  who: Don Lincoln and colleagues
+  free: true
+  url: https://www.youtube.com/channel/UCD5B6VoXv41fJ-IW8Wrhz9A
+  why: Particle physics explained by the lab that does it, without the press-release gloss.
+- track: astro
+  name: Cool Worlds
+  who: David Kipping, Columbia University
+  free: true
+  url: https://www.youtube.com/channel/UCGHZpIpAWJQ-Jy_CeCdXhMA
+  why: A working exoplanet astronomer thinking out loud about habitability and how we would ever know.
+- track: astro
+  name: Anton Petrov
+  who: whatdamath
+  free: true
+  url: https://www.youtube.com/channel/UCciQ8wFcVoIIMi-lfu8-cjQ
+  why: A short, careful video on almost every new astronomy result, usually within days of the paper.
+- track: astro
+  name: Kurzgesagt
+  who: In a Nutshell
+  free: true
+  url: https://www.youtube.com/channel/UCsXVk37bltHxD1rDPwtNM8Q
+  why: The most beautiful science animation being made, and the sources are published alongside each video.
+- track: astro
+  name: Deep Sky Videos
+  who: Brady Haran with Nottingham astronomers
+  free: true
+  url: https://www.youtube.com/channel/UCo-3ThNQmPmQSQL_L6Lx1_w
+  why: Real astronomers talking through objects one at a time, telescope time included.
+- track: astro
+  name: Event Horizon
+  who: John Michael Godier
+  free: true
+  url: https://www.youtube.com/channel/UCz3qvETKooktNgCvvheuQDw
+  why: Long interviews with the researchers themselves — where cosmology arguments actually get made.
+- track: industry
+  name: Scott Manley
+  who: Scott Manley
+  free: true
+  url: https://www.youtube.com/channel/UCxzC4EngIsMrPmbm6Nxvb-A
+  why: Orbital mechanics and launch failures explained by someone who reads the telemetry.
+- track: industry
+  name: Astrum
+  who: Alex McColgan
+  free: true
+  url: https://www.youtube.com/channel/UC-9b7aDP6ZN0coj9-xFnrtw
+  why: Built from real probe imagery — what the spacecraft actually sent back, not an artist's impression.
+books:
+- track: any
+  kind: method
+  title: Bayesian Data Analysis
+  who: Gelman, Carlin, Stern, Dunson, Vehtari and Rubin
+  year: 2013
+  url: https://sites.stat.columbia.edu/gelman/book/
+  free: true
+  why: How to reason about uncertainty when you have a model and not much data. Free PDF from the authors.
+- track: any
+  kind: method
+  title: Numerical Recipes
+  who: Press, Teukolsky, Vetterling and Flannery
+  year: 2007
+  url: http://numerical.recipes/
+  free: false
+  why: The algorithms behind the library functions you call, explained well enough to know when they will
+    fail you.
+- track: any
+  kind: method
+  title: Statistical Data Analysis
+  who: Glen Cowan
+  year: 1998
+  free: false
+  why: The standard reference for how physicists actually handle errors, fits and limits. Short, and nothing
+    wasted.
+- track: any
+  kind: method
+  title: Data Reduction and Error Analysis for the Physical Sciences
+  who: Bevington and Robinson
+  year: 2002
+  free: false
+  why: The first statistics book most physics students meet, and the one they keep going back to.
+- track: any
+  kind: popular
+  title: The Visual Display of Quantitative Information
+  who: Edward Tufte
+  year: 1983
+  free: false
+  why: If you are going to publish plots, read this before you publish more of them.
+- track: astro
+  kind: textbook
+  title: An Introduction to Modern Astrophysics
+  who: Carroll and Ostlie
+  year: 2006
+  free: false
+  why: The standard undergraduate course in one very heavy volume — stars, galaxies, cosmology, all of
+    it.
+- track: astro
+  kind: textbook
+  title: Introduction to Cosmology
+  who: Barbara Ryden
+  year: 2016
+  free: false
+  why: The clearest first cosmology book there is. You can read it end to end without getting stuck.
+- track: astro
+  kind: popular
+  title: Black Holes and Time Warps
+  who: Kip Thorne
+  year: 1994
+  free: false
+  why: Written before LIGO detected anything, by the person who argued it would. Worth reading for that
+    alone.
+- track: astro
+  kind: popular
+  title: The First Three Minutes
+  who: Steven Weinberg
+  year: 1977
+  free: false
+  why: A Nobel laureate walking through the early universe minute by minute, without hiding the physics.
+- track: industry
+  kind: popular
+  title: Liftoff
+  who: Eric Berger
+  year: 2021
+  free: false
+  why: How SpaceX nearly died before Falcon 1 reached orbit. Reported, not mythologised.
+- track: industry
+  kind: popular
+  title: Reentry
+  who: Eric Berger
+  year: 2024
+  free: false
+  why: 'The sequel: Falcon 9, reuse, and the decisions that turned a survivor into the whole market.'
+- track: industry
+  kind: textbook
+  title: Space Mission Analysis and Design
+  who: Wertz and Larson
+  year: 1999
+  free: false
+  why: The engineering reference the industry actually sizes missions with. Known simply as SMAD.
+- track: industry
+  kind: popular
+  title: The Right Stuff
+  who: Tom Wolfe
+  year: 1979
+  free: false
+  why: Why anyone climbs onto a rocket at all. Still the best writing about test pilots and nerve.
+- track: particles
+  kind: textbook
+  title: Modern Particle Physics
+  who: Mark Thomson
+  year: 2013
+  free: false
+  why: The current standard course. Works the calculations through instead of quoting results.
+- track: particles
+  kind: textbook
+  title: Introduction to Elementary Particles
+  who: David Griffiths
+  year: 2008
+  free: false
+  why: Griffiths explains things the way a good supervisor would. Start here before Thomson.
+- track: particles
+  kind: reference
+  title: Review of Particle Physics
+  who: Particle Data Group
+  year: 2026
+  url: https://pdg.lbl.gov/
+  free: true
+  why: Every measured property of every known particle, updated yearly and free. The field's single most-used
+    document.
+- track: particles
+  kind: popular
+  title: Lost in Math
+  who: Sabine Hossenfelder
+  year: 2018
+  free: false
+  why: An argument that beauty has been a bad guide in theoretical physics. Contested, and worth arguing
+    with.
+- track: energy
+  kind: textbook
+  title: Plasma Physics and Fusion Energy
+  who: Jeffrey Freidberg
+  year: 2007
+  free: false
+  why: What it would actually take to build a fusion reactor, with the engineering constraints left in.
+- track: energy
+  kind: popular
+  title: The Making of the Atomic Bomb
+  who: Richard Rhodes
+  year: 1986
+  free: false
+  why: A Pulitzer for a book that is also a genuine history of 20th-century nuclear physics. Read it for
+    Meitner and Bohr.
+- track: energy
+  kind: popular
+  title: Midnight in Chernobyl
+  who: Adam Higginbotham
+  year: 2019
+  free: false
+  why: Reactor physics as it behaves when institutions fail. The clearest account of what actually happened.
+- track: ai
+  kind: textbook
+  title: Deep Learning
+  who: Goodfellow, Bengio and Courville
+  year: 2016
+  url: https://www.deeplearningbook.org/
+  free: true
+  why: The foundations, from linear algebra up. Free online, and still the reference for why things work.
+- track: ai
+  kind: textbook
+  title: 'Probabilistic Machine Learning: An Introduction'
+  who: Kevin Murphy
+  year: 2022
+  url: https://probml.github.io/pml-book/book1.html
+  free: true
+  why: Bridges classical statistics and deep learning in one framework. Draft PDF free, code in Python
+    and JAX.
+- track: ai
+  kind: textbook
+  title: 'Reinforcement Learning: An Introduction'
+  who: Sutton and Barto
+  year: 2018
+  url: http://incompleteideas.net/book/the-book-2nd.html
+  free: true
+  why: By the people who built the field. Free PDF, and still the clearest treatment of the basics.
+- track: ai
+  kind: popular
+  title: The Alignment Problem
+  who: Brian Christian
+  year: 2020
+  free: false
+  why: The honest version of why making these systems do what we meant is hard, told through the research.
+- track: energy
+  kind: popular
+  title: Sustainable Energy — Without the Hot Air
+  who: David MacKay
+  year: 2008
+  url: https://www.withouthotair.com/
+  free: true
+  why: Every energy argument turned into kilowatt-hours per person per day. Free online, and it settles
+    a lot of arguments.
+- track: biotech
+  kind: textbook
+  title: Molecular Biology of the Cell
+  who: Alberts et al.
+  year: 2022
+  free: false
+  why: The textbook of cell biology. If you come from physics, this is where the vocabulary comes from.
+- track: biotech
+  kind: popular
+  title: The Gene
+  who: Siddhartha Mukherjee
+  year: 2016
+  free: false
+  why: From Mendel to gene editing, written by an oncologist with a family history that makes it personal.
+- track: biotech
+  kind: popular
+  title: The Code Breaker
+  who: Walter Isaacson
+  year: 2021
+  free: false
+  why: Jennifer Doudna and the race to CRISPR, with the rivalries left in.
+- track: biotech
+  kind: popular
+  title: The Emperor of All Maladies
+  who: Siddhartha Mukherjee
+  year: 2010
+  free: false
+  why: A biography of cancer. Won the Pulitzer, and explains why the mRNA cancer vaccines matter so much.
+buzz:
+  days: 7
+  hn_min_points: 150
+  wikipedia: true
