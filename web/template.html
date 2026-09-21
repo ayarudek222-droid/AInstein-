@@ -330,8 +330,16 @@
 
   /* ---------- two panes: Today (the feed) and the Library ---------- */
   .app{max-width:1180px;}
-  .brandrow{flex-wrap:wrap;row-gap:8px;}
-  .modes{display:flex;gap:2px;margin-left:14px;border:1px solid var(--rule);border-radius:2px;padding:2px;}
+  .brandrow{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;column-gap:12px;row-gap:8px;}
+  .brandrow .brand{justify-self:start;}
+  .brandrow .me{justify-self:end;margin-left:0;}
+  @media (max-width:759px){
+    .brandrow{grid-template-columns:1fr auto;}
+    .brandrow .modes{grid-column:1 / -1;grid-row:2;justify-self:center;max-width:100%;overflow-x:auto;scrollbar-width:none;}
+  }
+  .pmine{display:flex;flex-direction:column;gap:18px;padding:14px 0 30px;}
+  .pmine .settings > div{margin:10px 0 14px;}
+  .modes{display:flex;gap:2px;margin-left:0;border:1px solid var(--rule);border-radius:2px;padding:2px;}
   .mode{
     background:none;border:none;cursor:pointer;font:inherit;font-size:12px;letter-spacing:.06em;
     text-transform:uppercase;color:var(--ink-3);padding:5px 10px;border-radius:2px;
@@ -385,6 +393,9 @@
   .bcard .bnote{font-size:12.5px;color:var(--ink-3);}
   .bcard .bnote a{color:var(--accent);}
   .bacts{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:2px;}
+  .ocard{border-left-color:var(--teal);}
+  .osec{margin:6px 0 0;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-weight:500;}
+  .odead{color:var(--teal) !important;font-size:13.5px !important;}
   .bacts [data-bask]{margin-left:auto;}
   @media (prefers-reduced-motion: reduce){ .blabel i{animation:none;} }
   .progress{display:flex;gap:3px;}
@@ -827,6 +838,7 @@
         <button type="button" class="mode" data-mode="breaking" aria-pressed="false">Breaking<span class="dot" id="breakDot" hidden></span></button>
         <button type="button" class="mode" data-mode="today" aria-pressed="true">Feed</button>
         <button type="button" class="mode" data-mode="library" aria-pressed="false">Library</button>
+        <button type="button" class="mode" data-mode="opps" aria-pressed="false">Opportunities</button>
         <button type="button" class="mode" data-mode="talk" aria-pressed="false">Talk<span class="dot" id="talkDot" hidden></span></button>
         <button type="button" class="mode" data-mode="ask" aria-pressed="false">Ask</button>
         <button type="button" class="mode ico" data-mode="diary" aria-pressed="false" aria-label="Diary"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="1.5"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></svg></button>
@@ -863,30 +875,6 @@
       <div class="diaryscroll">
         <div class="cal" id="cal"></div>
         <div class="dayview" id="dayView"></div>
-        <div class="ideas" id="ideas">
-          <h3 class="dtitle">Want to learn</h3>
-          <div class="ideaadd">
-            <input type="text" id="ideaInput" maxlength="240" placeholder="Something that popped into your head" aria-label="Something you want to learn">
-            <button type="button" class="fbtn" id="ideaAdd">Add</button>
-          </div>
-          <ul class="idealist" id="ideaList"></ul>
-        </div>
-        <details class="settings" id="diarySettings">
-          <summary>Your feed</summary>
-          <div>
-            <h3>Focus</h3>
-            <div class="chips" id="focusChips"></div>
-            <p class="hint">Pick up to three. Today's cards lean toward them.</p>
-          </div>
-          <div>
-            <h3>Kept</h3>
-            <div class="quietlist" id="savedList"></div>
-          </div>
-          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-            <button type="button" class="jbtn" id="exportJournal">Export the diary</button>
-            <span class="storeline" id="storeline"></span>
-          </div>
-        </details>
       </div>
     </section>
 
@@ -910,6 +898,14 @@
         <p>The last two days, and what everyone is arguing about.</p>
       </div>
       <div class="thread" id="breakingList"></div>
+    </section>
+
+    <section class="pane side oppspane" id="oppsPane" data-hidden="true" aria-label="Opportunities">
+      <div class="sidehead">
+        <h2>Opportunities</h2>
+        <p>Hackathons, summer programmes, fellowships and competitions.</p>
+      </div>
+      <div class="thread" id="oppsList"></div>
     </section>
 
     <section class="pane side ask" id="askPane" data-hidden="true" aria-label="Ask">
@@ -974,6 +970,32 @@
       <button type="button" class="jbtn" data-close="profileSheet">Close</button>
     </div>
     <div id="pBody"></div>
+    <div class="pmine" id="pMine" hidden>
+        <div class="ideas" id="ideas">
+          <h3 class="dtitle">Want to learn</h3>
+          <div class="ideaadd">
+            <input type="text" id="ideaInput" maxlength="240" placeholder="Something that popped into your head" aria-label="Something you want to learn">
+            <button type="button" class="fbtn" id="ideaAdd">Add</button>
+          </div>
+          <ul class="idealist" id="ideaList"></ul>
+        </div>
+        <div class="settings" id="diarySettings">
+          <h3 class="dtitle">Your feed</h3>
+          <div>
+            <h3>Focus</h3>
+            <div class="chips" id="focusChips"></div>
+            <p class="hint">Pick up to three. Today's cards lean toward them.</p>
+          </div>
+          <div>
+            <h3>Kept</h3>
+            <div class="quietlist" id="savedList"></div>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+            <button type="button" class="jbtn" id="exportJournal">Export the diary</button>
+            <span class="storeline" id="storeline"></span>
+          </div>
+        </div>
+    </div>
   </div>
 </div>
 
@@ -1273,7 +1295,7 @@
   }
 
   function renderTabs(){
-    tabsEl.innerHTML = (data.tracks || []).map(function(t){
+    tabsEl.innerHTML = (data.tracks || []).filter(function(t){ return t.id !== "opportunities"; }).map(function(t){
       return '<button type="button" class="tab" role="tab" data-tab="'+t.id+'" '+
              'aria-selected="'+(t.id === tab)+'">'+esc(t.label)+'</button>';
     }).join("");
@@ -1717,6 +1739,36 @@
       fresh.forEach(function(i){ per[i.track] = (per[i.track] || 0) + 1; if(per[i.track] <= 4 && out.length < 24) out.push(i); });
       return breakCache = out;
     }
+    // Opportunities: what arrived lately (with deadlines when the source gives
+    // one), then the standing list of programmes and competitions.
+    function renderOpps(){
+      var el = $("oppsList"); if(!el) return;
+      var fresh = (data.items || []).filter(function(i){ return i.track === "opportunities" && i.title; })
+        .sort(function(a, b){ return (Date.parse(b.published) || 0) - (Date.parse(a.published) || 0); });
+      var standing = (data.entities || []).filter(function(e){ return e.track === "opportunities"; })
+        .sort(function(a, b){ return a.name.localeCompare(b.name); });
+      var date = function(x){ var t = Date.parse(x); return t ? new Date(t).toLocaleDateString(undefined, {day:"numeric", month:"short"}) : ""; };
+      el.innerHTML =
+        (fresh.length ? '<h3 class="osec">New</h3>' + fresh.map(function(i){
+          return '<article class="bcard ocard">' +
+            '<div class="ftrack">' + esc(i.source) + (date(i.published) ? ' · ' + esc(date(i.published)) : '') + '</div>' +
+            '<h3>' + esc(i.hook || i.title) + '</h3>' +
+            (i.deadline ? '<p class="odead">Deadline: ' + esc(i.deadline) + '</p>' : '') +
+            (i.event_dates ? '<p class="bnote">' + esc(i.event_dates) + '</p>' : '') +
+            '<div class="bacts"><a class="readlink" href="' + esc(i.url) + '" target="_blank" rel="noopener">Details →</a></div>' +
+          '</article>';
+        }).join("") : '') +
+        '<h3 class="osec">Programmes and competitions</h3>' + standing.map(function(e){
+          return '<article class="bcard ocard">' +
+            '<div class="ftrack">' + esc(e.kind || "") + (e.country ? ' · ' + esc(e.country) : '') + (e.org ? ' · ' + esc(e.org) : '') + '</div>' +
+            '<h3>' + esc(e.name) + '</h3>' +
+            (e.does ? '<p>' + esc(e.does) + '</p>' : '') +
+            (e.status ? '<p class="odead">' + esc(e.status) + '</p>' : '') +
+            (e.url ? '<div class="bacts"><a class="readlink" href="' + esc(e.url) + '" target="_blank" rel="noopener">Website →</a></div>' : '') +
+          '</article>';
+        }).join("");
+    }
+
     function renderBreaking(){
       var list = breaking(), el = $("breakingList");
       if(!el) return;
@@ -2146,18 +2198,19 @@
     });
 
     // ---------------------------------------------------------- modes
-    function order(){ return wide.matches ? ["breaking", "today", "talk", "ask", "diary"] : ["breaking", "today", "library", "talk", "ask", "diary"]; }
+    function order(){ return wide.matches ? ["breaking", "today", "opps", "talk", "ask", "diary"] : ["breaking", "today", "library", "opps", "talk", "ask", "diary"]; }
     function setMode(m){
       if(wide.matches && m === "library") m = "today";   // the library is always on screen there
       var o = order(), from = o.indexOf(mode), to = o.indexOf(m);
       mode = m;
-      ["diary", "today", "breaking", "library", "ask", "talk"].forEach(function(k){
+      ["diary", "today", "breaking", "library", "opps", "ask", "talk"].forEach(function(k){
         var el = $(k + "Pane"); if(!el) return;
         el.setAttribute("data-hidden", String(k !== m));
         el.classList.remove("in-l", "in-r");
         if(k === m && from >= 0 && to >= 0 && from !== to){ void el.offsetWidth; el.classList.add(to > from ? "in-r" : "in-l"); }
       });
       if(m === "diary") renderDiary();
+      if(m === "opps") renderOpps();
       document.querySelectorAll(".mode").forEach(function(b){
         b.setAttribute("aria-pressed", String(b.getAttribute("data-mode") === m));
       });
@@ -2225,7 +2278,7 @@
       text = (text || "").trim(); if(!text) return false;
       state.ideas = state.ideas || [];
       state.ideas.unshift({id: Date.now().toString(36) + Math.random().toString(36).slice(2, 5), text: text.slice(0, 240), at: Date.now(), from: from || "", done:false});
-      persist(); if(mode === "diary") renderIdeas();
+      persist(); renderIdeas();
       return true;
     }
     function findIdea(id){ return (state.ideas || []).filter(function(x){ return x.id === id; })[0]; }
@@ -2308,7 +2361,7 @@
       document.querySelectorAll(".mode").forEach(function(b){
         b.addEventListener("click", function(){ setMode(b.getAttribute("data-mode")); });
       });
-      $("diaryPane").addEventListener("click", function(e){
+      var onDiaryClick = function(e){
         var t;
         if((t = e.target.closest("[data-month]"))){
           view = new Date(view.getFullYear(), view.getMonth() + (+t.getAttribute("data-month")), 1); renderDiary();
@@ -2331,13 +2384,15 @@
           if(state.focus.indexOf(id) < 0 && state.focus.length >= 3) state.focus.shift();
           toggle(state.focus, id); persist(); buildAndRender(); renderSettings();
         }
-      });
+      };
+      $("diaryPane").addEventListener("click", onDiaryClick);
+      $("pMine").addEventListener("click", onDiaryClick);
       $("exportJournal").addEventListener("click", exportText);
       $("ideaInput").addEventListener("keydown", function(e){
         if(e.key === "Enter"){ e.preventDefault(); if(addIdea($("ideaInput").value)) $("ideaInput").value = ""; }
       });
       $("focusline").addEventListener("click", function(e){
-        if(e.target.closest('[data-act="focus"]')){ setMode("diary"); $("diarySettings").open = true; }
+        if(e.target.closest('[data-act="focus"]')) Social.openProfile("me");
       });
 
       // Swipe between pages, the way a phone already expects: right for the
@@ -2468,6 +2523,7 @@
       mode: function(){ return mode; },
       remember: function(text, from){ return state ? addIdea(text, from) : false; },
       toast: function(m){ toast(m); },
+      renderMine: function(){ if(state){ renderIdeas(); renderSettings(); } },
       cards: function(){ return set; },
       focus: function(){ return state ? state.focus.slice() : []; },
       show: function(){
@@ -3102,7 +3158,7 @@
         else if(a("data-person")) Social.openProfile(a("data-person"));
         else if(a("data-keep")){
           var key = a("data-keep"), txt = t.closest(".msg").querySelector(".text").textContent;
-          if(Today.remember(txt, view === "dm" ? "a message" : BY_ID[current].t)){ t.textContent = "In your list ✓"; t.disabled = true; Today.toast("Added to Want to learn in your diary."); }
+          if(Today.remember(txt, view === "dm" ? "a message" : BY_ID[current].t)){ t.textContent = "In your list ✓"; t.disabled = true; Today.toast("Added to Want to learn on your page."); }
         }
         else if(a("data-report")) report(a("data-report"));
         else if(a("data-del")) delMine(a("data-del"));
@@ -3410,6 +3466,7 @@
     }
 
     function renderProfile(id){
+      $("pMine").hidden = true;
       var p = profiles[id] || {};
       var nFollowers = followers(id).length, nFollowing = following(id).length;
       var head = '<div class="pblock phead">' +
@@ -3447,6 +3504,8 @@
     }
 
     function renderEdit(){
+      $("pMine").hidden = !(on && uid);
+      if(on && uid) Today.renderMine();
       if(!on || !uid){
         if(window.claude && window.claude.public){
           $("pName").textContent = "Sign in";
