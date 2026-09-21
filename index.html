@@ -1,3 +1,8 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>AInstein Science Desk</title>
 <style>
   /* Pastels carry the surfaces; a deeper version of each hue carries the
@@ -387,6 +392,21 @@
   .focusline{font-size:12px;color:var(--ink-3);}
   .focusline button{background:none;border:none;padding:0;font:inherit;color:var(--accent);
     cursor:pointer;border-bottom:1px dotted currentColor;}
+  .breaking{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;align-items:center;margin:2px -16px 0;padding:2px 16px 4px;}
+  .breaking::-webkit-scrollbar{display:none;}
+  .blabel{flex:none;display:inline-flex;align-items:center;gap:6px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--rose);}
+  .blabel i{width:7px;height:7px;border-radius:50%;background:var(--rose);animation:pulse 1.6s ease-in-out infinite;}
+  @keyframes pulse{50%{opacity:.25;}}
+  .bpill{flex:none;max-width:250px;text-align:left;font:inherit;font-size:13px;line-height:1.3;cursor:pointer;padding:7px 10px;border-radius:2px;
+    border:1px solid var(--rule);background:var(--surface);color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .bpill b{display:block;font-weight:400;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);}
+  .bpill[aria-pressed="true"]{border-color:var(--rose);background:var(--rose-soft);}
+  .breakopen{background:var(--surface);border:1px solid var(--rule);border-left:3px solid var(--rose);padding:10px 12px;display:flex;flex-direction:column;gap:6px;}
+  .breakopen h3{margin:0;font-size:19px;font-weight:400;line-height:1.25;}
+  .breakopen p{margin:0;font-size:14px;line-height:1.5;color:var(--ink-2);}
+  .breakopen .bnote{font-size:12.5px;color:var(--ink-3);}
+  .breakopen .factions{border:none;padding:0;margin:0;}
+  @media (prefers-reduced-motion: reduce){ .blabel i{animation:none;} }
   .progress{display:flex;gap:3px;}
   .progress i{flex:1;height:3px;border-radius:2px;background:var(--rule);transition:background .3s;}
   .progress i.on{background:var(--accent);}
@@ -757,6 +777,8 @@
 
   [hidden]{display:none!important;}
 </style>
+</head>
+<body>
 
 <!-- The front door. Someone arriving from a link has no idea what this is;
      the feed alone doesn't explain itself. One click gets past it, and the
@@ -812,7 +834,7 @@
         <button type="button" class="mode ico" data-mode="diary" aria-pressed="false" aria-label="Diary"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="1.5"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></svg></button>
         <button type="button" class="mode" data-mode="today" aria-pressed="true">Today</button>
         <button type="button" class="mode" data-mode="library" aria-pressed="false">Library</button>
-        <button type="button" class="mode" data-mode="ask" aria-pressed="false" hidden>Ask</button>
+        <button type="button" class="mode" data-mode="ask" aria-pressed="false">Ask</button>
         <button type="button" class="mode" data-mode="talk" aria-pressed="false">Talk<span class="dot" id="talkDot" hidden></span></button>
       </div>
       <button type="button" class="me" id="openMe" aria-label="Your page">
@@ -863,10 +885,6 @@
             <p class="hint">Pick up to three. Today's cards lean toward them.</p>
           </div>
           <div>
-            <h3>Cards a day</h3>
-            <div class="chips" id="sizeChips"></div>
-          </div>
-          <div>
             <h3>Kept</h3>
             <div class="quietlist" id="savedList"></div>
           </div>
@@ -883,6 +901,8 @@
         <div class="todaytitle"><h2>Today</h2><span id="todayCount"></span></div>
         <div class="progress" id="progress" aria-hidden="true"></div>
         <div class="focusline" id="focusline"></div>
+        <div class="breaking" id="breaking" hidden></div>
+        <div class="breakopen" id="breakOpen" hidden></div>
       </div>
       <div class="feed" id="feed" tabindex="0"></div>
     </section>
@@ -977,14 +997,15 @@
     <div>
       <h3>Suggested by readers</h3>
       <div id="sList"></div>
+    </div>
+  </div>
+</div>
 
-      
-
-
-
-
-
-      
+<script id="feed-data" type="application/json">{
+ "generated_at": "2026-09-21T09:00:00Z",
+ "note": "Seed data built from live sources on 2026-09-20. Re-run `python -m ainstein.build` to refresh.",
+ "tracks": [
+  {
    "id": "ai",
    "label": "AI",
    "blurb": "The labs, the models, and the papers underneath the announcements."
@@ -9002,18 +9023,13 @@
   }
  ]
 }</script>
-
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script id="cloud-config" type="application/json">{"supabase_url": "https://ynagopeesrrckdtmvtor.supabase.co", "supabase_key": "sb_publishable_wpEYYzzlt3ev8816TBZuig_860O4h40"}</script>
 
 <script>
 (function(){
   "use strict";
-  const supabaseUrl = 'https://ynagopeesrrckdtmvtor.supabase.co';
-  const supabaseKey = 'sb_publishable_wpEYYzzlt3ev8816TBZuig_860O4h40';
-  const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-  var seed = window.seedData || { items: [] };
+  var seed = JSON.parse(document.getElementById("feed-data").textContent);
   var data = seed;
   var tab = null;
   var query = "";
@@ -9335,6 +9351,47 @@
   //  this browser. Either way it is written only when something happens —
   //  a card read, a card kept, a note — never on a timer.
   // =====================================================================
+  // =====================================================================
+  //  CLOUD — the public-site backend (Supabase), used only outside claude.ai
+  //  and only when cloud.json was filled in at build time. The publishable
+  //  key is meant to be public; what keeps each visitor's data theirs is
+  //  row-level security (see supabase/schema.sql). Visitors get an
+  //  anonymous account on first visit, so there is no sign-up form.
+  // =====================================================================
+  var Cloud = (function(){
+    var p = null;
+    function conf(){
+      try{ var c = JSON.parse(document.getElementById("cloud-config").textContent); return c && c.supabase_url && c.supabase_key ? c : null; }
+      catch(e){ return null; }
+    }
+    function load(){
+      return new Promise(function(ok, bad){
+        if(window.supabase && window.supabase.createClient) return ok();
+        var sc = document.createElement("script");
+        sc.src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
+        sc.onload = ok; sc.onerror = function(){ bad(new Error("couldn't load supabase-js")); };
+        document.head.appendChild(sc);
+      });
+    }
+    return {
+      ready: function(){
+        if(p) return p;
+        var c = conf();
+        if(!c) return p = Promise.resolve(null);
+        return p = load().then(function(){
+          var client = window.supabase.createClient(c.supabase_url, c.supabase_key);
+          return client.auth.getSession().then(function(r){
+            if(r.data && r.data.session) return r.data.session.user;
+            return client.auth.signInAnonymously().then(function(a){
+              if(a.error) throw new Error(a.error.message + " — turn on anonymous sign-ins in Supabase: Authentication → Sign In / Providers");
+              return a.data.user;
+            });
+          }).then(function(u){ return {client:client, uid:u.id}; });
+        }).catch(function(e){ console.warn("AInstein cloud:", e.message); return null; });
+      }
+    };
+  })();
+
   var Today = (function(){
     var KEY = "ainstein.desk.v1";
     var HUE = { ai:"--rose", astro:"--violet", industry:"--accent",
@@ -9402,41 +9459,56 @@
       dbTimer = setTimeout(flushDb, 1200);   // coalesce a burst of taps into one write
     }
     function flushDb(){
-      if(dbBusy || !dbDirty) return;
+      if(!dbRef || dbBusy || !dbDirty) return;
       dbBusy = true; dbDirty = false;
-      
-      // יצירה או שליפה של מזהה משתמש אנונימי
-      var uid = localStorage.getItem('my_uid');
-      if(!uid){ 
-        uid = 'user_' + Math.random().toString(36).substr(2, 9); 
-        localStorage.setItem('my_uid', uid); 
-      }
-      
-      // שמירה למסד הנתונים בענן
-      supabase.from('user_data').upsert({ user_id: uid, state: state })
-        .then(function(){ 
-          dbBusy = false; 
-          if(dbDirty) flushDb(); 
-        });
+      dbRef.set(JSON.parse(JSON.stringify(state)))
+        .catch(function(e){
+          var c = e && e.code;
+          if(c === "invalid_argument" || c === "revoked" || c === "not_granted" ||
+             c === "capability_disabled" || c === "quota_exceeded"){
+            dbRef = null; where = "this browser"; renderStoreLine();
+          }
+        })
+        .then(function(){ dbBusy = false; if(dbDirty) flushDb(); });
     }
 
+    // Inside claude.ai: move to the viewer's own private document.
+    // On a public host with cloud.json (Supabase): the same, in a row only
+    // this visitor can read or write, keyed by an anonymous sign-in.
     function connect(){
-      dbRef = true; // מסמן למערכת שאנחנו מחוברים
-      where = "Supabase Cloud";
-      renderStoreLine();
-
-      var uid = localStorage.getItem('my_uid');
-      if(!uid) return;
-      
-      // משיכת הנתונים הקיימים מהענן בעת טעינת האתר
-      supabase.from('user_data').select('state').eq('user_id', uid).single()
-        .then(function(res){
-          if(res.data && res.data.state){
-            state = merge(state, res.data.state);
-            saveLocal();
-            buildAndRender();
+      if(!(window.claude && window.claude.use)) return Cloud.ready().then(function(c){
+        if(!c) return;
+        var ref = {
+          set: function(d){
+            return c.client.from("user_data").upsert({user_id:c.uid, state:d, updated_at:new Date().toISOString()})
+              .then(function(r){ if(r.error) throw {code:"cloud", message:r.error.message}; });
           }
+        };
+        return c.client.from("user_data").select("state").eq("user_id", c.uid).maybeSingle().then(function(r){
+          if(r.error){ console.warn("AInstein: couldn't read your saved state —", r.error.message); return; }
+          var remote = r.data && r.data.state, merged = remote ? merge(state, remote) : state;
+          state = merged; saveLocal();
+          dbRef = ref; where = "your cloud account";
+          if(!remote || JSON.stringify(remote) !== JSON.stringify(merged)){ dbDirty = true; flushDb(); }
+          buildAndRender(); renderStoreLine();
         });
+      }).catch(function(e){ console.warn("AInstein: cloud unavailable —", e && e.message); });
+      Promise.all([window.claude.use("db"), window.claude.use("user")]).then(function(r){
+        var db = r[0], user = r[1];
+        if(!db || !user) return null;
+        return user.id().then(function(uid){
+          if(!uid) return null;
+          var ref = db.doc("data/users/" + uid + "/desk");
+          return ref.get().then(function(snap){
+            var remote = snap.exists ? snap.data() : null;
+            var merged = remote ? merge(state, remote) : state;
+            state = merged; saveLocal();
+            dbRef = ref; where = "your account";
+            if(!remote || JSON.stringify(remote) !== JSON.stringify(merged)){ dbDirty = true; flushDb(); }
+            buildAndRender(); renderStoreLine();
+          });
+        });
+      }).catch(function(){ /* stays in this browser */ });
     }
 
     // ---------------------------------------------------------- the daily set
@@ -9460,12 +9532,47 @@
     // order, for "Keep going". Rewritten stories lead; headline cards (the
     // source's own title and a link) fill in between them, so a field with
     // no openly licensed text this week still shows up.
+    // Breaking: what landed in the last two days, plus whatever the internet
+    // is arguing about. It lives in a strip above the feed, not among the
+    // cards, so it stays visible however long the feed gets.
+    var breakCache = null;
+    function breaking(){
+      if(breakCache) return breakCache;
+      var items = (data.items || []).filter(function(i){ return i.track !== "opportunities" && i.title; });
+      var newest = Math.max.apply(null, items.map(function(i){ return Date.parse(i.published) || 0; }).concat([0]));
+      var fresh = items.filter(function(i){ return i.buzz || newest - (Date.parse(i.published) || 0) < 2 * 864e5; });
+      fresh.sort(function(a, b){ return (b.buzz || 0) - (a.buzz || 0) || (Date.parse(b.published) || 0) - (Date.parse(a.published) || 0); });
+      var per = {}, out = [];
+      fresh.forEach(function(i){ per[i.track] = (per[i.track] || 0) + 1; if(per[i.track] <= 3 && out.length < 10) out.push(i); });
+      return breakCache = out;
+    }
+    var breakOpen = null;
+    function renderBreaking(){
+      var list = breaking(), el = $("breaking");
+      el.hidden = !list.length;
+      el.innerHTML = '<span class="blabel"><i></i>Breaking</span>' + list.map(function(i){
+        return '<button type="button" class="bpill" data-break="' + esc(i.id) + '" aria-pressed="' + (breakOpen === i.id) + '">' +
+          '<b>' + esc(trackLabel(i.track)) + '</b>' + esc(i.hook || i.title) + '</button>';
+      }).join("");
+      var it = list.filter(function(i){ return i.id === breakOpen; })[0], box = $("breakOpen");
+      box.hidden = !it;
+      if(!it) return;
+      var when = new Date(it.published).toLocaleDateString(undefined, {weekday:"short", day:"numeric", month:"short"});
+      box.innerHTML = '<div class="ftrack">' + esc(trackLabel(it.track)) + ' · ' + esc(it.source) + ' · ' + esc(when) + '</div>' +
+        '<h3>' + esc(it.hook || it.title) + '</h3>' +
+        (it.body ? '<p>' + esc(it.body) + '</p>' : '') +
+        (it.buzz_note ? '<p class="bnote">' + esc(it.buzz_note) + '</p>' : '') +
+        '<div class="factions"><a class="readlink" href="' + esc(it.url) + '" target="_blank" rel="noopener">Read at ' + esc(it.source) + ' →</a>' +
+        '<button type="button" class="fbtn" data-bask="' + esc(it.id) + '">Ask about it</button>' +
+        '<button type="button" class="fbtn" data-bclose="1">Close</button></div>';
+    }
+
     function buildSet(){
-      var r = rng(dayKey() + "|" + state.focus.join(",") + "|" + state.size);
+      var SIZE = 20, r = rng(dayKey() + "|" + state.focus.join(","));
       var w = function(track){ return state.focus.length ? (state.focus.indexOf(track) >= 0 ? 5 : 1) : 1; };
       var now = Date.now(), age = function(i){ return (now - Date.parse(i.published || 0)) / 864e5; };
       var news = (data.items || []).filter(function(i){ return i.policy !== "headline_only" && i.hook; });
-      var heads = (data.items || []).filter(function(i){ return i.policy === "headline_only" && !i.buzz && i.title && age(i) < 30; });
+      var heads = (data.items || []).filter(function(i){ return i.policy === "headline_only" && i.title && age(i) < 30; });
 
       var byTrack = {};
       var queue = function(t){ return byTrack[t] = byTrack[t] || {news:[], heads:[], n:0}; };
@@ -9485,9 +9592,9 @@
       };
       var left = function(t){ return byTrack[t].news.length + byTrack[t].heads.length; };
       var order = pick(Object.keys(byTrack), function(t){ return w(t); }, 99, r);
-      var trending = (data.items || []).filter(function(i){ return i.policy === "headline_only" && i.buzz; })
-        .sort(function(a, b){ return b.buzz * w(b.track) - a.buzz * w(a.track); })
-        .slice(0, state.size >= 20 ? 2 : 1);
+      var skip = {}; breaking().forEach(function(i){ skip[i.id] = 1; });
+      news = news.filter(function(i){ return !skip[i.id]; });
+      heads = heads.filter(function(i){ return !skip[i.id]; });
       var all = [], round = 0;
       while(order.some(left)){
         round++;
@@ -9497,27 +9604,24 @@
           while(turns-- && left(t)){ var c = next(t); if(c) all.push({kind:c.kind, id:c.item.id, track:c.item.track, item:c.item}); }
         });
       }
-      trending.forEach(function(t, k){
-        all.splice(Math.min(1 + k*6, all.length), 0, {kind:"trending", id:t.id, track:t.track, item:t});
-      });
 
       var classics = pick(data.canon || [], function(c){ return w(c.track); }, 99, r);
       var watch = pick(data.watch || [], function(x){ return w(x.track); }, 3, r);
-      var head = all.slice(0, Math.max(1, state.size - 2)), rest = all.slice(head.length);
+      var head = all.slice(0, Math.max(1, SIZE - 2)), rest = all.slice(head.length);
       if(classics[0]) head.splice(Math.min(2, head.length), 0,
         {kind:"classic", id:"canon:" + classics[0].url, track:classics[0].track, item:classics[0]});
       if(watch[0]) head.splice(Math.max(head.length - 1, 0), 0,
         {kind:"watch", id:"watch:" + watch[0].url, track:watch[0].track, item:watch[0]});
-      for(var i = 1; head.length < state.size && i < classics.length; i++){
+      for(var i = 1; head.length < SIZE && i < classics.length; i++){
         head.push({kind:"classic", id:"canon:" + classics[i].url, track:classics[i].track, item:classics[i]});
       }
       // past the finish line: the rest, with a classic every twelve cards
-      var ci = 1 + Math.max(0, state.size - head.length);
+      var ci = 1 + Math.max(0, SIZE - head.length);
       for(var k = 12; k < rest.length && ci < classics.length; k += 13, ci++){
         rest.splice(k, 0, {kind:"classic", id:"canon:" + classics[ci].url, track:classics[ci].track, item:classics[ci]});
       }
       bonus = rest;
-      return head.slice(0, state.size);
+      return head.slice(0, SIZE);
     }
     function findCard(id){
       return set.concat(bonus.slice(0, extra)).filter(function(x){ return x.id === id; })[0];
@@ -9730,6 +9834,7 @@
       if(el) el.textContent = "Saved to " + where + ".";
     }
     function buildAndRender(){
+      breakCache = null; renderBreaking();
       set = buildSet(); extra = 0;
       var feed = $("feed");
       feed.innerHTML = set.map(cardFor).join("") + endCard() + moreCard();
@@ -9919,9 +10024,6 @@
       $("focusChips").innerHTML = tracks.map(function(t){
         return '<button type="button" class="chipbtn" data-focus="'+t.id+'" aria-pressed="'+(state.focus.indexOf(t.id) >= 0)+'">'+esc(t.label)+'</button>';
       }).join("");
-      $("sizeChips").innerHTML = [10, 20, 40].map(function(n){
-        return '<button type="button" class="chipbtn" data-size="'+n+'" aria-pressed="'+(state.size === n)+'">'+n+'</button>';
-      }).join("");
       var lookup = titleLookup();
       $("savedList").innerHTML = state.saved.length ? state.saved.map(function(id){
         var u = urlLookup()[id];
@@ -10004,8 +10106,6 @@
           var id = t.getAttribute("data-focus");
           if(state.focus.indexOf(id) < 0 && state.focus.length >= 3) state.focus.shift();
           toggle(state.focus, id); persist(); buildAndRender(); renderSettings();
-        } else if((t = e.target.closest("[data-size]"))){
-          state.size = +t.getAttribute("data-size"); persist(); buildAndRender(); renderSettings();
         }
       });
       $("exportJournal").addEventListener("click", exportText);
@@ -10070,6 +10170,15 @@
         }
       });
       $("feed").addEventListener("scroll", function(){ lastActive = Date.now(); }, {passive:true});
+      document.querySelector(".todayhead").addEventListener("click", function(e){
+        var t;
+        if((t = e.target.closest("[data-break]"))){ var id = t.getAttribute("data-break"); breakOpen = breakOpen === id ? null : id; renderBreaking(); }
+        else if(e.target.closest("[data-bclose]")){ breakOpen = null; renderBreaking(); }
+        else if((t = e.target.closest("[data-bask]"))){
+          var it = breaking().filter(function(i){ return i.id === t.getAttribute("data-bask"); })[0];
+          if(it) Ask.about({kind:"news", id:it.id, track:it.track, item:it}, trackLabel(it.track));
+        }
+      });
 
       var lastTap = {t:0, x:0, y:0};
       function doubleTap(e, x, y){
@@ -11452,5 +11561,6 @@
     })
     .catch(function(){});
 })();
-
 </script>
+</body>
+</html>
