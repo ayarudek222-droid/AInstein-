@@ -254,41 +254,25 @@
     min-height:100%;display:flex;align-items:center;justify-content:center;
     padding:32px 16px;position:relative;z-index:1;
   }
-  .doorinner{max-width:620px;width:100%;}
-  .kicker{
-    font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;
-    color:var(--ink-3);margin:0 0 6px;
-  }
-  .doortitle{
-    font-size:clamp(44px,12vw,64px);line-height:1;margin:0 0 18px;font-weight:400;
-  }
+  .doorinner{max-width:360px;width:100%;display:flex;flex-direction:column;align-items:stretch;gap:14px;text-align:center;}
+  .doortitle{font-size:clamp(52px,14vw,76px);line-height:1;margin:0 0 18px;font-weight:400;}
   .doortitle em{font-style:italic;color:var(--accent);}
-  .lede{
-    font-size:17px;line-height:1.6;color:var(--ink-2);margin:0 0 22px;max-width:60ch;
-    padding-bottom:20px;border-bottom:1px solid var(--rule);
-    box-shadow:0 3px 0 -2px var(--rule);
-  }
-  .doorgrid{
-    display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
-    gap:18px 26px;margin:22px 0 26px;
-  }
-  .doorcell b{
-    display:block;font-size:11px;letter-spacing:.1em;text-transform:uppercase;
-    color:var(--accent);font-weight:500;margin-bottom:5px;
-  }
-  .doorcell p{margin:0;font-size:14.5px;line-height:1.55;color:var(--ink-2);}
+  .doorbtns{display:flex;flex-direction:column;gap:10px;}
+  .doorform{display:flex;flex-direction:column;gap:12px;text-align:left;}
+  .doorform .linkbtn{align-self:center;}
+  .doorform .hint{text-align:center;}
   .enter{
-    font-family:Georgia,"Times New Roman",serif;font-size:15px;
+    font-family:Georgia,"Times New Roman",serif;font-size:16px;
     letter-spacing:.04em;cursor:pointer;
-    background:var(--ink);color:var(--ground);border:none;border-radius:2px;
-    padding:11px 22px;
+    background:var(--ink);color:var(--ground);border:1px solid var(--ink);border-radius:2px;
+    padding:12px 22px;
   }
-  .enter:hover{background:var(--accent);}
+  .enter:hover{background:var(--accent);border-color:var(--accent);}
+  .enter.ghost{background:none;color:var(--ink);}
+  .enter.ghost:hover{background:var(--surface);color:var(--ink);}
   .enter:focus-visible{outline:2px solid var(--accent);outline-offset:3px;}
-  .doorfoot{
-    margin:14px 0 0;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;
-    color:var(--ink-3);
-  }
+  #enter.quiet{background:none;border:none;color:var(--ink-3);font-size:13.5px;padding:6px;text-decoration:underline;text-underline-offset:3px;}
+  #enter.quiet:hover{color:var(--ink);}
 
   /* ---------- canon and watch ---------- */
   .canon{display:flex;flex-direction:column;gap:2px;}
@@ -809,44 +793,27 @@
      choice is remembered for the rest of the browser session. -->
 <section class="door" id="door">
   <div class="doorinner">
-    <p class="kicker">A science desk that runs itself</p>
     <h1 class="doortitle">AI<em>nstein</em></h1>
-    <p class="lede">
-      Keeping up with science is work: the good material is scattered across
-      preprint servers, agency press rooms and paywalled journals, and none of
-      it is shaped like something you'd read on a phone. This is an attempt to
-      take that seriously in the other direction.
-    </p>
 
-    <div class="doorgrid">
-      <div class="doorcell">
-        <b>What it does</b>
-        <p>Every morning it pulls from arXiv, Crossref, NASA, ESA, CERN,
-        magazines and YouTube, scores what's worth your attention, and rewrites
-        the openly-licensed parts into plain language.</p>
-      </div>
-      <div class="doorcell">
-        <b>Two layers, per subject</b>
-        <p>A standing directory — the experiments, missions, labs and companies
-        that exist, and where they are — and the pulse of what actually moved
-        this week, attached to it.</p>
-      </div>
-      <div class="doorcell">
-        <b>The rule it obeys</b>
-        <p>Facts are free; someone else's sentences are not. Open sources get
-        rewritten into cards. Journalism gets a headline and a link, and its
-        text never reaches the AI at all.</p>
-      </div>
-      <div class="doorcell">
-        <b>A feed that ends</b>
-        <p>Today is a short set of cards, one at a time — news, a classic and
-        something to watch — with a finish line. Mark what you learned, keep
-        what you want, and the diary remembers it for you.</p>
-      </div>
+    <div class="doorbtns" id="doorAuth" hidden>
+      <button type="button" class="enter" data-door="signup">Sign up</button>
+      <button type="button" class="enter ghost" data-door="login">Log in</button>
     </div>
 
-    <button type="button" class="enter" id="enter">Open the feed</button>
-    <p class="doorfoot" id="doorfoot"></p>
+    <form class="doorform" id="doorForm" hidden novalidate>
+      <div class="pfield" id="doorNameBox"><label for="doorName">Your name</label>
+        <input id="doorName" autocomplete="name" maxlength="60"></div>
+      <div class="pfield"><label for="doorEmail">Email</label>
+        <input id="doorEmail" type="email" autocomplete="email" placeholder="you@example.com"></div>
+      <button type="submit" class="enter" id="doorSend">Email me a link</button>
+      <p class="hint" id="doorNote"></p>
+      <div class="pfield" id="doorCodeBox" hidden><label for="doorCode">Or type the code from the email</label>
+        <input id="doorCode" inputmode="numeric" autocomplete="one-time-code" maxlength="10" placeholder="123456"></div>
+      <button type="button" class="enter ghost" id="doorVerify" hidden>Sign in with the code</button>
+      <button type="button" class="linkbtn" data-door="back">Back</button>
+    </form>
+
+    <button type="button" class="enter" id="enter">Enter</button>
   </div>
 </section>
 
@@ -3726,6 +3693,18 @@
 
     return {
       key: key, likes: likeCount, iLiked: iLiked, commentCount: commentCount, followsOf: following,
+      // after signing up: keep the name they chose and open their page to finish it
+      welcome: function(name){
+        ready.then(function(){ return user ? user.id() : null; }).then(function(id){ uid = uid || id;
+          if(!db || !uid) return;
+          return db.doc("profiles/" + uid).get().then(function(snap){
+            var p = (snap && snap.exists && snap.data()) || {};
+            if(!name && p.name) return;
+            if(name && p.name !== name){ p.name = name; p.updated = Date.now(); profiles[uid] = p; db.doc("profiles/" + uid).set(p).catch(function(){}); }
+            renderMe(); openProfile(uid);
+          });
+        });
+      },
       like: like, openComments: openComments, openProfile: openProfile,
       isOn: function(){ return on; }, uid: function(){ return uid; }, db: function(){ return db; },
       init: function(){
@@ -3881,11 +3860,55 @@
   }
   document.getElementById("enter").addEventListener("click", openDesk);
 
-  function doorFoot(){
-    document.getElementById("doorfoot").textContent =
-      (data.items || []).length + " stories this week · " +
-      (data.entities || []).length + " in the directory · " +
-      (data.books || []).length + " books";
+  function doorFoot(){}
+
+  // On the public site the door is where you sign up or log in; inside
+  // Claude your Claude account is the account, so there is just a way in.
+  var doorMode = "signup";
+  function doorShow(m){
+    var $d = function(id){ return document.getElementById(id); };
+    doorMode = m;
+    $d("doorAuth").hidden = m !== "choose";
+    $d("doorForm").hidden = m === "choose";
+    $d("doorNameBox").hidden = m !== "signup";
+    $d("doorNote").textContent = Cloud.linkError() ? "The last link didn't work: " + Cloud.linkError() + ". Send a new one." : "";
+    $d("doorCodeBox").hidden = true; $d("doorVerify").hidden = true;
+    $d("doorSend").textContent = m === "signup" ? "Sign up" : "Email me a link";
+    if(m !== "choose") $d(m === "signup" ? "doorName" : "doorEmail").focus();
+  }
+  function setupDoor(){
+    var $d = function(id){ return document.getElementById(id); };
+    if(!Cloud.configured() || (window.claude && !window.claude.public)) return;
+    $d("enter").textContent = "Just look around"; $d("enter").classList.add("quiet");
+    doorShow("choose");
+    document.getElementById("door").addEventListener("click", function(e){
+      var t = e.target.closest("[data-door]"); if(!t) return;
+      var m = t.getAttribute("data-door"); doorShow(m === "back" ? "choose" : m);
+    });
+    $d("doorForm").addEventListener("submit", function(e){
+      e.preventDefault();
+      var email = ($d("doorEmail").value || "").trim(), name = ($d("doorName").value || "").trim();
+      if(doorMode === "signup" && !name){ $d("doorNote").textContent = "What should people here call you?"; return; }
+      if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ $d("doorNote").textContent = "That doesn't look like an email address."; return; }
+      if(doorMode === "signup"){ try{ localStorage.setItem("ainstein.signup", JSON.stringify({name:name})); }catch(er){} }
+      $d("doorSend").disabled = true; $d("doorNote").textContent = "Sending…";
+      Cloud.signIn(email).then(function(){
+        $d("doorNote").textContent = "Check your email and open the link in this browser.";
+        $d("doorCodeBox").hidden = false; $d("doorVerify").hidden = false; $d("doorSend").disabled = false;
+      }, function(er){ $d("doorSend").disabled = false; $d("doorNote").textContent = "Couldn't send: " + ((er && er.message) || "try again") + "."; });
+    });
+    $d("doorVerify").addEventListener("click", function(){
+      var code = ($d("doorCode").value || "").replace(/\s/g, ""); if(!code) return;
+      $d("doorNote").textContent = "Checking…";
+      Cloud.verify(($d("doorEmail").value || "").trim(), code).catch(function(er){ $d("doorNote").textContent = "That code didn't work: " + ((er && er.message) || "try again") + "."; });
+    });
+    // already a member: straight in. Just signed up: finish the page.
+    Cloud.ready().then(function(c){
+      if(!c || c.anonymous) return;
+      openDesk();
+      var pending = null; try{ pending = JSON.parse(localStorage.getItem("ainstein.signup") || "null"); localStorage.removeItem("ainstein.signup"); }catch(er){}
+      Social.welcome(pending && pending.name);
+    });
   }
 
   tab = tab || ((data.tracks || [])[0] || {}).id;
@@ -3900,6 +3923,7 @@
   Talk.init();
   Social.init();
   Suggest.init();
+  setupDoor();
   if(entered) openDesk();
 
   // When served from the repo, prefer the freshly built feed over the inline
