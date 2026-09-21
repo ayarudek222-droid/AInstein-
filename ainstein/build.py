@@ -15,6 +15,7 @@ from pathlib import Path
 import yaml
 
 from .images import localize
+from . import pictures
 from .link import annotate, link
 from .route import route
 from .models import Item, Policy
@@ -82,6 +83,9 @@ def build(days: int, use_ai: bool, cfg_path: Path) -> dict:
     ]
 
     # Only what made the cut gets its image fetched — a few dozen, not hundreds.
+    pic_opts = cfg.get("pictures", {})
+    if pic_opts.get("enabled", True):
+        pictures.find(cards, cfg["feeds"], pic_opts)
     try:
         localize(cards, ROOT / "data" / "img")
     except ImportError:

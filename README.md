@@ -247,14 +247,49 @@ python -m http.server -d . 8000
 
 ## Deploying
 
+### Vercel + Supabase (recommended)
+
+The site is static, so Vercel just serves the folder; Supabase keeps each
+visitor's diary, streak and saved cards.
+
+1. **Supabase → SQL Editor:** paste and run `supabase/schema.sql`. It
+   creates `user_data` with row-level security, so each visitor can read
+   and write only their own row.
+2. **Supabase → Authentication → Sign In / Providers:** turn on
+   *Allow anonymous sign-ins*. Every visitor gets an anonymous account on
+   their first visit — no sign-up form.
+3. **`cloud.json`:** your project URL and the **publishable** key
+   (`sb_publishable_…`). That key is meant to be public; row-level security
+   is what protects the data. Never put the secret key (`sb_secret_…`)
+   here — `tools/embed.py` refuses to build if you do.
+4. `python tools/embed.py`, commit, push.
+5. **Vercel → Add New → Project →** import the repository. `vercel.json`
+   tells it there is nothing to build; it serves `index.html` as is.
+
+The GitHub Action keeps refreshing `data/feed.json` every morning, and
+Vercel redeploys on each commit.
+
+On the public site, visitors read, keep a diary and see everything
+without an account. To like, comment, follow, join rooms or send messages
+they sign in with an email link. All of it lives in one Supabase table,
+`docs`, and the rules in `supabase/schema.sql` do what `{self}` rules do
+inside Claude: each person writes only their own documents, comments carry
+their real author, and private documents stay private.
+
+**Ask** on the public site runs through `api/ask.js`, a small Vercel
+function that holds the API key (Vercel → Settings → Environment Variables →
+`ANTHROPIC_API_KEY`). Each visitor gets `ASK_PER_HOUR` questions an hour
+(default 20); set a monthly spend limit in the Anthropic console as the hard
+cap. The same function runs the Claude check on chat messages.
+
+### GitHub Pages
+
 1. Push to GitHub.
 2. **Settings → Pages → Source: Deploy from branch**, `main` / root.
 3. **Settings → Secrets and variables → Actions** → add `ANTHROPIC_API_KEY`
    and `CROSSREF_MAILTO`.
 4. `.github/workflows/daily.yml` rebuilds the feed at 05:00 UTC, commits
    `data/feed.json` only when it changed, and Pages redeploys.
-
-The whole thing is static: no server, no database, no hosting bill.
 
 ## Roadmap
 

@@ -60,6 +60,7 @@ class Item:
     why: str = ""
     tags: list[str] = field(default_factory=list)
     jargon: dict = field(default_factory=dict)
+    points: list = field(default_factory=list)   # 3 short key points, the gist at a glance
     confidence: str = ""
 
     @property

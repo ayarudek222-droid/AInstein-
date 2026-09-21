@@ -236,6 +236,7 @@ feeds:
   fallback_track: astro
   license: NASA material is generally not copyrighted (see NASA media guidelines)
   verified: true
+  og_image: true
   images: true
   image_credit: NASA
   image_skip:
@@ -249,6 +250,7 @@ feeds:
   fallback_track: astro
   license: CC BY-SA 3.0 IGO
   verified: true
+  og_image: true
   images: true
   image_credit: ESA (CC BY-SA 3.0 IGO)
   image_skip:
@@ -330,6 +332,7 @@ feeds:
   track: astro
   license: CC BY 4.0 — credit "ESO" (press releases, captions, images)
   verified: true
+  og_image: true
   images: true
   image_credit: ESO (CC BY 4.0)
   image_skip: []
@@ -340,6 +343,7 @@ feeds:
   fallback_track: astro
   license: JPL's policy frees images and video, not article text — headline and link only
   verified: true
+  og_image: true
   images: true
   image_credit: NASA/JPL-Caltech
   image_skip: []
@@ -411,12 +415,14 @@ feeds:
   fallback_track: biotech
   license: CC BY 4.0
   verified: true
+  og_image: true
 - name: PLOS Biology
   url: https://journals.plos.org/plosbiology/feed/atom
   policy: abstract_ok
   track: biotech
   license: CC BY 4.0
   verified: true
+  og_image: true
 - name: PLOS Computational Biology
   url: https://journals.plos.org/ploscompbiol/feed/atom
   policy: abstract_ok
@@ -424,6 +430,7 @@ feeds:
   fallback_track: biotech
   license: CC BY 4.0
   verified: true
+  og_image: true
 - name: STAT
   url: https://www.statnews.com/feed/
   policy: headline_only
@@ -478,6 +485,7 @@ feeds:
   track: astro
   license: CC BY 4.0 (ESA/Webb press releases and images, unless stated otherwise)
   verified: true
+  og_image: true
   images: true
   image_credit: ESA/Webb (CC BY 4.0)
 - name: ESA/Hubble
@@ -486,6 +494,7 @@ feeds:
   track: astro
   license: CC BY 4.0 (ESA/Hubble press releases and images, unless stated otherwise)
   verified: true
+  og_image: true
   images: true
   image_credit: ESA/Hubble (CC BY 4.0)
 - name: AAS Nova
@@ -543,18 +552,21 @@ feeds:
   license: Articles CC BY 4.0 (fully open-access APS journal); note feed <rights> element says 'Personal use only'
     (APS boilerplate)
   verified: true
+  og_image: true
 - name: Physical Review Research
   url: https://feeds.aps.org/rss/recent/prresearch.xml
   policy: abstract_ok
   track: particles
   license: Articles CC BY 4.0 (open-access APS journal); feed rights boilerplate says personal use only
   verified: true
+  og_image: true
 - name: Quantum (journal)
   url: https://quantum-journal.org/feed/
   policy: abstract_ok
   track: particles
   license: CC BY 4.0 (stated on each paper page)
   verified: true
+  og_image: true
 - name: APS Physics
   url: https://feeds.aps.org/rss/recent/physics.xml
   policy: headline_only
@@ -647,6 +659,7 @@ feeds:
   fallback_track: biotech
   license: CC BY 4.0 (verified on article pages; occasional CC0)
   verified: true
+  og_image: true
 - name: ESA Education
   url: https://www.esa.int/rssfeed/Education
   policy: headline_only
@@ -659,6 +672,16 @@ feeds:
   track: opportunities
   license: All rights reserved (Opportunity Desk)
   verified: true
+# Pictures for cards (ainstein/pictures.py). The article's own picture comes
+# only from feeds marked og_image or images; `previews: true` would also take
+# link-preview pictures from every other source — their copyright, so it is
+# your call. `library` searches NASA's library and Wikimedia Commons (open
+# licences only) for the rest.
+pictures:
+  enabled: true
+  previews: false
+  library: true
+
 youtube:
 - name: PBS Space Time
   channel_id: UC7_gcs09iThXybpVgjHZ_7g

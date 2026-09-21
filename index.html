@@ -377,7 +377,7 @@
   @media (min-width:760px){
     .pane.side{padding-inline:max(0px, calc(50% - 360px));}
     .pane.library{padding-inline:max(0px, calc(50% - 560px));}
-    .plate{height:190px;}
+    .plate{height:150px;}
     .fhook{font-size:30px;}
     .ftext{font-size:16.5px;}
   }
@@ -401,6 +401,7 @@
   .bcard .bnote{font-size:12.5px;color:var(--ink-3);}
   .bcard .bnote a{color:var(--accent);}
   .bacts{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:2px;}
+  .bacts [data-bask]{margin-left:auto;}
   @media (prefers-reduced-motion: reduce){ .blabel i{animation:none;} }
   .progress{display:flex;gap:3px;}
   .progress i{flex:1;height:3px;border-radius:2px;background:var(--rule);transition:background .3s;}
@@ -408,20 +409,20 @@
   .progress i.learned{background:var(--rose);}
 
   .feed{
-    flex:1;min-height:0;overflow-y:auto;scroll-snap-type:y mandatory;
+    flex:1;min-height:0;overflow-y:auto;scroll-snap-type:y proximity;
     padding:0 16px;scrollbar-width:thin;
   }
   .fcard{
     scroll-snap-align:start;scroll-margin-top:0;
-    min-height:calc(100% - 16px);margin:0 0 16px;
+    margin:0 0 22px;
     background:var(--surface);border:1px solid var(--rule);border-radius:2px;
     box-shadow:0 1px 0 rgba(0,0,0,.05), 0 3px 12px rgba(60,45,25,.07);
     display:flex;flex-direction:column;overflow:hidden;
   }
-  .plate{flex:none;height:132px;background:var(--surface-2);border-bottom:1px solid var(--rule);}
+  .plate{flex:none;height:110px;background:var(--surface-2);border-bottom:1px solid var(--rule);}
   .plate svg{display:block;width:100%;height:100%;}
   .plate{position:relative;}
-  .plate.photo{height:auto;aspect-ratio:16/9;max-height:260px;background:var(--ink);}
+  .plate.photo{height:auto;aspect-ratio:16/9;max-height:min(420px, 48vh);background:var(--ink);}
   .plate.photo img{display:block;width:100%;height:100%;object-fit:cover;}
   .plate.photo svg{display:none;}
   .plate .credit{
@@ -429,9 +430,37 @@
     color:#f4efe6;background:rgba(20,16,12,.62);padding:2px 6px;border-radius:2px;
   }
   .plate:not(.photo) .credit{display:none;}
-  .fcard.hl .plate{flex:1;height:auto;min-height:132px;}
+  .fcard.hl .plate:not(.photo){height:90px;}
   .fcard.hl .fbody{flex:none;}
-  .fcard.hl .fhook{font-size:clamp(24px,6vw,32px);}
+  .fcard.hl .fhook{font-size:clamp(21px,5vw,26px);}
+  .fwhy{margin:0;font-size:13.5px;line-height:1.5;color:var(--ink-3);font-style:italic;}
+  .factions.row{display:flex;align-items:center;gap:16px;flex-wrap:nowrap;border-top:1px solid var(--rule);padding-top:10px;margin-top:4px;}
+  .factions.row .gap{flex:1;}
+  .factions.row .readlink{margin-left:0;white-space:nowrap;}
+  .ibtn.learn[aria-pressed="true"]{color:var(--teal);}
+  .ibtn.learn[aria-pressed="true"] svg{fill:none;stroke-width:2.2;}
+  .ibtn.save[aria-pressed="true"]{color:var(--accent);}
+  .fpoints{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:5px;}
+  .fpoints li{font-size:15.5px;line-height:1.45;color:var(--ink-2);}
+  .fpoints li::marker{color:var(--accent);}
+  .fmore summary{cursor:pointer;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);list-style:none;}
+  .fmore summary::-webkit-details-marker{display:none;}
+  .fmore summary::after{content:" ▾";}
+  .fmore[open] summary::after{content:" ▴";}
+  .fmore[open]{display:flex;flex-direction:column;gap:8px;}
+  .viewtoggle{margin-left:auto;display:inline-flex;border:1px solid var(--rule);border-radius:2px;overflow:hidden;align-self:center;}
+  .viewtoggle button{font:inherit;font-size:12px;padding:4px 10px;border:none;background:none;color:var(--ink-3);cursor:pointer;}
+  .viewtoggle button[aria-pressed="true"]{background:var(--ink);color:var(--ground);}
+  .feed.listview{scroll-snap-type:none;}
+  .lrow{display:flex;flex-direction:column;gap:4px;width:100%;text-align:left;font:inherit;cursor:pointer;
+    background:var(--surface);border:1px solid var(--rule);border-radius:2px;padding:11px 13px;margin:0 0 8px;color:var(--ink);}
+  .lrow:hover{border-color:var(--accent);}
+  .lrow.seen{opacity:.62;}
+  .lrow .lk{display:flex;align-items:center;gap:6px;font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);}
+  .lrow .lk i{width:7px;height:7px;border-radius:50%;flex:none;}
+  .lrow b{font-weight:400;font-size:17px;line-height:1.3;}
+  .lrow .lp{font-size:13.5px;line-height:1.45;color:var(--ink-2);}
+  .fcard.opened{margin-bottom:8px;}
   .fbody{flex:1;padding:14px 15px 14px;display:flex;flex-direction:column;gap:10px;}
   .ftrack{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);}
   .fhook{margin:0;font-size:clamp(22px,5.4vw,26px);line-height:1.18;font-weight:400;text-wrap:balance;}
@@ -816,7 +845,7 @@
       </div>
     </div>
 
-    <button type="button" class="enter" id="enter">Open today's set</button>
+    <button type="button" class="enter" id="enter">Open the feed</button>
     <p class="doorfoot" id="doorfoot"></p>
   </div>
 </section>
@@ -826,12 +855,12 @@
     <div class="brandrow">
       <div class="brand">AI<em>nstein</em></div>
       <div class="modes" role="group" aria-label="Pages">
-        <button type="button" class="mode ico" data-mode="diary" aria-pressed="false" aria-label="Diary"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="1.5"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></svg></button>
-        <button type="button" class="mode" data-mode="today" aria-pressed="true">Today</button>
         <button type="button" class="mode" data-mode="breaking" aria-pressed="false">Breaking<span class="dot" id="breakDot" hidden></span></button>
+        <button type="button" class="mode" data-mode="today" aria-pressed="true">Feed</button>
         <button type="button" class="mode" data-mode="library" aria-pressed="false">Library</button>
-        <button type="button" class="mode" data-mode="ask" aria-pressed="false">Ask</button>
         <button type="button" class="mode" data-mode="talk" aria-pressed="false">Talk<span class="dot" id="talkDot" hidden></span></button>
+        <button type="button" class="mode" data-mode="ask" aria-pressed="false">Ask</button>
+        <button type="button" class="mode ico" data-mode="diary" aria-pressed="false" aria-label="Diary"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="1.5"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></svg></button>
       </div>
       <button type="button" class="me" id="openMe" aria-label="Your page">
         <span class="ring"><img id="meAvatar" alt="" hidden><span id="meInitial" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" style="fill:none;stroke:currentColor;stroke-width:1.6"><circle cx="12" cy="9" r="3.6"/><path d="M5 19.5c1.4-3.3 4-4.8 7-4.8s5.6 1.5 7 4.8"/></svg></span></span>
@@ -894,7 +923,12 @@
 
     <section class="pane side today" id="todayPane" data-hidden="false" aria-label="Today">
       <div class="todayhead">
-        <div class="todaytitle"><h2>Today</h2><span id="todayCount"></span></div>
+        <div class="todaytitle"><h2>Your feed</h2><span id="todayCount"></span>
+          <div class="viewtoggle" role="group" aria-label="View">
+            <button type="button" data-view="cards" aria-pressed="true">Cards</button>
+            <button type="button" data-view="list" aria-pressed="false">Quick list</button>
+          </div>
+        </div>
         <div class="progress" id="progress" aria-hidden="true"></div>
         <div class="focusline" id="focusline"></div>
       </div>
@@ -1074,7 +1108,14 @@
     "jwst-xrism"
    ],
    "media": "article",
-   "fallback_track": "astro"
+   "fallback_track": "astro",
+   "image": "https://assets.science.nasa.gov/content/dam/science/cds/svs/a020000/a020300/a020374/XRISM_S1_4k_30fps_ProRes-00001_print.jpg/jcr:content/renditions/cq5dam.web.1280.1280.jpeg",
+   "image_credit": "NASA",
+   "points": [
+    "XRISM watched a neutron star capturing a giant star's wind.",
+    "Plasma falls toward the pulsar at roughly 335,000 mph.",
+    "First direct look at what powers a class of X-ray binaries."
+   ]
   },
   {
    "id": "esa:flex-s3c",
@@ -1104,7 +1145,12 @@
    "experiments": [],
    "entities": [],
    "media": "article",
-   "fallback_track": "astro"
+   "fallback_track": "astro",
+   "points": [
+    "ESA launched FLEX and Sentinel-3C together on one Vega-C.",
+    "Rocket's first dual launch, using the Vespa adapter, on 15 September.",
+    "FLEX reads plant fluorescence, a direct measure of photosynthesis."
+   ]
   },
   {
    "id": "esa:galileo-sas",
@@ -1133,7 +1179,14 @@
    "experiments": [],
    "entities": [],
    "media": "article",
-   "fallback_track": "astro"
+   "fallback_track": "astro",
+   "image": "https://www.esa.int/var/esa/storage/images/esa_multimedia/images/2026/09/galileo_signal_authentication_service_first_position_fix/27525934-1-eng-GB/Galileo_Signal_Authentication_Service_first_position_fix_article.jpg",
+   "image_credit": "ESA",
+   "points": [
+    "Galileo receivers fixed their position despite deliberate spoofing.",
+    "Five satellites broadcast a new encrypted Signal Authentication test signal.",
+    "Authentication defends against spoofing now routine near conflict zones."
+   ]
   },
   {
    "id": "nasa:spacex-crew",
@@ -1163,7 +1216,14 @@
     "spacex"
    ],
    "media": "article",
-   "fallback_track": "astro"
+   "fallback_track": "astro",
+   "image": "https://www.nasa.gov/wp-content/uploads/2026/01/54387592956-0d0c5c9258-o.jpg?w=2048",
+   "image_credit": "NASA/Aubrey Gemignani",
+   "points": [
+    "NASA added Crew-15, Crew-16 and Crew-17 to SpaceX's contract.",
+    "Worth $946 million, bringing SpaceX to 17 missions through 2028.",
+    "Shapes how the station stays crewed late in its life."
+   ]
   },
   {
    "id": "nasa:cosi",
@@ -1191,7 +1251,12 @@
    "experiments": [],
    "entities": [],
    "media": "article",
-   "fallback_track": "astro"
+   "fallback_track": "astro",
+   "points": [
+    "UC Berkeley engineers assembled the COSI gamma-ray telescope's detector.",
+    "Built in July 2026 with UC San Diego and Naval Research Laboratory.",
+    "Could trace antimatter in the galaxy via positron annihilation lines."
+   ]
   },
   {
    "id": "esa:iris2",
@@ -1219,7 +1284,12 @@
    "experiments": [],
    "entities": [],
    "media": "article",
-   "fallback_track": "astro"
+   "fallback_track": "astro",
+   "points": [
+    "ESA signed 18 contracts for the EU's IRIS² constellation.",
+    "Nearly 80 companies will study services, focusing on very low orbit.",
+    "Aims to cut Europe's reliance on non-European satellite communications."
+   ]
   },
   {
    "id": "arxiv:atlas-higgs-width",
@@ -1256,7 +1326,12 @@
    "entities": [
     "atlas"
    ],
-   "media": "article"
+   "media": "article",
+   "points": [
+    "ATLAS set a new upper limit on the Higgs boson's width.",
+    "Observed limit 307 MeV at 95% confidence, via two-photon interference.",
+    "Invisible decays to undiscovered particles would widen the Higgs first."
+   ]
   },
   {
    "id": "arxiv:cms-hllhc-tracking",
@@ -1293,7 +1368,12 @@
    "entities": [
     "cms"
    ],
-   "media": "article"
+   "media": "article",
+   "points": [
+    "CMS redesigned its track reconstruction for the High-Luminosity LHC.",
+    "Splits work between GPU-optimised algorithms and vectorised CPU code.",
+    "Reconstruction speed, not the detector, will limit HL-LHC physics reach."
+   ]
   },
   {
    "id": "arxiv:bennu-pristine",
@@ -1328,7 +1408,14 @@
    ],
    "experiments": [],
    "entities": [],
-   "media": "article"
+   "media": "article",
+   "image": "https://images-assets.nasa.gov/image/Bennu_Sample2/Bennu_Sample2~medium.jpg",
+   "image_credit": "NASA",
+   "points": [
+    "An audit found the Bennu sample essentially free of contamination.",
+    "69 authors checked 121.6 grams; one isolated 1.24% by mass excepted.",
+    "Bennu's organics and water-bearing minerals really come from Bennu."
+   ]
   },
   {
    "id": "arxiv:solar-system-instability",
@@ -1363,7 +1450,14 @@
    ],
    "experiments": [],
    "entities": [],
-   "media": "article"
+   "media": "article",
+   "image": "https://images-assets.nasa.gov/image/PIA21836/PIA21836~medium.jpg",
+   "image_credit": "NASA",
+   "points": [
+    "The dying Sun's mass loss may destabilise the outer planets.",
+    "Orbits crossed during the red giant phase in ~40% of simulations.",
+    "The outer Solar System may stay stable for far less time."
+   ]
   },
   {
    "id": "arxiv:3i-atlas",
@@ -1398,7 +1492,14 @@
    ],
    "experiments": [],
    "entities": [],
-   "media": "article"
+   "media": "article",
+   "image": "https://assets.science.nasa.gov/content/dam/science/missions/hubble/releases/2025/08/STScI-01K1X6XDR76ZD4FYJ9VTWN1ERB.tif/jcr:content/renditions/cq5dam.web.1280.1280.jpeg",
+   "image_credit": "NASA, ESA, David Jewitt (UCLA)",
+   "points": [
+    "Interstellar object 3I/ATLAS has unusually deuterium-rich water.",
+    "Modeling best reproduces this ratio at subsolar metallicities.",
+    "Water chemistry may fingerprint where visiting objects were born."
+   ]
   },
   {
    "id": "arxiv:titan-ethane",
@@ -1433,7 +1534,14 @@
    ],
    "experiments": [],
    "entities": [],
-   "media": "article"
+   "media": "article",
+   "image": "https://images-assets.nasa.gov/image/PIA06229/PIA06229~orig.jpg",
+   "image_credit": "NASA",
+   "points": [
+    "An exoplanet technique detected ethane in Titan's atmosphere.",
+    "High-resolution cross-correlation spectroscopy reached signal-to-noise of 5.17.",
+    "Validating it on Titan builds trust for distant exoplanet atmospheres."
+   ]
   },
   {
    "id": "arxiv:charged-hazes",
@@ -1467,7 +1575,14 @@
    ],
    "experiments": [],
    "entities": [],
-   "media": "article"
+   "media": "article",
+   "image": "https://images-assets.nasa.gov/image/PIA20687/PIA20687~medium.jpg",
+   "image_credit": "NASA",
+   "points": [
+    "Modeling suggests electric charge changes exoplanet haze behaviour.",
+    "Charged grains repel, stay small, and give steep super-Rayleigh slopes.",
+    "Steep slopes might reflect electrical state, not strong mixing."
+   ]
   },
   {
    "id": "arxiv:kelt9b",
@@ -1500,7 +1615,14 @@
    ],
    "experiments": [],
    "entities": [],
-   "media": "article"
+   "media": "article",
+   "image": "https://images-assets.nasa.gov/image/PIA21472/PIA21472~medium.jpg",
+   "image_credit": "NASA",
+   "points": [
+    "Astronomers measured the hottest known giant exoplanet's C/O ratio.",
+    "C/O is 0.20, slightly below its host star's value.",
+    "C/O ratios hint where in its disk a planet formed."
+   ]
   },
   {
    "id": "arxiv:jwst-protoplanets",
@@ -1536,7 +1658,14 @@
    "entities": [
     "jwst"
    ],
-   "media": "article"
+   "media": "article",
+   "image": "https://images-assets.nasa.gov/image/PIA20645/PIA20645~medium.jpg",
+   "image_credit": "NASA",
+   "points": [
+    "JWST found none of the planets inferred from disk gas motions.",
+    "MIRI imaging set upper limits of roughly 3–20 Jupiter masses.",
+    "Planets are fainter than expected, or the signatures mean something else."
+   ]
   },
   {
    "id": "arxiv:mms-reconnection",
@@ -1570,7 +1699,14 @@
    ],
    "experiments": [],
    "entities": [],
-   "media": "article"
+   "media": "article",
+   "image": "https://images-assets.nasa.gov/image/201408040001HQ/201408040001HQ~medium.jpg",
+   "image_credit": "NASA",
+   "points": [
+    "Four MMS spacecraft directly measured a magnetic reconnection exhaust.",
+    "Exhaust thickness was 29–31 ion inertial lengths across four crossings.",
+    "Validates the single-spacecraft estimates most reconnection studies rely on."
+   ]
   },
   {
    "id": "arxiv:pseudostreamer",
@@ -1604,7 +1740,12 @@
    ],
    "experiments": [],
    "entities": [],
-   "media": "article"
+   "media": "article",
+   "points": [
+    "Simulations show the Sun's current sheet can split and rejoin.",
+    "Flips over days to weeks when dipole and quadrupole roughly match.",
+    "A splitting sheet complicates forecasts of solar wind reaching Earth."
+   ]
   },
   {
    "id": "arxiv:kmt-two-jovian",
@@ -1639,7 +1780,12 @@
    ],
    "experiments": [],
    "entities": [],
-   "media": "article"
+   "media": "article",
+   "points": [
+    "Microlensing revealed two cold giant planets around an M dwarf.",
+    "One sits near the snow line, the other far beyond it.",
+    "Small stars were not expected to build two giant planets."
+   ]
   },
   {
    "id": "arxiv:rogue-planet",
@@ -1674,7 +1820,14 @@
    ],
    "experiments": [],
    "entities": [],
-   "media": "article"
+   "media": "article",
+   "image": "https://assets.science.nasa.gov/content/dam/science/astro/exo-explore/2023/09/r/RoguePlanet1600.jpg/jcr:content/renditions/cq5dam.web.1280.1280.jpeg",
+   "image_credit": "NASA",
+   "points": [
+    "No host star found near a Saturn-mass rogue planet candidate.",
+    "Interferometry ruled out luminous hosts out to 90 au.",
+    "Ruling out a host moves a candidate toward confirmed rogue planet."
+   ]
   },
   {
    "id": "doi:nature-dark-matter-glimpse",
@@ -1722,7 +1875,12 @@
    },
    "confidence": "solid",
    "media": "article",
-   "entities": []
+   "entities": [],
+   "points": [
+    "A survey mapped what language model benchmarks have been testing.",
+    "Covers 14,767 papers on evaluation resources from 2022 to 2026.",
+    "Benchmarks shifted toward action and professional tasks, steering the field."
+   ]
   },
   {
    "id": "arxiv:llm-web-search",
@@ -1755,7 +1913,12 @@
    },
    "confidence": "solid",
    "media": "article",
-   "entities": []
+   "entities": [],
+   "points": [
+    "First comparison of how ChatGPT, Claude, Grok and DeepSeek search.",
+    "Each agent uses a distinctly different web querying strategy.",
+    "Raises attribution concerns as agents mediate people's access to the web."
+   ]
   },
   {
    "id": "arxiv:biophys-bridge",
@@ -1786,7 +1949,12 @@
    },
    "confidence": "preliminary",
    "media": "article",
-   "entities": []
+   "entities": [],
+   "points": [
+    "A new benchmark tests AI reasoning across physics and biology.",
+    "500 cases drawn from biophysics literature, linking evidence and models.",
+    "Real research requires crossing fields, which most benchmarks skip."
+   ]
   },
   {
    "id": "openai:youth-safety",
@@ -1851,7 +2019,12 @@
     "fragmentation function": "how a quark turns into hadrons"
    },
    "confidence": "modeling-only",
-   "entities": []
+   "entities": [],
+   "points": [
+    "The f0(980) particle may change nature depending on energy scale.",
+    "Fragmentation functions suggest four-quark at low energy, ordinary at high.",
+    "Bears on whether exotic hadrons are real states or loose molecules."
+   ]
   },
   {
    "id": "hn:49763697",
@@ -2390,7 +2563,14 @@
     "decision-making",
     "behaviour"
    ],
-   "confidence": "peer reviewed"
+   "confidence": "peer reviewed",
+   "image": "https://iiif.elifesciences.org/lax:108241%2Felife-108241-fig1-v1.tif/full/1500,/0/default.jpg",
+   "image_credit": "Figure: Chen et al., CC BY 4.0",
+   "points": [
+    "Noninvasive brain stimulation lastingly reduced everyday procrastination.",
+    "Double-blind trial; future rewards felt more valuable, tasks no less unpleasant.",
+    "Points to a specific decision mechanism that could be targeted."
+   ]
   },
   {
    "id": "elife:de9a88a5",
@@ -2413,7 +2593,14 @@
     "language",
     "neuroscience"
    ],
-   "confidence": "peer reviewed"
+   "confidence": "peer reviewed",
+   "image": "https://iiif.elifesciences.org/lax:101204%2Felife-101204-fig1-v1.tif/full/1500,/0/default.jpg",
+   "image_credit": "Figure: Zhuoqiao Hong et al., CC BY 4.0",
+   "points": [
+    "Larger language models predicted recorded brain activity more accurately.",
+    "Gains grew roughly logarithmically with model size.",
+    "Links AI scaling to how well models mirror brain language processing."
+   ]
   },
   {
    "id": "elife:93045d00",
@@ -2436,7 +2623,14 @@
     "regeneration",
     "reprogramming"
    ],
-   "confidence": "peer reviewed"
+   "confidence": "peer reviewed",
+   "image": "https://iiif.elifesciences.org/lax:111251%2Felife-111251-fig1-v1.tif/full/1500,/0/default.jpg",
+   "image_credit": "Figure: Baoshan Liao et al., CC BY 4.0",
+   "points": [
+    "Retinal Müller glia were coaxed into becoming neurons in mice.",
+    "Combined Notch blocking with pushing glia back into the cell cycle.",
+    "A potential route to repairing vision loss."
+   ]
   },
   {
    "id": "elife:650ec6a6",
@@ -2459,7 +2653,14 @@
     "antibodies",
     "protein structure"
    ],
-   "confidence": "peer reviewed"
+   "confidence": "peer reviewed",
+   "image": "https://iiif.elifesciences.org/lax:98369%2Felife-98369-fig1-v1.tif/full/617,/0/default.jpg",
+   "image_credit": "Figure: DeRoo et al., CC BY 4.0",
+   "points": [
+    "PAbFold uses AlphaFold2 to predict where antibodies bind.",
+    "Needs only antibody and target protein sequences to find linear epitopes.",
+    "Faster epitope mapping could speed antibody development."
+   ]
   },
   {
    "id": "elife:2e29790c",
@@ -2482,7 +2683,14 @@
     "drug discovery",
     "infection"
    ],
-   "confidence": "peer reviewed"
+   "confidence": "peer reviewed",
+   "image": "https://iiif.elifesciences.org/lax:102511%2Felife-102511-fig1-v1.tif/full/1500,/0/default.jpg",
+   "image_credit": "Figure: Deborah Maus et al., CC BY 4.0",
+   "points": [
+    "Dormant Toxoplasma parasites depend on mitochondrial ATP production.",
+    "A compound screen flagged the mitochondrial bc1 complex as target.",
+    "Chronic Toxoplasma infections currently have no cure."
+   ]
   },
   {
    "id": "elife:3e1feb8d",
@@ -2505,7 +2713,14 @@
     "mitochondria",
     "neurodevelopment"
    ],
-   "confidence": "peer reviewed"
+   "confidence": "peer reviewed",
+   "image": "https://iiif.elifesciences.org/lax:104055%2Felife-104055-fig1-v1.tif/full/617,/0/default.jpg",
+   "image_credit": "Figure: Walkiewicz et al., CC BY 4.0",
+   "points": [
+    "Losing the Lowe syndrome gene OCRL disrupted mitochondria across species.",
+    "Linked to altered neural differentiation and weaker cilia-based Hedgehog signalling.",
+    "Suggests mechanisms behind the disease's neurological symptoms."
+   ]
   },
   {
    "id": "elife:f4626256",
@@ -2528,7 +2743,14 @@
     "zebrafish",
     "methods"
    ],
-   "confidence": "peer reviewed"
+   "confidence": "peer reviewed",
+   "image": "https://iiif.elifesciences.org/lax:100880%2Felife-100880-fig1-v1.tif/full/,1500/0/default.jpg",
+   "image_credit": "Figure: Chen et al., CC BY 4.0",
+   "points": [
+    "A new method traces neural connections in larval zebrafish.",
+    "Labels up to about 20 input neurons per starter cell, low toxicity.",
+    "Helps map which neurons connect in a widely used model animal."
+   ]
   },
   {
    "id": "elife:895811a7",
@@ -2551,7 +2773,14 @@
     "autoimmunity",
     "T cells"
    ],
-   "confidence": "peer reviewed"
+   "confidence": "peer reviewed",
+   "image": "https://iiif.elifesciences.org/lax:105212%2Felife-105212-fig1-v1.tif/full/,1500/0/default.jpg",
+   "image_credit": "Figure: Lei Li et al., CC BY 4.0",
+   "points": [
+    "Two enzymes keep regulatory T cells stable and anti-inflammatory.",
+    "Without DGK alpha and zeta, cells turned pathogenic and caused autoimmunity.",
+    "Could inform therapies for autoimmune disease."
+   ]
   },
   {
    "id": "plos-biology:412a2c11",
@@ -2574,7 +2803,12 @@
     "stem cells",
     "evolution"
    ],
-   "confidence": "peer reviewed"
+   "confidence": "peer reviewed",
+   "points": [
+    "Only lower body fragments of the sea squirt Ciona regenerated.",
+    "Region-specific signals, not stem cell numbers, controlled stem cell activation.",
+    "Local signalling limits regeneration in a close vertebrate relative."
+   ]
   },
   {
    "id": "plos-biology:bf12c866",
@@ -2597,7 +2831,12 @@
     "metabolism",
     "tumour microenvironment"
    ],
-   "confidence": "peer reviewed"
+   "confidence": "peer reviewed",
+   "points": [
+    "Collagen I helps cancer cells survive when nutrients are scarce.",
+    "Integrin signalling boosted amino acid import and mTORC1/S6 activity.",
+    "The LAT1-4F2hc transporter may be a druggable target."
+   ]
   },
   {
    "id": "plos-biology:f6175e45",
@@ -2620,7 +2859,14 @@
     "microbiome",
     "biosensors"
    ],
-   "confidence": "peer reviewed"
+   "confidence": "peer reviewed",
+   "image": "https://journals.plos.org/plosbiology/article/figure/image?size=inline&id=10.1371/journal.pbio.3003997.g001",
+   "image_credit": "Figure: Chhun et al., CC BY 4.0",
+   "points": [
+    "A honeybee gut bacterium was engineered into a sugar biosensor.",
+    "Engineered Snodgrassella alvi revealed micron-scale nutrient gradients in the gut.",
+    "Offers a platform for sensing chemistry inside living hosts."
+   ]
   },
   {
    "id": "plos-biology:4b32a424",
@@ -2643,7 +2889,12 @@
     "bacterial immunity",
     "signalling"
    ],
-   "confidence": "peer reviewed"
+   "confidence": "peer reviewed",
+   "points": [
+    "Bacteria use the Panoptes system to stop virus infections.",
+    "Its membrane effector disrupts the cell membrane and halts growth.",
+    "Bacterial immune systems are a rich source of molecular tools."
+   ]
   },
   {
    "id": "plos-biology:3d9043b2",
@@ -2666,7 +2917,14 @@
     "antibodies",
     "immunology"
    ],
-   "confidence": "peer reviewed"
+   "confidence": "peer reviewed",
+   "image": "https://journals.plos.org/plosbiology/article/figure/image?size=large&id=10.1371/journal.pbio.3003996.g001",
+   "image_credit": "Figure: Chuanying Niu et al., CC BY 4.0",
+   "points": [
+    "Common antibodies can mutate to keep up with COVID variants.",
+    "Researchers found an ultrapotent R1-32-like antibody with broad activity.",
+    "Could guide vaccine and antibody design."
+   ]
   },
   {
    "id": "plos-biology:4118324a",
@@ -2689,7 +2947,12 @@
     "flavivirus",
     "cell biology"
    ],
-   "confidence": "peer reviewed"
+   "confidence": "peer reviewed",
+   "points": [
+    "Dengue and Zika rely on host protein atlastin-2 to replicate.",
+    "Depleting it disrupted replication organelles and reduced virus production.",
+    "Host factors like this could be broad antiviral drug targets."
+   ]
   },
   {
    "id": "plos-biology:4b87725a",
@@ -2712,7 +2975,14 @@
     "olfaction",
     "connectomics"
    ],
-   "confidence": "peer reviewed"
+   "confidence": "peer reviewed",
+   "image": "https://journals.plos.org/plosbiology/article/figure/image?size=inline&id=10.1371/journal.pbio.3003959.g001",
+   "image_credit": "Figure: Bao et al., CC BY 4.0",
+   "points": [
+    "Mosquito CO2-sensing neurons are wired to amplify each other.",
+    "Connectome mapping showed extra recurrent connections among CO2 neurons.",
+    "Explains how mosquitoes find people, a key step in disease spread."
+   ]
   },
   {
    "id": "plos-biology:097013be",
@@ -2735,7 +3005,12 @@
     "neuroimaging",
     "connectivity"
    ],
-   "confidence": "peer reviewed"
+   "confidence": "peer reviewed",
+   "points": [
+    "Brain structure and activity grow more aligned before birth.",
+    "After birth, through toddlerhood, that coupling shifted toward weakening.",
+    "Maps a basic transition in how the developing brain organises."
+   ]
   },
   {
    "id": "plos-computational-biology:7a07d687",
@@ -2758,7 +3033,12 @@
     "single-cell",
     "machine learning"
    ],
-   "confidence": "peer reviewed"
+   "confidence": "peer reviewed",
+   "points": [
+    "Machine learning implicates maternal T cells in recurrent miscarriage.",
+    "Single-cell RNA data nominated CXCR4 and JUN as druggable candidates.",
+    "Narrows which cells and molecules to study for this condition."
+   ]
   },
   {
    "id": "plos-computational-biology:960d0c01",
@@ -2781,7 +3061,12 @@
     "kidney",
     "genetics"
    ],
-   "confidence": "peer reviewed"
+   "confidence": "peer reviewed",
+   "points": [
+    "PFOA showed mixed genetic links to different kidney diseases.",
+    "Mendelian randomization: lower IgA nephropathy risk, higher hypertensive nephropathy risk.",
+    "Sharpens questions about how PFAS may affect kidney health."
+   ]
   },
   {
    "id": "plos-computational-biology:14eb090f",
@@ -2804,7 +3089,14 @@
     "pathology",
     "medical imaging"
    ],
-   "confidence": "peer reviewed"
+   "confidence": "peer reviewed",
+   "image": "https://journals.plos.org/ploscompbiol/article/figure/image?size=large&id=10.1371/journal.pcbi.1013611.g001",
+   "image_credit": "Figure: Vijendran et al., CC BY 4.0",
+   "points": [
+    "SmartHisto cuts how much experts must label for pathology AI.",
+    "Bayesian active learning picks regions; reached mean IoU of 0.75.",
+    "Expert annotation is a major bottleneck for medical image AI."
+   ]
   },
   {
    "id": "plos-computational-biology:d1fe9f0a",
@@ -2827,7 +3119,14 @@
     "research practice",
     "risk"
    ],
-   "confidence": "peer reviewed"
+   "confidence": "peer reviewed",
+   "image": "https://journals.plos.org/ploscompbiol/article/figure/image?size=large&id=10.1371/journal.pcbi.1014776.g001",
+   "image_credit": "Figure: Thomas Sharpton et al., CC BY 4.0",
+   "points": [
+    "A guide explains how to use LLMs safely in biology labs.",
+    "Risk framework plus six guides with worked examples and checklists.",
+    "Helps researchers manage errors like hallucination and sycophancy."
+   ]
   },
   {
    "id": "plos-computational-biology:d33c8932",
@@ -2850,7 +3149,12 @@
     "computational neuroscience",
     "spiking networks"
    ],
-   "confidence": "peer reviewed"
+   "confidence": "peer reviewed",
+   "points": [
+    "A spiking network model learned neurons tuned to shape features.",
+    "Modelled on the primate ventral pathway; showed repeating firing patterns.",
+    "Offers a mechanistic account of vision's feature-binding problem."
+   ]
   },
   {
    "id": "plos-computational-biology:76dbb0fd",
@@ -2873,7 +3177,12 @@
     "biomechanics",
     "modelling"
    ],
-   "confidence": "peer reviewed"
+   "confidence": "peer reviewed",
+   "points": [
+    "Models link faulty spiral artery remodelling to placental damage.",
+    "Incomplete remodelling sharply raised shear stress on placental villi.",
+    "Identifies shear-stress thresholds relevant to pregnancy complications."
+   ]
   },
   {
    "id": "plos-computational-biology:2f5fadda",
@@ -2896,7 +3205,12 @@
     "image analysis",
     "high-throughput"
    ],
-   "confidence": "peer reviewed"
+   "confidence": "peer reviewed",
+   "points": [
+    "An image-based assay measures virus infectivity at high throughput.",
+    "An nnU-Net model measuring cell damage matched manual thresholding closely.",
+    "Could replace slower infectivity assays in antiviral screening."
+   ]
   },
   {
    "id": "plos-computational-biology:f6bf2fab",
@@ -2919,7 +3233,12 @@
     "biophysics",
     "simulation"
    ],
-   "confidence": "peer reviewed"
+   "confidence": "peer reviewed",
+   "points": [
+    "Ion channels cluster most at intermediate interaction strengths.",
+    "Monte Carlo simulations; multiple channel types formed hierarchical clusters.",
+    "Clustering shapes electrical signalling in neurons and heart cells."
+   ]
   },
   {
    "id": "stat:de715538",
@@ -3602,7 +3921,12 @@
    ],
    "confidence": "announcement",
    "image": "https://science.nasa.gov/wp-content/uploads/2026/09/potm2609a.jpg",
-   "image_credit": "ESA/Hubble & NASA, D. Thilker, the MAUVE-HST Team (CC BY 4.0)"
+   "image_credit": "ESA/Hubble & NASA, D. Thilker, the MAUVE-HST Team (CC BY 4.0)",
+   "points": [
+    "Hubble shows galaxy NGC 4698's core spinning perpendicular to its disk.",
+    "Spiral galaxy about 55 million light-years away in Virgo Cluster.",
+    "Likely picked up outside gas, possibly in a minor merger."
+   ]
   },
   {
    "id": "esa-webb:74426e88",
@@ -3627,7 +3951,12 @@
    ],
    "confidence": "announcement",
    "image": "https://cdn.esawebb.org/archives/images/screen/weic2619a.jpg",
-   "image_credit": "ESA/Webb, NASA, CSA, K. Luhman, C. Alves De Oliveira, M. Zamani (ESA/Webb) (CC BY 4.0)"
+   "image_credit": "ESA/Webb, NASA, CSA, K. Luhman, C. Alves De Oliveira, M. Zamani (ESA/Webb) (CC BY 4.0)",
+   "points": [
+    "Webb found the least massive known free-floating brown dwarfs.",
+    "As light as about twice Jupiter's mass, in cluster IC 348.",
+    "One has a disc, so planets could form around it."
+   ]
   },
   {
    "id": "esa-hubble:a1872142",
@@ -3652,7 +3981,12 @@
    ],
    "confidence": "peer reviewed",
    "image": "https://cdn.esahubble.org/archives/images/screen/heic2612a.jpg",
-   "image_credit": "NASA, ESA, STScI, A. Sánchez-Lavega (University of the Basque Country), A. Simon (NASA-GSFC), M. Wong (UC Berkeley); Image Processing: A. Pagan (STScI) (CC BY 4.0)"
+   "image_credit": "NASA, ESA, STScI, A. Sánchez-Lavega (University of the Basque Country), A. Simon (NASA-GSFC), M. Wong (UC Berkeley); Image Processing: A. Pagan (STScI) (CC BY 4.0)",
+   "points": [
+    "Hubble spotted a ten-sided jet stream around Saturn's south pole.",
+    "Cassini saw no such pattern from 2004 to 2017, suggesting it's new.",
+    "A forming pattern lets scientists test how jet streams organise."
+   ]
   },
   {
    "id": "eso:c07c3d94",
@@ -3677,7 +4011,12 @@
    ],
    "confidence": "peer reviewed",
    "image": "https://cdn.eso.org/images/screen/eso2612a.jpg",
-   "image_credit": "ESO/GRAVITY collaboration (CC BY 4.0)"
+   "image_credit": "ESO/GRAVITY collaboration (CC BY 4.0)",
+   "points": [
+    "Star S301, the Milky Way's fastest known, orbits our black hole.",
+    "Reaches about 25,000 km/s, orbiting Sagittarius A* every 8.7 years.",
+    "Could measure the black hole's spin and test general relativity."
+   ]
   },
   {
    "id": "esa-hubble:4095b495",
@@ -3702,7 +4041,12 @@
    ],
    "confidence": "peer reviewed",
    "image": "https://cdn.esahubble.org/archives/images/screen/heic2611a.jpg",
-   "image_credit": "NASA, ESA, J. Olmsted (STScI) (CC BY 4.0)"
+   "image_credit": "NASA, ESA, J. Olmsted (STScI) (CC BY 4.0)",
+   "points": [
+    "The Milky Way absorbed a dwarf galaxy 11.8 billion years ago.",
+    "Hubble and Gaia data on 39 globular clusters revealed its remnants.",
+    "Extends our galaxy's known merger history 1.8 billion years further back."
+   ]
   },
   {
    "id": "esa-webb:4be1e40a",
@@ -3727,7 +4071,12 @@
    ],
    "confidence": "peer reviewed",
    "image": "https://cdn.esawebb.org/archives/images/screen/weic2617a.jpg",
-   "image_credit": "ESA/Webb, NASA & CSA, F. Peißker, J. Lu, F. Yusef-Zadeh, N. B. Sabha, C. Chan (CC BY 4.0)"
+   "image_credit": "ESA/Webb, NASA & CSA, F. Peißker, J. Lu, F. Yusef-Zadeh, N. B. Sabha, C. Chan (CC BY 4.0)",
+   "points": [
+    "Webb found dust and water around a star near Sagittarius A*.",
+    "Star IRS 3 sits only about 0.55 light-years from the black hole.",
+    "Dust can form even in harsh radiation near supermassive black holes."
+   ]
   },
   {
    "id": "esa-webb:d2eaa2c2",
@@ -3752,7 +4101,12 @@
    ],
    "confidence": "announcement",
    "image": "https://cdn.esawebb.org/archives/images/screen/weic2616a.jpg",
-   "image_credit": "NASA, ESA, CSA, STScI. Image Processing: A. Pagan (STScI) (CC BY 4.0)"
+   "image_credit": "NASA, ESA, CSA, STScI. Image Processing: A. Pagan (STScI) (CC BY 4.0)",
+   "points": [
+    "Webb imaged the Lion Nebula, a dying star's cast-off gas.",
+    "NIRCam and MIRI show shells, rings and comet-tailed dust clumps.",
+    "Planetary nebulae show the Sun's likely fate in detail."
+   ]
   },
   {
    "id": "eso:3961650b",
@@ -3775,7 +4129,12 @@
     "binary stars",
     "VLT"
    ],
-   "confidence": "peer reviewed"
+   "confidence": "peer reviewed",
+   "points": [
+    "Betelgeuse's companion star was directly imaged for the first time.",
+    "VLT's SPHERE found it about two to three times the Sun's mass.",
+    "Ends a search for the companion lasting about a century."
+   ]
   },
   {
    "id": "eso:e6eb178d",
@@ -3800,7 +4159,12 @@
    ],
    "confidence": "peer reviewed",
    "image": "https://cdn.eso.org/images/screen/eso2610a.jpg",
-   "image_credit": "ESO/M. Kornmesser (artist's impression, CC BY 4.0)"
+   "image_credit": "ESO/M. Kornmesser (artist's impression, CC BY 4.0)",
+   "points": [
+    "A possible moon was found orbiting a brown dwarf.",
+    "CRIRES+ detected a wobble from an object at least Jupiter-mass.",
+    "If confirmed, it blurs lines between planets, moons and failed stars."
+   ]
   },
   {
    "id": "nasa:eca7580e",
@@ -3822,7 +4186,12 @@
     "Artemis Accords",
     "space policy"
    ],
-   "confidence": "announcement"
+   "confidence": "announcement",
+   "points": [
+    "Albania is signing the Artemis Accords on 21 September 2026.",
+    "It becomes the 73rd country to join the US-led principles.",
+    "The Accords keep growing as shared rules for lunar activity."
+   ]
   },
   {
    "id": "aas-nova:54cf1e47",
@@ -3850,7 +4219,9 @@
    "categories": [],
    "experiments": [],
    "entities": [],
-   "media": "article"
+   "media": "article",
+   "image": "https://cdn.esawebb.org/archives/images/screen/weic2520a.jpg",
+   "image_credit": "ESA/Webb (NASA, ESA, CSA, STScI, A. Ginsburg et al.)"
   },
   {
    "id": "aas-nova:a95c71d2",
@@ -4130,7 +4501,9 @@
    "categories": [],
    "experiments": [],
    "entities": [],
-   "media": "article"
+   "media": "article",
+   "image": "https://images-assets.nasa.gov/image/iss072e220043/iss072e220043~medium.jpg",
+   "image_credit": "NASA"
   },
   {
    "id": "nasaspaceflight:70b33baf",
@@ -4144,7 +4517,9 @@
    "categories": [],
    "experiments": [],
    "entities": [],
-   "media": "article"
+   "media": "article",
+   "image": "https://images-assets.nasa.gov/image/iss073e0698630/iss073e0698630~medium.jpg",
+   "image_credit": "NASA"
   },
   {
    "id": "nasaspaceflight:df218c66",
@@ -4200,7 +4575,9 @@
    "categories": [],
    "experiments": [],
    "entities": [],
-   "media": "article"
+   "media": "article",
+   "image": "https://images-assets.nasa.gov/image/NHQ202212160008/NHQ202212160008~medium.jpg",
+   "image_credit": "NASA"
   },
   {
    "id": "spaceflight-now:ba962755",
@@ -4589,7 +4966,12 @@
    ],
    "confidence": "peer reviewed",
    "image": "https://cdn.journals.aps.org/journals/PRX/key_images/10.1103/jc35-gj2l.png",
-   "image_credit": "Physical Review X"
+   "image_credit": "Physical Review X",
+   "points": [
+    "A layered nickelate variant superconducts only up to about 3.6 K.",
+    "Paired-layer version reaches roughly 80 K under high pressure.",
+    "Suggests coupled bilayers drive high-temperature superconductivity in this material."
+   ]
   },
   {
    "id": "physical-review-x:2860e3d9",
@@ -4614,7 +4996,12 @@
    ],
    "confidence": "peer reviewed",
    "image": "https://cdn.journals.aps.org/journals/PRX/key_images/10.1103/n723-s2t6.png",
-   "image_credit": "Physical Review X"
+   "image_credit": "Physical Review X",
+   "points": [
+    "Carbon nanotube foams show 'return point memory' of past compression.",
+    "They return to earlier mechanical states along the same path.",
+    "Could enable mechanical computing and new shock-absorbing designs."
+   ]
   },
   {
    "id": "physical-review-x:ea41dbf9",
@@ -4639,7 +5026,12 @@
    ],
    "confidence": "peer reviewed",
    "image": "https://cdn.journals.aps.org/journals/PRX/key_images/10.1103/6j6l-kb6x.png",
-   "image_credit": "Physical Review X"
+   "image_credit": "Physical Review X",
+   "points": [
+    "Antiferromagnet surfaces could host two-dimensional altermagnetism, theory shows.",
+    "A surface symmetry framework identifies more than 150 candidate materials.",
+    "Widens where altermagnets, of interest for spintronics, might be found."
+   ]
   },
   {
    "id": "physical-review-x:01e0b4eb",
@@ -4664,7 +5056,12 @@
    ],
    "confidence": "peer reviewed",
    "image": "https://cdn.journals.aps.org/journals/PRX/key_images/10.1103/dhzb-28rb.png",
-   "image_credit": "Physical Review X"
+   "image_credit": "Physical Review X",
+   "points": [
+    "Theorists describe 'quantum birthmarks' in chaotic quantum systems.",
+    "An imprint of the initial state persists, beyond known quantum scars.",
+    "Challenges the assumption that chaotic quantum systems fully thermalise."
+   ]
   },
   {
    "id": "physical-review-x:f4ee66b6",
@@ -4689,7 +5086,12 @@
    ],
    "confidence": "peer reviewed",
    "image": "https://cdn.journals.aps.org/journals/PRX/key_images/10.1103/5v2c-55m1.png",
-   "image_credit": "Physical Review X"
+   "image_credit": "Physical Review X",
+   "points": [
+    "BESIII found charmed Lambda-c+ baryons produced with a spin tilt.",
+    "Made in electron-positron collisions just above the production threshold.",
+    "Tests how the strong force produces heavy baryons."
+   ]
   },
   {
    "id": "physical-review-x:9c0635f2",
@@ -4714,7 +5116,12 @@
    ],
    "confidence": "peer reviewed",
    "image": "https://cdn.journals.aps.org/journals/PRX/key_images/10.1103/pbbp-bz28.png",
-   "image_credit": "Physical Review X"
+   "image_credit": "Physical Review X",
+   "points": [
+    "Feedback control linked microwave photons, magnons and phonons strongly.",
+    "An active feedback loop countered the material's built-in magnetic losses.",
+    "Opens routes to hybrid quantum devices converting between signal carriers."
+   ]
   },
   {
    "id": "physical-review-x:4aadc0fe",
@@ -4739,7 +5146,12 @@
    ],
    "confidence": "peer reviewed",
    "image": "https://cdn.journals.aps.org/journals/PRX/key_images/10.1103/2jst-psds.png",
-   "image_credit": "Physical Review X"
+   "image_credit": "Physical Review X",
+   "points": [
+    "A distorted kagome magnet surface makes electrons prefer one direction.",
+    "Distortion on Co3Sn2S2 creates a higher-order Van Hove singularity.",
+    "Surface distortion can tune electron correlations in kagome materials."
+   ]
   },
   {
    "id": "quantum-journal:3c0285f5",
@@ -4762,7 +5174,12 @@
     "quantum circuits",
     "phase transitions"
    ],
-   "confidence": "peer reviewed"
+   "confidence": "peer reviewed",
+   "points": [
+    "Measurement-induced transitions carry long-range entanglement shared among many parties.",
+    "Exponents computed exactly for a 1D model mapping onto percolation.",
+    "Clarifies entanglement in monitored systems, relevant to error correction."
+   ]
   },
   {
    "id": "quantum-journal:237fdf7e",
@@ -4784,7 +5201,12 @@
     "quantum foundations",
     "probability"
    ],
-   "confidence": "peer reviewed"
+   "confidence": "peer reviewed",
+   "points": [
+    "Aumann's 'agreeing to disagree' theorem holds in quantum theory too.",
+    "Extended to any generalised probability theory via information conditioning.",
+    "Settles whether quantum physics allows reasoning classical probability forbids."
+   ]
   },
   {
    "id": "quantum-journal:7057aff6",
@@ -4806,7 +5228,12 @@
     "quantum error correction",
     "decoding"
    ],
-   "confidence": "peer reviewed"
+   "confidence": "peer reviewed",
+   "points": [
+    "A streaming decoder handles quantum error correction continuously.",
+    "Sliding-window belief propagation reached thresholds of 0.4% to 0.87%.",
+    "Fast decoding is a bottleneck for keeping quantum memories alive."
+   ]
   },
   {
    "id": "quantum-journal:359fcba1",
@@ -4828,7 +5255,14 @@
     "quantum simulation",
     "nuclear physics"
    ],
-   "confidence": "peer reviewed"
+   "confidence": "peer reviewed",
+   "image": "https://quantum-journal.org/wp-content/uploads/2026/08/paper_pop_pic-scaled.png",
+   "image_credit": "Figure: Spagnoli et al., CC BY 4.0",
+   "points": [
+    "Early fault-tolerant quantum computers could simulate nuclear reactions.",
+    "Tens of millions of T gates, a few hundred logical qubits.",
+    "Nuclear reaction rates are very expensive to compute classically."
+   ]
   },
   {
    "id": "quantum-journal:fbaee9d0",
@@ -4850,7 +5284,12 @@
     "quantum computing",
     "review"
    ],
-   "confidence": "peer reviewed"
+   "confidence": "peer reviewed",
+   "points": [
+    "A review surveys every quantum advantage claim made so far.",
+    "Covers loopholes, classical rebuttals and error correction progress.",
+    "A clear scorecard for a field full of contested claims."
+   ]
   },
   {
    "id": "nature-communications:bcc9416f",
@@ -4873,7 +5312,12 @@
     "superconductivity",
     "spectroscopy"
    ],
-   "confidence": "peer reviewed"
+   "confidence": "peer reviewed",
+   "points": [
+    "Overdoped cuprates' electronic structure reconstructs strongly beyond x = 0.2.",
+    "Optical spectroscopy on La2-xSrxCuO4 from x = 0.15 to 0.60.",
+    "Proposed checkerboard arrangement constrains how cuprate superconductivity works."
+   ]
   },
   {
    "id": "nature-communications:f412719d",
@@ -5162,7 +5606,12 @@
     "perovskites",
     "photovoltaics"
    ],
-   "confidence": "peer reviewed"
+   "confidence": "peer reviewed",
+   "points": [
+    "A polymer network in perovskite ink yields large, durable solar panels.",
+    "655 cm2 submodule hit 22.60%; devices kept 93.3% after 1,000 hours.",
+    "Tackles the main hurdle to commercialising perovskites: scale and stability."
+   ]
   },
   {
    "id": "nature-communications:40f40e6b",
@@ -5185,7 +5634,12 @@
     "sodium-ion",
     "energy storage"
    ],
-   "confidence": "peer reviewed"
+   "confidence": "peer reviewed",
+   "points": [
+    "Hard carbon anodes made at 900 °C boost sodium-ion batteries.",
+    "Pouch cells reached 208.1 Wh/kg; production energy roughly halved.",
+    "Could make lithium-free grid storage cheaper."
+   ]
   },
   {
    "id": "nature-communications:ef142312",
@@ -5227,7 +5681,9 @@
    "categories": [],
    "experiments": [],
    "entities": [],
-   "media": "article"
+   "media": "article",
+   "image": "https://assets.science.nasa.gov/content/dam/science/esd/eo/images/imagerecords/149000/149442/bhadlasolarpark_oli_202226.jpg/jcr:content/renditions/cq5dam.web.1280.1280.jpeg",
+   "image_credit": "NASA Earth Observatory (Landsat/USGS)"
   },
   {
    "id": "carbon-brief:c4a1a1cf",
@@ -5689,7 +6145,9 @@
    "categories": [],
    "experiments": [],
    "entities": [],
-   "media": "article"
+   "media": "article",
+   "image": "https://science.nasa.gov/wp-content/uploads/2023/06/tempo-concept-jpg.webp",
+   "image_credit": "NASA"
   },
   {
    "id": "knowable-magazine:19c58207",
@@ -5796,7 +6254,12 @@
     "inflammation",
     "aging"
    ],
-   "confidence": "peer reviewed"
+   "confidence": "peer reviewed",
+   "points": [
+    "An approved ataxia drug makes cells destroy the inflammation protein STING.",
+    "Omaveloxolone lowered STING and eased age-related inflammation in aged mice.",
+    "Repurposing could shortcut treatment, as no STING drug is approved."
+   ]
   },
   {
    "id": "nature-communications:a6d9fbc9",
@@ -5819,7 +6282,12 @@
     "microscopy",
     "image segmentation"
    ],
-   "confidence": "peer reviewed"
+   "confidence": "peer reviewed",
+   "points": [
+    "Lower-resolution microscope images can improve AI segmentation accuracy.",
+    "To quarter resolution, accuracy rose up to 25% or fell under 5%.",
+    "Labs could image faster with less data and light damage."
+   ]
   },
   {
    "id": "nature-communications:e723a0fb",
@@ -5833,7 +6301,9 @@
    "categories": [],
    "experiments": [],
    "entities": [],
-   "media": "article"
+   "media": "article",
+   "image": "https://media.springernature.com/lw685/springer-static/image/art%3A10.1038%2Fs41467-026-77366-7/MediaObjects/41467_2026_77366_Fig1_HTML.png",
+   "image_credit": "Figure: Ye et al., CC BY 4.0"
   },
   {
    "id": "nature-communications:6ba2fb91",
@@ -5884,7 +6354,12 @@
     "cancer stem cells",
     "protein degradation"
    ],
-   "confidence": "peer reviewed"
+   "confidence": "peer reviewed",
+   "points": [
+    "Glioblastoma stem cells need the protein CSN1 to grow.",
+    "Deleting CSN1 significantly extended survival in mice with these tumours.",
+    "Reveals a new vulnerability in cells thought to drive regrowth."
+   ]
   },
   {
    "id": "plos-one:eb770475",
@@ -5907,7 +6382,14 @@
     "creativity",
     "education"
    ],
-   "confidence": "peer reviewed"
+   "confidence": "peer reviewed",
+   "image": "https://journals.plos.org/plosone/article/figure/image?size=medium&id=10.1371/journal.pone.0358542.g001",
+   "image_credit": "Figure: Yu-Ju Lin et al., CC BY 4.0",
+   "points": [
+    "AI brainstorming improved design students' problem framing, not innovation.",
+    "32 students; experts rated human-only ideas higher on innovation.",
+    "Generative AI shifts which creative work improves, not everything."
+   ]
   },
   {
    "id": "esa-education:14ce236f",
@@ -5921,7 +6403,9 @@
    "categories": [],
    "experiments": [],
    "entities": [],
-   "media": "article"
+   "media": "article",
+   "image": "https://www.esa.int/var/esa/storage/images/esa_multimedia/images/2013/01/lunar_base_made_with_3d_printing/12501019-1-eng-GB/Lunar_base_made_with_3D_printing_pillars.jpg",
+   "image_credit": "ESA"
   },
   {
    "id": "esa-education:3d9451d5",
@@ -5935,7 +6419,9 @@
    "categories": [],
    "experiments": [],
    "entities": [],
-   "media": "article"
+   "media": "article",
+   "image": "https://www.esa.int/var/esa/storage/images/esa_multimedia/images/2026/06/a_cansat_is_a_simulation_of_a_real_satellite_built_to_match_the_size_and_shape_of_a_soft_drink_can/27340258-1-eng-GB/A_CanSat_is_a_simulation_of_a_real_satellite_built_to_match_the_size_and_shape_of_a_soft_drink_can_article.jpg",
+   "image_credit": "ESA"
   },
   {
    "id": "esa-education:2d9c27a3",
@@ -9378,7 +9864,7 @@
     // ---- the same small store API the page uses inside Claude, on one
     // Supabase table: docs(collection, id, owner, data). Row-level security
     // in supabase/schema.sql plays the part of Claude's {self} rules.
-    var dbShim = null, userShim = null;
+    var dbShim = null, userShim = null, member = false;
     function makeDb(c){
       var client = c.client, T = "docs", watchers = {};
       var fail = function(e){ return {code: /row-level|permission|violates|denied/i.test(e.message || "") ? "invalid_argument" : "cloud", message: e.message}; };
@@ -9446,9 +9932,60 @@
       function rid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2, 10); }
       return { doc: doc, collection: function(col){ return query(col, null, null); } };
     }
+    // Ask on the public site: the same call shape as Claude's, answered by
+    // /api/ask (api/ask.js on Vercel), which holds the key. Page tools run
+    // here in the browser, the way they do inside Claude.
+    function makeSample(){
+      function fail(code, message){ return {code:code, message:message || code}; }
+      function call(messages, opts){
+        var tools = (opts.tools || []).map(function(t){ return {name:t.name, description:t.description, input_schema:t.inputSchema || {type:"object", properties:{}}}; });
+        return fetch("/api/ask", {method:"POST", headers:{"content-type":"application/json"}, signal:opts.signal,
+          body: JSON.stringify({messages:messages, tools:tools, tier:opts.modelTier === "default" || opts.modelTier === "complex" ? "default" : "quick"})})
+          .then(function(r){
+            return r.json().catch(function(){ return {}; }).then(function(j){
+              if(r.status === 404) throw fail("sampling_disabled", "No /api/ask on this site.");
+              if(!r.ok) throw fail((j.error && j.error.code) || "upstream_error", j.error && j.error.message);
+              return j;
+            });
+          }, function(e){ throw e && e.name === "AbortError" ? fail("cancelled") : fail("upstream_error"); });
+      }
+      function run(input, opts){
+        opts = opts || {};
+        var messages = typeof input === "string" ? [{role:"user", content:input}] : input.map(function(m){ return {role:m.role, content:m.content}; });
+        var rounds = 0;
+        function step(){
+          return call(messages, opts).then(function(j){
+            var content = j.content || [];
+            var uses = content.filter(function(b){ return b.type === "tool_use"; });
+            if(j.stop_reason === "tool_use" && uses.length && rounds++ < 5){
+              messages.push({role:"assistant", content:content});
+              return Promise.all(uses.map(function(u){
+                var t = (opts.tools || []).filter(function(x){ return x.name === u.name; })[0];
+                return Promise.resolve().then(function(){ return t ? t.execute(u.input || {}) : {error:"unknown tool"}; })
+                  .then(function(out){ return {type:"tool_result", tool_use_id:u.id, content:JSON.stringify(out)}; },
+                        function(e){ return {type:"tool_result", tool_use_id:u.id, content:String(e && e.message || e), is_error:true}; });
+              })).then(function(results){ messages.push({role:"user", content:results}); return step(); });
+            }
+            var text = content.filter(function(b){ return b.type === "text"; }).map(function(b){ return b.text; }).join("");
+            if(opts.onText) opts.onText({text:text, delta:text});
+            return {text:text, truncated:j.stop_reason === "max_tokens"};
+          });
+        }
+        return step();
+      }
+      var sample = function(input, opts){ return run(input, opts); };
+      sample.json = function(input, opts){
+        var ask = typeof input === "string" ? input + "\n\nReply with JSON only." : input;
+        return run(ask, opts).then(function(r){
+          var m = r.text.match(/[\[{][\s\S]*[\]}]/);
+          try{ return JSON.parse(m ? m[0] : r.text); }catch(e){ throw fail("upstream_error", "not JSON"); }
+        });
+      };
+      return sample;
+    }
     function makeUser(c){
       var cache = {}, admin = null;
-      var signedIn = !c.anonymous;
+      member = !c.anonymous;
       function load(ids){
         ids = ids.filter(function(i){ return i && !cache[i]; });
         if(!ids.length) return Promise.resolve();
@@ -9464,21 +10001,25 @@
           .then(function(r){ return !!(r.data); }, function(){ return false; });
       }
       return {
-        id: function(){ return Promise.resolve(signedIn ? c.uid : null); },
+        // everyone has an id (anonymous visitors too) — a page and likes need
+        // nothing more; commenting and talking need a signed-in member
+        id: function(){ return Promise.resolve(c.uid); },
         me: function(){ return load([c.uid]).then(function(){ return cache[c.uid] || {name:"", avatarUrl:""}; }); },
         profiles: function(ids){
           ids = [].concat(ids);
           return load(ids).then(function(){ var o = {}; ids.forEach(function(i){ o[i] = cache[i] || {name:"", avatarUrl:""}; }); return o; });
         },
         canEdit: isAdmin, isOwner: isAdmin,
-        can: function(){ return Promise.resolve(signedIn); },
+        can: function(){ return Promise.resolve(true); },
         email: c.email || ""
       };
     }
 
     return {
       configured: function(){ return !!conf(); },
+      isMember: function(){ return member; },
       use: function(name){
+        if(name === "sample") return Promise.resolve(makeSample());
         if(name !== "db" && name !== "user") return Promise.resolve(null);
         return this.ready().then(function(c){
           if(!c) return null;
@@ -9557,6 +10098,7 @@
       var out = blank();
       out.focus = (b.focus && b.focus.length) ? b.focus.slice() : (a.focus || []).slice();
       out.size  = b.size || a.size || 20;
+      out.view  = b.view || a.view || "cards";
       out.saved = uniq((a.saved || []).concat(b.saved || []));
       var ib = {};
       (a.ideas || []).concat(b.ideas || []).forEach(function(x){
@@ -9697,34 +10239,62 @@
       }).join("") : '<p class="hint">Nothing new in the last two days.</p>';
     }
 
+    // What matters most. Not clicks: who published it (peer review, the
+    // agencies, the labs themselves), whether it is a finding rather than a
+    // roundup, how fresh it is, and whether people are talking about it.
+    var TIER = {
+      3: ["Nature","Nature Physics","Nature Neuroscience","Nature Biotechnology","Nature Climate Change","Nature Communications",
+          "Nature Communications — physics","Nature Communications — energy","Physical Review X","eLife","PLOS Biology",
+          "Quanta Magazine","NASA","ESA","ESO","ESA/Webb","ESA/Hubble","NASA JPL","CERN Courier","Google DeepMind","OpenAI","Crossref"],
+      2: ["arXiv","Physical Review Research","Quantum (journal)","APS Physics","Science News","Scientific American","Knowable Magazine",
+          "The Transmitter","STAT","Carbon Brief","Spaceflight Now","NASASpaceflight","Payload","European Spaceflight","SpacePolicyOnline",
+          "Google Research Blog","Microsoft Research","BAIR Blog","MIT News AI","AAS Nova","Universe Today","Physics World",
+          "Canary Media","Nature Neuroscience","PLOS Computational Biology","Hugging Face","MIT Technology Review","Phys.org","ESA Education"]
+    };
+    var TIER_OF = {}; [2, 3].forEach(function(t){ TIER[t].forEach(function(n){ TIER_OF[n] = t; }); });
+    var BIG = /\b(first|discover\w*|detect\w*|record|breakthrough|launch\w*|land\w*|confirm\w*|evidence|largest|smallest|fastest|oldest|earliest|new (particle|species|state)|black hole|exoplanet|dark matter|fusion|quantum|crispr|gene (therapy|editing)|vaccine|clinical trial|neutrino|higgs|gravitational|webb|jwst|starship|reasoning|alignment)\b/gi;
+    var JUNK = /\b(correction|erratum|expression of concern|retraction|podcast|webinar|quiz|live coverage|watch live|how to watch|newsletter|import ai \d+|what's happening|week in review|roundup|deal|sale|sponsored|obituary|in memoriam|job|hiring|apply now)\b/i;
+    var impCache = {};
+    function importance(i){
+      if(impCache[i.id] != null) return impCache[i.id];
+      var text = (i.hook || "") + " " + i.title, sc = TIER_OF[i.source] || 1;
+      if(JUNK.test(text)) return impCache[i.id] = -1;
+      sc += Math.min(2, (text.match(BIG) || []).length * 0.8);
+      if(i.hook && i.policy !== "headline_only") sc += 1.2;        // we could read it and explain it
+      if(i.confidence === "peer reviewed") sc += 0.6;
+      if(i.image) sc += 0.4;
+      if(i.buzz) sc += Math.min(2, Math.log10(i.buzz + 1));
+      if(i.track === "opportunities") sc -= 1;
+      var days = (Date.now() - (Date.parse(i.published) || 0)) / 864e5;
+      sc -= Math.max(0, days) / 6;
+      return impCache[i.id] = sc;
+    }
+
     function buildSet(){
       var SIZE = 20, r = rng(dayKey() + "|" + state.focus.join(","));
       var w = function(track){ return state.focus.length ? (state.focus.indexOf(track) >= 0 ? 5 : 1) : 1; };
       var now = Date.now(), age = function(i){ return (now - Date.parse(i.published || 0)) / 864e5; };
-      var news = (data.items || []).filter(function(i){ return i.policy !== "headline_only" && i.hook; });
-      var heads = (data.items || []).filter(function(i){ return i.policy === "headline_only" && i.title && age(i) < 30; });
-
-      var byTrack = {};
-      var queue = function(t){ return byTrack[t] = byTrack[t] || {news:[], heads:[], n:0}; };
-      news.forEach(function(i){ queue(i.track).news.push(i); });
-      heads.forEach(function(i){ queue(i.track).heads.push(i); });
-      Object.keys(byTrack).forEach(function(t){
-        var q = byTrack[t];
-        q.news = pick(q.news, function(i){ return 1 / (1 + age(i) / 7); }, q.news.length, r);
-        q.heads = pick(q.heads, function(i){ return 1 / (1 + age(i) / 4); }, q.heads.length, r);
-      });
-      // a story, then a headline, per field — while each lasts
-      var next = function(t){
-        var q = byTrack[t]; q.n++;
-        if(q.news.length && (q.n % 2 || !q.heads.length)) return {kind:"news", item:q.news.shift()};
-        if(q.heads.length) return {kind:"headline", item:q.heads.shift()};
-        return null;
-      };
-      var left = function(t){ return byTrack[t].news.length + byTrack[t].heads.length; };
-      var order = pick(Object.keys(byTrack), function(t){ return w(t); }, 99, r);
       var skip = {}; breaking().forEach(function(i){ skip[i.id] = 1; });
-      news = news.filter(function(i){ return !skip[i.id]; });
-      heads = heads.filter(function(i){ return !skip[i.id]; });
+      var pool = (data.items || []).filter(function(i){
+        return !skip[i.id] && i.title && (i.hook || age(i) < 30) && importance(i) > 0;
+      });
+      // Each field's stories, most important first; a little daily jitter so
+      // two equally strong stories take turns leading.
+      var byTrack = {};
+      pool.forEach(function(i){
+        var q = byTrack[i.track] = byTrack[i.track] || [];
+        q.push({i:i, s:importance(i) + r() * 0.4});
+      });
+      Object.keys(byTrack).forEach(function(t){ byTrack[t].sort(function(a, b){ return b.s - a.s; }); });
+      var next = function(t){
+        var x = byTrack[t].shift(); if(!x) return null;
+        return {kind: x.i.hook && x.i.policy !== "headline_only" ? "news" : "headline", item: x.i};
+      };
+      var left = function(t){ return byTrack[t].length; };
+      // the field whose best story is strongest goes first
+      var order = Object.keys(byTrack).sort(function(a, b){
+        return (byTrack[b][0].s * w(b)) - (byTrack[a][0].s * w(a));
+      });
       var all = [], round = 0;
       while(order.some(left)){
         round++;
@@ -9831,7 +10401,9 @@
     var ICON = {
       heart: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-9.3-9.2C1.4 8 3.4 4.5 7 4.5c2 0 3.3 1.1 5 3 1.7-1.9 3-3 5-3 3.6 0 5.6 3.5 4.3 6.8-1.8 4.6-9.3 9.2-9.3 9.2z"/></svg>',
       bubble: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg>',
-      spark: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg>'
+      spark: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg>',
+      check: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M8 12.3l2.7 2.7L16 9.6"/></svg>',
+      mark: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 4h11v16l-5.5-4-5.5 4z"/></svg>'
     };
     function num(n){ return n ? (n >= 1000 ? (n/1000).toFixed(1).replace(/\.0$/, "") + "k" : String(n)) : ""; }
 
@@ -9856,12 +10428,20 @@
       '</div>';
     }
 
+    // The gist, in two or three short lines: the rewrite's own key points,
+    // or the summary's sentences when an older card has none.
+    function pointsOf(it){
+      if(it.points && it.points.length) return it.points.slice(0, 3);
+      if(!it.body) return [];
+      return (it.body.match(/[^.!?]+[.!?]+(\s|$)/g) || [it.body]).map(function(x){ return x.trim(); }).slice(0, 3);
+    }
     function cardFor(s, n){
-      var it = s.item, head, text, why = "", url, label;
+      var it = s.item, head, text, why = "", url, label, pts = [];
       var kicker = trackLabel(s.track);
       if(s.kind === "news"){
         kicker += (it.source ? " · " + it.source : "");
         head = it.hook || it.title; text = it.body; why = it.why; url = it.url; label = "Source →";
+        pts = pointsOf(it); if(pts.length && !it.points) text = "";
       } else if(s.kind === "headline"){
         kicker += " · " + it.source;
         head = it.title; text = it.deadline ? "Deadline: " + it.deadline : ""; why = ""; url = it.url; label = "Read at " + it.source + " →";
@@ -9893,12 +10473,26 @@
           (it.buzz_note ? '<div class="buzz">'+esc(it.buzz_note)+
             (it.discuss_url ? ' · <a href="'+esc(it.discuss_url)+'" target="_blank" rel="noopener">join the discussion</a>' : '')+
             '</div>' : '')+
-          (text ? '<p class="ftext">'+esc(text)+'</p>' : '')+
-          (why ? '<p class="why"><b>Why it matters</b>'+esc(why)+'</p>' : '')+
+          (pts.length ? '<ul class="fpoints">'+pts.map(function(p){ return '<li>'+esc(p)+'</li>'; }).join("")+'</ul>' : '')+
+          (pts.length && (text || why)
+            ? '<details class="fmore"><summary>More</summary>'+(text ? '<p class="ftext">'+esc(text)+'</p>' : '')+(why ? '<p class="fwhy">'+esc(why)+'</p>' : '')+'</details>'
+            : (text ? '<p class="ftext">'+esc(text)+'</p>' : '')+(why ? '<p class="fwhy">'+esc(why)+'</p>' : ''))+
           actions(s, url, label)+
         '</div>'+
       '</article>';
     }
+
+    function rowFor(s, n){
+      var it = s.item, pts = s.kind === "news" ? pointsOf(it) : [];
+      var head = s.kind === "watch" ? it.name : (s.kind === "news" ? (it.hook || it.title) : it.title);
+      var kick = s.kind === "classic" ? "A classic · " + it.sort : s.kind === "watch" ? "Watch" : (it.source || "");
+      return '<button type="button" class="lrow'+(isRead(s.id) ? " seen" : "")+'" data-row="'+esc(s.id)+'" data-n="'+n+'">'+
+        '<span class="lk"><i style="background:var('+(HUE[s.track] || "--ink-3")+')"></i>'+esc(trackLabel(s.track))+' · '+esc(kick)+'</span>'+
+        '<b>'+esc(head)+'</b>'+
+        (pts[0] ? '<span class="lp">'+esc(pts[0])+'</span>' : '')+
+      '</button>';
+    }
+    function itemFor(s, n){ return state.view === "list" ? rowFor(s, n) : cardFor(s, n); }
 
     function endCard(){
       var d = day(), mins = Math.round((d.sec + secLive)/60);
@@ -9967,7 +10561,9 @@
       breakCache = null; renderBreaking();
       set = buildSet(); extra = 0;
       var feed = $("feed");
-      feed.innerHTML = set.map(cardFor).join("") + endCard() + moreCard();
+      feed.innerHTML = set.map(itemFor).join("") + endCard() + moreCard();
+      feed.classList.toggle("listview", state.view === "list");
+      document.querySelectorAll("[data-view]").forEach(function(b){ b.setAttribute("aria-pressed", String(b.getAttribute("data-view") === (state.view || "cards"))); });
       renderProgress(); renderStats();
       observe();
     }
@@ -9982,7 +10578,7 @@
     function showMore(){
       var from = extra; extra = Math.min(bonus.length, extra + 10);
       var old = document.querySelector('.fcard[data-more]');
-      var html = bonus.slice(from, extra).map(function(s, k){ return cardFor(s, set.length + from + k); }).join("") + moreCard();
+      var html = bonus.slice(from, extra).map(function(s, k){ return itemFor(s, set.length + from + k); }).join("") + moreCard();
       var tmp = document.createElement("div"); tmp.innerHTML = html;
       var first = tmp.firstElementChild;
       while(tmp.firstChild) old.parentNode.insertBefore(tmp.firstChild, old);
@@ -10052,7 +10648,7 @@
     });
 
     // ---------------------------------------------------------- modes
-    function order(){ return wide.matches ? ["diary", "today", "breaking", "ask", "talk"] : ["diary", "today", "breaking", "library", "ask", "talk"]; }
+    function order(){ return wide.matches ? ["breaking", "today", "talk", "ask", "diary"] : ["breaking", "today", "library", "talk", "ask", "diary"]; }
     function setMode(m){
       if(wide.matches && m === "library") m = "today";   // the library is always on screen there
       var o = order(), from = o.indexOf(mode), to = o.indexOf(m);
@@ -10254,7 +10850,7 @@
       var panes = document.querySelector(".panes");
       panes.addEventListener("touchstart", function(e){
         var t = e.touches[0]; sx = t.clientX; sy = t.clientY; st = Date.now();
-        if(e.target.closest(".tabs, .people, .chips, textarea, input, select, .rpick")) st = 0;
+        if(e.target.closest(".tabs, .people, .chips, .roombar, textarea, input, select, .rpick")) st = 0;
       }, {passive:true});
       panes.addEventListener("touchend", function(e){
         if(!st) return;
@@ -10263,11 +10859,28 @@
         var o = order(), i = o.indexOf(mode), next = o[i + (dx > 0 ? -1 : 1)];
         if(next) setMode(next);
       }, {passive:true});
-      document.addEventListener("keydown", function(e){
-        if(e.altKey || e.ctrlKey || e.metaKey || e.target.closest("textarea, input, select")) return;
-        if(e.key !== "[" && e.key !== "]") return;
-        var o = order(), next = o[o.indexOf(mode) + (e.key === "[" ? -1 : 1)];
+      // The same on a laptop: a two-finger sideways swipe on the trackpad
+      // turns the page, once per gesture.
+      var wx = 0, wDone = false, wTimer = null;
+      panes.addEventListener("wheel", function(e){
+        if(Math.abs(e.deltaX) < Math.abs(e.deltaY) * 1.5) return;
+        if(e.target.closest(".tabs, .people, .chips, .roombar, textarea, input, select")) return;
+        e.preventDefault();
+        // a gesture ends when the events (momentum included) go quiet
+        clearTimeout(wTimer); wTimer = setTimeout(function(){ wx = 0; wDone = false; }, 260);
+        if(wDone) return;
+        wx += e.deltaX;
+        if(Math.abs(wx) < 90) return;
+        var o = order(), next = o[o.indexOf(mode) + (wx > 0 ? 1 : -1)];
+        wDone = true;
         if(next) setMode(next);
+      }, {passive:false});
+      document.addEventListener("keydown", function(e){
+        if(e.altKey || e.ctrlKey || e.metaKey || (e.target.closest && e.target.closest("textarea, input, select"))) return;
+        var back = e.key === "[" || e.key === "ArrowLeft", fwd = e.key === "]" || e.key === "ArrowRight";
+        if(!back && !fwd) return;
+        var o = order(), next = o[o.indexOf(mode) + (back ? -1 : 1)];
+        if(next){ e.preventDefault(); setMode(next); }
       });
       $("feed").addEventListener("click", function(e){
         var b = e.target.closest("[data-act]");
@@ -10300,6 +10913,18 @@
         }
       });
       $("feed").addEventListener("scroll", function(){ lastActive = Date.now(); }, {passive:true});
+      document.querySelector(".todaytitle").addEventListener("click", function(e){
+        var b = e.target.closest("[data-view]"); if(!b) return;
+        state.view = b.getAttribute("data-view"); persist(); buildAndRender();
+      });
+      // In the quick list, a row opens into its full card where it stands.
+      $("feed").addEventListener("click", function(e){
+        var row = e.target.closest(".lrow"); if(!row) return;
+        var id = row.getAttribute("data-row"), card = findCard(id); if(!card) return;
+        var tmp = document.createElement("div"); tmp.innerHTML = cardFor(card, +row.getAttribute("data-n"));
+        var el = tmp.firstElementChild; el.classList.add("opened");
+        row.replaceWith(el); markRead(id);
+      });
       $("breakingList").addEventListener("click", function(e){
         var t;
         if((t = e.target.closest("[data-bask]"))){
@@ -10351,7 +10976,7 @@
         setMode(wide.matches ? "today" : mode); renderStats();
         var seen = false; try{ seen = localStorage.getItem("ainstein.swipehint") === "1"; }catch(e){}
         if(!seen && !wide.matches && ("ontouchstart" in window)){
-          setTimeout(function(){ toast("Swipe right for your diary"); }, 900);
+          setTimeout(function(){ toast("Swipe right for breaking news"); }, 900);
           try{ localStorage.setItem("ainstein.swipehint", "1"); }catch(e){}
         }
       }
@@ -10509,7 +11134,11 @@
       }).catch(function(e){
         var code = (e && e.code) || "upstream_error";
         if(code === "cancelled"){ out.innerHTML = e.text ? render(e.text) : '<span class="thinking">Stopped.</span>'; turns.pop(); return; }
-        if(HIDE.indexOf(code) >= 0){ unavailable("Ask isn't available here", "<p>This page wasn't allowed to use Claude in this view. Nothing was sent.</p>"); return; }
+        if(HIDE.indexOf(code) >= 0){
+          if(window.claude && window.claude.public) unavailable("Ask isn't switched on yet", "<p>The site's owner needs to add an Anthropic API key in Vercel (ANTHROPIC_API_KEY). Nothing was sent.</p>");
+          else unavailable("Ask isn't available here", "<p>This page wasn't allowed to use Claude in this view. Nothing was sent.</p>");
+          return;
+        }
         if(code === "tools_unavailable"){ TOOLS.length = 0; }
         out.innerHTML = (e.text ? render(e.text) : "") + '<span class="tool">' + esc(COPY[code] || COPY.upstream_error) + '</span>';
         turns.pop();
@@ -10699,7 +11328,7 @@
       return Promise.race([sample.json(prompt, {modelTier:"quick", cache:false}), timeout]).then(function(r){
         return (r && r.ok === false) ? {ok:false, reason:String(r.reason || "This doesn't fit here.")} : {ok:true};
       }, function(e){
-        if(e && e.code === "not_granted") sample = null;     // asked once, said no: local filter only
+        if(e && (e.code === "not_granted" || e.code === "sampling_disabled")) sample = null;     // no Claude here: local filter only
         return {ok:true};
       });
     }
@@ -10751,7 +11380,7 @@
       var pub = window.claude && window.claude.public;
       $("talkInput").disabled = readOnly || (!uid && !pub);
       $("talkSend").disabled = readOnly || !uid;
-      if(!uid && pub) $("talkInput").placeholder = "Sign in to talk";
+      if(pub && !Cloud.isMember()) $("talkInput").placeholder = "Sign in to talk";
     }
     function render(){
       if(!db) return;
@@ -10886,6 +11515,7 @@
     function send(){
       var text = ($("talkInput").value || "").trim().slice(0, MAX);
       if(!text || !db || !uid || readOnly) return;
+      if(window.claude && window.claude.public && !Cloud.isMember()){ Today.toast("Sign in with your email to talk."); return Social.openProfile("me"); }
       if(mod.banned[uid]) return note("You can't post here any more.");
       var bad = localCheck(text); if(bad) return note(bad);
       var target = view === "dm" ? {dm:peer} : {room:current};
@@ -10958,7 +11588,7 @@
       });
       $("talkInput").addEventListener("input", function(){ note(""); });
       $("talkInput").addEventListener("focus", function(){
-        if(!uid && window.claude && window.claude.public){ $("talkInput").blur(); Social.openProfile("me"); }
+        if(window.claude && window.claude.public && !Cloud.isMember()){ $("talkInput").blur(); Today.toast("Sign in with your email to talk."); Social.openProfile("me"); }
       });
       $("talkPane").addEventListener("click", function(e){
         var t = e.target.closest("button"); if(!t) return;
@@ -11165,6 +11795,9 @@
       saveMine(next);
     }
 
+    // On the public site: may this visitor comment and talk?
+    function mayPost(){ return !(window.claude && window.claude.public) || Cloud.isMember(); }
+    function askToSignIn(why){ Today.toast(why); openProfile("me"); }
     function needAccount(){
       if(window.claude && window.claude.public){ openProfile("me"); return; }
       var t = document.querySelector(".toast");
@@ -11240,6 +11873,7 @@
     function postComment(){
       var text = ($("cInput").value || "").trim().slice(0, 1000);
       if(!text || !current || !on || !uid) return;
+      if(!mayPost()){ closeSheet("commentsSheet"); return askToSignIn("Sign in with your email to comment."); }
       $("cPost").disabled = true;
       db.collection("comments").add({
         card: key(current.id),
@@ -11333,8 +11967,16 @@
       }
       var p = profiles[uid] || {};
       var tracks = (data.tracks || []).filter(function(t){ return t.id !== "opportunities"; });
-      var av = avatarOf(uid), pub = window.claude && window.claude.public;
+      var av = avatarOf(uid), pub = window.claude && window.claude.public, anon = pub && !Cloud.isMember();
       $("pBody").innerHTML =
+        (anon ? '<div class="pblock signin"><h3>Sign in</h3><p>Your page and likes are saved in this browser already. ' +
+          'Sign in with your email to comment, talk in rooms and send messages — and to have your page on every device.</p>' +
+          '<div class="pfield"><label for="siEmail">Email</label><input id="siEmail" type="email" autocomplete="email" placeholder="you@example.com"></div>' +
+          '<button type="button" class="sendbtn" id="siSend" style="align-self:flex-start">Email me a sign-in link</button>' +
+          '<p class="hint" id="siNote">' + (Cloud.linkError() ? "The last link didn't work: " + esc(Cloud.linkError()) + ". Send a new one." : "Open the link in this same browser.") + '</p>' +
+          '<div class="pfield" id="siCodeBox" hidden><label for="siCode">Or type the code from the email</label>' +
+            '<input id="siCode" inputmode="numeric" autocomplete="one-time-code" maxlength="10" placeholder="123456"></div>' +
+          '<button type="button" class="fbtn" id="siVerify" style="align-self:flex-start" hidden>Sign in with the code</button></div>' : '') +
         (pub ? '<div class="pblock"><div class="pfield"><label for="peName">Your name</label>' +
           '<input id="peName" maxlength="60" placeholder="How people here will see you" value="' + esc(p.name || "") + '"></div></div>' : '') +
         '<div class="pblock photoedit">' +
@@ -11373,7 +12015,7 @@
         '<div class="pblock"><button type="button" class="sendbtn" id="peSave">Save my page</button>' +
           '<p class="hint">Your page, likes and comments are visible to people here. Your diary, streak and what you marked as learned are not.</p></div>' +
         '<div class="pblock"><h3>How others see it</h3><button type="button" class="linkbtn" data-preview="1">Preview</button></div>' +
-        (pub ? '<div class="pblock"><button type="button" class="linkbtn" id="siOut" style="align-self:flex-start">Sign out</button></div>' : '');
+        (pub && !anon ? '<div class="pblock"><button type="button" class="linkbtn" id="siOut" style="align-self:flex-start">Sign out</button></div>' : '');
     }
 
     function cloudFail(what){
@@ -11492,7 +12134,7 @@
       });
       $("cPost").addEventListener("click", postComment);
       $("cInput").addEventListener("focus", function(){
-        if(on && !uid && window.claude && window.claude.public){ $("cInput").blur(); closeSheet("commentsSheet"); openProfile("me"); }
+        if(on && uid && !mayPost()){ $("cInput").blur(); closeSheet("commentsSheet"); askToSignIn("Sign in with your email to comment."); }
       });
       $("cInput").addEventListener("keydown", function(e){ if(e.key === "Enter" && !e.shiftKey){ e.preventDefault(); postComment(); } });
       $("cList").addEventListener("click", function(e){

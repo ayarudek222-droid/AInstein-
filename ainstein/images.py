@@ -30,7 +30,7 @@ from .models import Item
 
 UA = "AInstein/0.4 (https://github.com/AyaRudek/ainstein; personal science feed)"
 MAX_BYTES = 8 * 1024 * 1024
-MAX_WIDTH = 960
+MAX_WIDTH = 1280
 IMG_RE = re.compile(r"""<img[^>]+src=["']([^"']+)["']""", re.I)
 
 
@@ -93,7 +93,7 @@ def localize(items: list[Item], out_dir: Path, public_prefix: str = "data/img") 
                     continue
                 img = Image.open(io.BytesIO(raw)).convert("RGB")
                 img.thumbnail((MAX_WIDTH, MAX_WIDTH * 2))
-                img.save(path, "JPEG", quality=78, optimize=True, progressive=True)
+                img.save(path, "JPEG", quality=82, optimize=True, progressive=True)
             except Exception as exc:
                 print(f"  ! image skipped for {it.id}: {exc}")
                 continue

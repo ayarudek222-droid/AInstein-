@@ -31,6 +31,7 @@ Return STRICT JSON, nothing around it:
 {
   "hook": "<=70 chars, the finding itself, no clickbait",
   "body": "2-3 sentences, <=420 chars, what was done and what was found",
+  "points": ["exactly 3 key points, each <=12 words, the gist at a glance: what was found, the key number or method, what it means"],
   "why": "1 sentence, <=140 chars, why a non-specialist should care",
   "tags": ["2-3 lowercase topic tags"],
   "jargon": {"term": "<=6 word definition"},
@@ -65,6 +66,7 @@ def rewrite(item: Item, client) -> bool:
     item.hook = card.get("hook", "")[:90]
     item.body = card.get("body", "")
     item.why = card.get("why", "")
+    item.points = [str(p)[:110] for p in card.get("points", []) if p][:3]
     item.tags = [t.lower() for t in card.get("tags", [])][:3]
     item.jargon = card.get("jargon", {}) or {}
     item.confidence = card.get("confidence", "")
