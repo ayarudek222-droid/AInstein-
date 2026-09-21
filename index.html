@@ -392,20 +392,15 @@
   .focusline{font-size:12px;color:var(--ink-3);}
   .focusline button{background:none;border:none;padding:0;font:inherit;color:var(--accent);
     cursor:pointer;border-bottom:1px dotted currentColor;}
-  .breaking{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;align-items:center;margin:2px -16px 0;padding:2px 16px 4px;}
-  .breaking::-webkit-scrollbar{display:none;}
-  .blabel{flex:none;display:inline-flex;align-items:center;gap:6px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--rose);}
-  .blabel i{width:7px;height:7px;border-radius:50%;background:var(--rose);animation:pulse 1.6s ease-in-out infinite;}
+  .blabel{display:inline-flex;align-items:center;vertical-align:middle;}
+  .blabel i{width:9px;height:9px;border-radius:50%;background:var(--rose);animation:pulse 1.6s ease-in-out infinite;}
   @keyframes pulse{50%{opacity:.25;}}
-  .bpill{flex:none;max-width:250px;text-align:left;font:inherit;font-size:13px;line-height:1.3;cursor:pointer;padding:7px 10px;border-radius:2px;
-    border:1px solid var(--rule);background:var(--surface);color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-  .bpill b{display:block;font-weight:400;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);}
-  .bpill[aria-pressed="true"]{border-color:var(--rose);background:var(--rose-soft);}
-  .breakopen{background:var(--surface);border:1px solid var(--rule);border-left:3px solid var(--rose);padding:10px 12px;display:flex;flex-direction:column;gap:6px;}
-  .breakopen h3{margin:0;font-size:19px;font-weight:400;line-height:1.25;}
-  .breakopen p{margin:0;font-size:14px;line-height:1.5;color:var(--ink-2);}
-  .breakopen .bnote{font-size:12.5px;color:var(--ink-3);}
-  .breakopen .factions{border:none;padding:0;margin:0;}
+  .bcard{background:var(--surface);border:1px solid var(--rule);border-left:3px solid var(--rose);padding:12px 14px;display:flex;flex-direction:column;gap:7px;flex:none;}
+  .bcard h3{margin:0;font-size:20px;font-weight:400;line-height:1.25;}
+  .bcard p{margin:0;font-size:14.5px;line-height:1.55;color:var(--ink-2);}
+  .bcard .bnote{font-size:12.5px;color:var(--ink-3);}
+  .bcard .bnote a{color:var(--accent);}
+  .bacts{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:2px;}
   @media (prefers-reduced-motion: reduce){ .blabel i{animation:none;} }
   .progress{display:flex;gap:3px;}
   .progress i{flex:1;height:3px;border-radius:2px;background:var(--rule);transition:background .3s;}
@@ -833,6 +828,7 @@
       <div class="modes" role="group" aria-label="Pages">
         <button type="button" class="mode ico" data-mode="diary" aria-pressed="false" aria-label="Diary"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="1.5"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></svg></button>
         <button type="button" class="mode" data-mode="today" aria-pressed="true">Today</button>
+        <button type="button" class="mode" data-mode="breaking" aria-pressed="false">Breaking<span class="dot" id="breakDot" hidden></span></button>
         <button type="button" class="mode" data-mode="library" aria-pressed="false">Library</button>
         <button type="button" class="mode" data-mode="ask" aria-pressed="false">Ask</button>
         <button type="button" class="mode" data-mode="talk" aria-pressed="false">Talk<span class="dot" id="talkDot" hidden></span></button>
@@ -901,10 +897,16 @@
         <div class="todaytitle"><h2>Today</h2><span id="todayCount"></span></div>
         <div class="progress" id="progress" aria-hidden="true"></div>
         <div class="focusline" id="focusline"></div>
-        <div class="breaking" id="breaking" hidden></div>
-        <div class="breakopen" id="breakOpen" hidden></div>
       </div>
       <div class="feed" id="feed" tabindex="0"></div>
+    </section>
+
+    <section class="pane side breakingpane" id="breakingPane" data-hidden="true" aria-label="Breaking">
+      <div class="sidehead">
+        <h2><span class="blabel"><i></i></span> Breaking</h2>
+        <p>The last two days, and what everyone is arguing about.</p>
+      </div>
+      <div class="thread" id="breakingList"></div>
     </section>
 
     <section class="pane side ask" id="askPane" data-hidden="true" aria-label="Ask">
@@ -9373,7 +9375,128 @@
         document.head.appendChild(sc);
       });
     }
+    // ---- the same small store API the page uses inside Claude, on one
+    // Supabase table: docs(collection, id, owner, data). Row-level security
+    // in supabase/schema.sql plays the part of Claude's {self} rules.
+    var dbShim = null, userShim = null;
+    function makeDb(c){
+      var client = c.client, T = "docs", watchers = {};
+      var fail = function(e){ return {code: /row-level|permission|violates|denied/i.test(e.message || "") ? "invalid_argument" : "cloud", message: e.message}; };
+      var split = function(path){ var q = path.split("/"); return {col: q.slice(0, -1).join("/"), id: q[q.length - 1]}; };
+      var notify = function(col){ (watchers[col] || []).slice().forEach(function(f){ f(); }); };
+      var watch = function(col, f){ (watchers[col] = watchers[col] || []).push(f); return function(){ watchers[col] = watchers[col].filter(function(g){ return g !== f; }); }; };
+      try{
+        client.channel("docs-changes").on("postgres_changes", {event:"*", schema:"public", table:T}, function(pl){
+          var col = (pl.new && pl.new.collection) || (pl.old && pl.old.collection);
+          if(col) notify(col); else Object.keys(watchers).forEach(notify);
+        }).subscribe();
+      }catch(e){}
+      setInterval(function(){ if(!document.hidden) Object.keys(watchers).forEach(notify); }, 30000);   // in case realtime is off
+
+      function getOne(col, id){
+        return client.from(T).select("data").eq("collection", col).eq("id", id).maybeSingle().then(function(r){
+          if(r.error) throw fail(r.error); return r.data ? r.data.data : null;
+        });
+      }
+      function doc(path){
+        var k = split(path);
+        var ref = {
+          id: k.id,
+          get: function(){ return getOne(k.col, k.id).then(function(d){ return {id:k.id, exists:d != null, data:function(){ return d; }}; }); },
+          set: function(d){
+            return client.from(T).upsert({collection:k.col, id:k.id, owner:c.uid, data:d, updated_at:new Date().toISOString()})
+              .then(function(r){ if(r.error) throw fail(r.error); notify(k.col); });
+          },
+          update: function(d){ return getOne(k.col, k.id).then(function(old){ return ref.set(Object.assign({}, old || {}, d)); }); },
+          delete: function(){
+            return client.from(T).delete().eq("collection", k.col).eq("id", k.id).then(function(r){ if(r.error) throw fail(r.error); notify(k.col); });
+          },
+          onSnapshot: function(next, err){
+            var run = function(){ ref.get().then(next, function(e){ if(err) err(e); }); };
+            run(); return watch(k.col, run);
+          }
+        };
+        return ref;
+      }
+      function query(col, order, n){
+        var api = {
+          orderBy: function(f, dir){ return query(col, [f, dir || "asc"], n); },
+          limit: function(m){ return query(col, order, m); },
+          where: function(){ return api; },
+          doc: function(id){ return doc(col + "/" + (id || rid())); },
+          add: function(d){ var r = doc(col + "/" + rid()); return r.set(d).then(function(){ return r; }); },
+          get: function(){
+            return client.from(T).select("id,data").eq("collection", col).limit(1000).then(function(r){
+              if(r.error) throw fail(r.error);
+              var docs = (r.data || []).map(function(x){ return {id:x.id, data:function(){ return x.data; }}; });
+              if(order) docs.sort(function(a, b){
+                var x = a.data()[order[0]], y = b.data()[order[0]];
+                return (x > y ? 1 : x < y ? -1 : 0) * (order[1] === "desc" ? -1 : 1);
+              });
+              return {docs: docs.slice(0, n || 1000)};
+            });
+          },
+          onSnapshot: function(next, err){
+            var run = function(){ api.get().then(next, function(e){ if(err) err(e); }); };
+            run(); return watch(col, run);
+          }
+        };
+        return api;
+      }
+      function rid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2, 10); }
+      return { doc: doc, collection: function(col){ return query(col, null, null); } };
+    }
+    function makeUser(c){
+      var cache = {}, admin = null;
+      var signedIn = !c.anonymous;
+      function load(ids){
+        ids = ids.filter(function(i){ return i && !cache[i]; });
+        if(!ids.length) return Promise.resolve();
+        return c.client.from("docs").select("id,data").eq("collection", "profiles").in("id", ids).then(function(r){
+          ids.forEach(function(i){ cache[i] = {name:"", avatarUrl:""}; });
+          (r.data || []).forEach(function(x){ cache[x.id] = {name:(x.data && x.data.name) || "", avatarUrl:(x.data && x.data.photo) || ""}; });
+          setTimeout(function(){ ids.forEach(function(i){ delete cache[i]; }); }, 15000);
+        });
+      }
+      function isAdmin(){
+        if(admin) return admin;
+        return admin = c.client.from("admins").select("user_id").eq("user_id", c.uid).maybeSingle()
+          .then(function(r){ return !!(r.data); }, function(){ return false; });
+      }
+      return {
+        id: function(){ return Promise.resolve(signedIn ? c.uid : null); },
+        me: function(){ return load([c.uid]).then(function(){ return cache[c.uid] || {name:"", avatarUrl:""}; }); },
+        profiles: function(ids){
+          ids = [].concat(ids);
+          return load(ids).then(function(){ var o = {}; ids.forEach(function(i){ o[i] = cache[i] || {name:"", avatarUrl:""}; }); return o; });
+        },
+        canEdit: isAdmin, isOwner: isAdmin,
+        can: function(){ return Promise.resolve(signedIn); },
+        email: c.email || ""
+      };
+    }
+
     return {
+      configured: function(){ return !!conf(); },
+      use: function(name){
+        if(name !== "db" && name !== "user") return Promise.resolve(null);
+        return this.ready().then(function(c){
+          if(!c) return null;
+          if(name === "db") return dbShim = dbShim || makeDb(c);
+          return userShim = userShim || makeUser(c);
+        });
+      },
+      signIn: function(email){
+        return this.ready().then(function(c){
+          if(!c) throw new Error("Not connected.");
+          return c.client.auth.signInWithOtp({email:email, options:{emailRedirectTo: location.origin + location.pathname}})
+            .then(function(r){ if(r.error) throw r.error; });
+        });
+      },
+      signOut: function(){
+        return this.ready().then(function(c){ return c && c.client.auth.signOut(); }).then(function(){ location.reload(); });
+      },
+      account: function(){ return this.ready().then(function(c){ return c ? {anonymous:c.anonymous, email:c.email || ""} : null; }); },
       ready: function(){
         if(p) return p;
         var c = conf();
@@ -9386,7 +9509,7 @@
               if(a.error) throw new Error(a.error.message + " — turn on anonymous sign-ins in Supabase: Authentication → Sign In / Providers");
               return a.data.user;
             });
-          }).then(function(u){ return {client:client, uid:u.id}; });
+          }).then(function(u){ return {client:client, uid:u.id, anonymous:!!u.is_anonymous || !u.email, email:u.email || ""}; });
         }).catch(function(e){ console.warn("AInstein cloud:", e.message); return null; });
       }
     };
@@ -9476,7 +9599,7 @@
     // On a public host with cloud.json (Supabase): the same, in a row only
     // this visitor can read or write, keyed by an anonymous sign-in.
     function connect(){
-      if(!(window.claude && window.claude.use)) return Cloud.ready().then(function(c){
+      if(!(window.claude && window.claude.use) || window.claude.public) return Cloud.ready().then(function(c){
         if(!c) return;
         var ref = {
           set: function(d){
@@ -9543,28 +9666,25 @@
       var fresh = items.filter(function(i){ return i.buzz || newest - (Date.parse(i.published) || 0) < 2 * 864e5; });
       fresh.sort(function(a, b){ return (b.buzz || 0) - (a.buzz || 0) || (Date.parse(b.published) || 0) - (Date.parse(a.published) || 0); });
       var per = {}, out = [];
-      fresh.forEach(function(i){ per[i.track] = (per[i.track] || 0) + 1; if(per[i.track] <= 3 && out.length < 10) out.push(i); });
+      fresh.forEach(function(i){ per[i.track] = (per[i.track] || 0) + 1; if(per[i.track] <= 4 && out.length < 24) out.push(i); });
       return breakCache = out;
     }
-    var breakOpen = null;
     function renderBreaking(){
-      var list = breaking(), el = $("breaking");
-      el.hidden = !list.length;
-      el.innerHTML = '<span class="blabel"><i></i>Breaking</span>' + list.map(function(i){
-        return '<button type="button" class="bpill" data-break="' + esc(i.id) + '" aria-pressed="' + (breakOpen === i.id) + '">' +
-          '<b>' + esc(trackLabel(i.track)) + '</b>' + esc(i.hook || i.title) + '</button>';
-      }).join("");
-      var it = list.filter(function(i){ return i.id === breakOpen; })[0], box = $("breakOpen");
-      box.hidden = !it;
-      if(!it) return;
-      var when = new Date(it.published).toLocaleDateString(undefined, {weekday:"short", day:"numeric", month:"short"});
-      box.innerHTML = '<div class="ftrack">' + esc(trackLabel(it.track)) + ' · ' + esc(it.source) + ' · ' + esc(when) + '</div>' +
-        '<h3>' + esc(it.hook || it.title) + '</h3>' +
-        (it.body ? '<p>' + esc(it.body) + '</p>' : '') +
-        (it.buzz_note ? '<p class="bnote">' + esc(it.buzz_note) + '</p>' : '') +
-        '<div class="factions"><a class="readlink" href="' + esc(it.url) + '" target="_blank" rel="noopener">Read at ' + esc(it.source) + ' →</a>' +
-        '<button type="button" class="fbtn" data-bask="' + esc(it.id) + '">Ask about it</button>' +
-        '<button type="button" class="fbtn" data-bclose="1">Close</button></div>';
+      var list = breaking(), el = $("breakingList");
+      if(!el) return;
+      $("breakDot").hidden = !list.length;
+      el.innerHTML = list.length ? list.map(function(it){
+        var when = new Date(it.published).toLocaleDateString(undefined, {weekday:"short", day:"numeric", month:"short"});
+        return '<article class="bcard">' +
+          '<div class="ftrack">' + esc(trackLabel(it.track)) + ' · ' + esc(it.source) + ' · ' + esc(when) + '</div>' +
+          '<h3>' + esc(it.hook || it.title) + '</h3>' +
+          (it.body ? '<p>' + esc(it.body) + '</p>' : '') +
+          (it.buzz_note ? '<p class="bnote">' + esc(it.buzz_note) +
+            (it.discuss_url ? ' · <a href="' + esc(it.discuss_url) + '" target="_blank" rel="noopener">the discussion</a>' : '') + '</p>' : '') +
+          '<div class="bacts"><a class="readlink" href="' + esc(it.url) + '" target="_blank" rel="noopener">Read at ' + esc(it.source) + ' →</a>' +
+          '<button type="button" class="fbtn" data-bask="' + esc(it.id) + '">Ask about it</button></div>' +
+        '</article>';
+      }).join("") : '<p class="hint">Nothing new in the last two days.</p>';
     }
 
     function buildSet(){
@@ -9922,12 +10042,12 @@
     });
 
     // ---------------------------------------------------------- modes
-    function order(){ return wide.matches ? ["diary", "today", "ask", "talk"] : ["diary", "today", "library", "ask", "talk"]; }
+    function order(){ return wide.matches ? ["diary", "today", "breaking", "ask", "talk"] : ["diary", "today", "breaking", "library", "ask", "talk"]; }
     function setMode(m){
       if(wide.matches && m === "library") m = "today";   // the library is always on screen there
       var o = order(), from = o.indexOf(mode), to = o.indexOf(m);
       mode = m;
-      ["diary", "today", "library", "ask", "talk"].forEach(function(k){
+      ["diary", "today", "breaking", "library", "ask", "talk"].forEach(function(k){
         var el = $(k + "Pane"); if(!el) return;
         el.setAttribute("data-hidden", String(k !== m));
         el.classList.remove("in-l", "in-r");
@@ -10170,11 +10290,9 @@
         }
       });
       $("feed").addEventListener("scroll", function(){ lastActive = Date.now(); }, {passive:true});
-      document.querySelector(".todayhead").addEventListener("click", function(e){
+      $("breakingList").addEventListener("click", function(e){
         var t;
-        if((t = e.target.closest("[data-break]"))){ var id = t.getAttribute("data-break"); breakOpen = breakOpen === id ? null : id; renderBreaking(); }
-        else if(e.target.closest("[data-bclose]")){ breakOpen = null; renderBreaking(); }
-        else if((t = e.target.closest("[data-bask]"))){
+        if((t = e.target.closest("[data-bask]"))){
           var it = breaking().filter(function(i){ return i.id === t.getAttribute("data-bask"); })[0];
           if(it) Ask.about({kind:"news", id:it.id, track:it.track, item:it}, trackLabel(it.track));
         }
@@ -10620,8 +10738,10 @@
     function setComposer(show, placeholder){
       $("talkComposer").hidden = !show;
       if(placeholder) $("talkInput").placeholder = placeholder;
-      $("talkInput").disabled = readOnly || !uid;
+      var pub = window.claude && window.claude.public;
+      $("talkInput").disabled = readOnly || (!uid && !pub);
       $("talkSend").disabled = readOnly || !uid;
+      if(!uid && pub) $("talkInput").placeholder = "Sign in to talk";
     }
     function render(){
       if(!db) return;
@@ -10827,6 +10947,9 @@
         if(e.key === "Enter" && !e.shiftKey){ e.preventDefault(); send(); }
       });
       $("talkInput").addEventListener("input", function(){ note(""); });
+      $("talkInput").addEventListener("focus", function(){
+        if(!uid && window.claude && window.claude.public){ $("talkInput").blur(); Social.openProfile("me"); }
+      });
       $("talkPane").addEventListener("click", function(e){
         var t = e.target.closest("button"); if(!t) return;
         var a = function(n){ return t.getAttribute(n); };
@@ -11033,6 +11156,7 @@
     }
 
     function needAccount(){
+      if(window.claude && window.claude.public){ openProfile("me"); return; }
       var t = document.querySelector(".toast");
       if(!t){ t = document.createElement("div"); t.className = "toast"; t.setAttribute("role", "status"); document.body.appendChild(t); }
       t.textContent = on ? "Sign in to like and comment." : "Likes and comments work inside Claude.";
@@ -11180,13 +11304,24 @@
 
     function renderEdit(){
       if(!on || !uid){
+        if(window.claude && window.claude.public){
+          $("pName").textContent = "Sign in";
+          $("pBody").innerHTML = '<div class="pblock"><p>Sign in to like, comment, follow people, join rooms and have your own page. ' +
+            'Your diary is already saved without an account.</p>' +
+            '<div class="pfield"><label for="siEmail">Email</label><input id="siEmail" type="email" autocomplete="email" placeholder="you@example.com"></div>' +
+            '<button type="button" class="sendbtn" id="siSend" style="align-self:flex-start">Email me a sign-in link</button>' +
+            '<p class="hint" id="siNote"></p></div>';
+          return;
+        }
         $("pBody").innerHTML = '<p class="hint">' + (on ? "Sign in to make a page." : "Pages work inside Claude.") + "</p>";
         return;
       }
       var p = profiles[uid] || {};
       var tracks = (data.tracks || []).filter(function(t){ return t.id !== "opportunities"; });
-      var av = avatarOf(uid);
+      var av = avatarOf(uid), pub = window.claude && window.claude.public;
       $("pBody").innerHTML =
+        (pub ? '<div class="pblock"><div class="pfield"><label for="peName">Your name</label>' +
+          '<input id="peName" maxlength="60" placeholder="How people here will see you" value="' + esc(p.name || "") + '"></div></div>' : '') +
         '<div class="pblock photoedit">' +
           '<button type="button" class="bigav" id="pePhotoBtn" aria-label="Choose a profile photo">' + (av ? '<img src="' + esc(av) + '" alt="">' : 'Add photo') + '</button>' +
           '<div class="photoacts"><button type="button" class="fbtn" id="pePhotoPick">' + (photoOf(uid) ? "Change photo" : "Upload a photo") + '</button>' +
@@ -11222,12 +11357,14 @@
         '</div>' +
         '<div class="pblock"><button type="button" class="sendbtn" id="peSave">Save my page</button>' +
           '<p class="hint">Your page, likes and comments are visible to people here. Your diary, streak and what you marked as learned are not.</p></div>' +
-        '<div class="pblock"><h3>How others see it</h3><button type="button" class="linkbtn" data-preview="1">Preview</button></div>';
+        '<div class="pblock"><h3>How others see it</h3><button type="button" class="linkbtn" data-preview="1">Preview</button></div>' +
+        (pub ? '<div class="pblock"><button type="button" class="linkbtn" id="siOut" style="align-self:flex-start">Sign out</button></div>' : '');
     }
 
     function saveProfile(){
       var fields = [].map.call(document.querySelectorAll('#peFields [aria-pressed="true"]'), function(b){ return b.getAttribute("data-pf"); });
       var doc = {
+        name: $("peName") ? ($("peName").value || "").trim().slice(0, 60) : ((profiles[uid] || {}).name || undefined),
         bio: ($("peBio").value || "").trim().slice(0, 160),
         why: ($("peWhy").value || "").trim().slice(0, 500),
         fields: fields,
@@ -11332,6 +11469,9 @@
         ["commentsSheet", "profileSheet", "suggestSheet"].forEach(function(id){ if(!$(id).hidden) closeSheet(id); });
       });
       $("cPost").addEventListener("click", postComment);
+      $("cInput").addEventListener("focus", function(){
+        if(on && !uid && window.claude && window.claude.public){ $("cInput").blur(); closeSheet("commentsSheet"); openProfile("me"); }
+      });
       $("cInput").addEventListener("keydown", function(e){ if(e.key === "Enter" && !e.shiftKey){ e.preventDefault(); postComment(); } });
       $("cList").addEventListener("click", function(e){
         var t;
@@ -11359,6 +11499,14 @@
         if((t = e.target.closest("[data-follow]"))){ toggleFollow(t.getAttribute("data-follow")); renderProfile(t.getAttribute("data-follow")); return; }
         if((t = e.target.closest("[data-pf]"))) t.setAttribute("aria-pressed", String(t.getAttribute("aria-pressed") !== "true"));
         else if(e.target.id === "peSave") saveProfile();
+        else if(e.target.id === "siOut") Cloud.signOut();
+        else if(e.target.id === "siSend"){
+          var em = ($("siEmail").value || "").trim();
+          if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)){ $("siNote").textContent = "That doesn't look like an email address."; return; }
+          e.target.disabled = true; $("siNote").textContent = "Sending…";
+          Cloud.signIn(em).then(function(){ $("siNote").textContent = "Check your inbox: the link signs you in on this device."; },
+            function(er){ e.target.disabled = false; $("siNote").textContent = "Couldn't send: " + ((er && er.message) || "try again") + "."; });
+        }
         else if(e.target.closest("#pePhotoBtn") || e.target.id === "pePhotoPick") $("pePhotoFile").click();
         else if(e.target.id === "pePhotoRemove") setPhoto(null);
         else if(e.target.closest("[data-preview]")) renderProfile(uid);
@@ -11542,6 +11690,11 @@
 
   tab = tab || ((data.tracks || [])[0] || {}).id;
   reindex(); renderTabs(); renderStamp(); render(); doorFoot();
+  // On the public site there is no Claude; the Supabase shim stands in for
+  // the store and the account, and everything else reports itself absent.
+  if(!(window.claude && window.claude.use) && Cloud.configured()){
+    window.claude = {public:true, use:function(n){ return Cloud.use(n); }};
+  }
   Today.init();
   Ask.init();
   Talk.init();
